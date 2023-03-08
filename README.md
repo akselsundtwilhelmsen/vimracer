@@ -1,7 +1,4 @@
-
-
-
-#STRUKTUR
+# STRUKTUR
 
 * Interface textbox 
   * Fasit
@@ -9,7 +6,10 @@
 
 * Meny 
 
-* Vim 
+* Vim (får input, oppdaterer Redigerbar tekst)
+    * Keyboard input: Får input fra tastatur
+    
+
 
     
 
