@@ -4,14 +4,12 @@
   * Fasit 
   * Redigerbar
 * Meny 
-* TextGetter: Henter text sender til Textbox og TextScrambler 
-* TextScrambler: Endrer på teksten og sender til Textbox
-  har mange funksjoner som ødelegger teksten på forskjellig vis
-* Vim: får input, oppdaterer Redigerbar tekst
+* TextGetter: Henter text (liste med strenger) sender til Textbox og TextScrambler 
+* TextScrambler: Endrer på teksten og sender til Textbox. 
+  Har mange funksjoner som enderer teksten på ulikt vis.
+* Vim: får input, oppdaterer Redigerbar tekst.
+  Må kunne også kunne lese fra Redigerbar.
     * Keyboard input: Får input fra tastatur
-    
-
-
     
 
 
