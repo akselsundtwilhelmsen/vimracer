@@ -7,9 +7,9 @@
 * TextGetter: Henter text (liste med strenger) sender til Textbox og TextScrambler 
 * TextScrambler: Endrer på teksten og sender til Textbox. 
   Har mange funksjoner som enderer teksten på ulikt vis.
-* Vim: får input, oppdaterer Redigerbar tekst.
+
   Må kunne også kunne lese fra Redigerbar.
     * Keyboard input: Får input fra tastatur
-    
+
 
 
