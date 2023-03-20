@@ -17,6 +17,10 @@ public class Textbox {
         this.text = text;
     }
 
+    public String getLine(int lineIndex) {
+        return text.get(lineIndex);
+    }
+
     public String toString() {
         return text.stream()
             .collect(Collectors.joining("\n"));

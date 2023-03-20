@@ -27,4 +27,17 @@ public class TextWindow extends StackPane {
     public TextWindow() {
         this(400, 300);
     }
+
+    public String getText() {
+        return textbox.toString();
+    }
+
+    public String getLine(int lineIndex) {
+        return textbox.getLine(lineIndex);
+    }
+
+    private void textUpdate() {
+        text.setText(textbox.toString());
+    }
 }
+
