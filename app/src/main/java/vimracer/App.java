@@ -8,8 +8,12 @@ public class App extends Application {
 
     @Override  
     public void start(Stage primaryStage) throws Exception {  
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("App.fxml"));
+        Scene scene = new Scene(loader.load());
+        loader.setController(new Controller());
+
         primaryStage.setTitle("Example App");
-        primaryStage.setScene(new Scene(FXMLLoader.load(getClass().getResource("App.fxml"))));
+        primaryStage.setScene(scene);
         primaryStage.show();
     }  
 
