@@ -1,5 +1,7 @@
 package tutorial;
 
+import java.util.ArrayList;
+
 public class Vim {
     VimWindow window;
     private ArrayList<String> text;
