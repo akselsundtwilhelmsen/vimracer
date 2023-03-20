@@ -1,0 +1,45 @@
+
+
+
+Gehør
+    Hovedfunksjon:
+	hører en note, ser tangent som blir trykket 
+	hører ny note, skal gjette hva som blir laget
+
+	andre tester?
+	    melodier
+	    akkorder
+
+    
+    Sekundærfunksjoner
+	score?
+	valg av instrument / lyd? 
+	valg av mulige intervall, noter, ...
+
+
+
+    Struktur
+	Conductor  // ansvarlig for hvilke noter som skal spilles 
+	    
+	Piano
+	    
+
+	AudioPlayer  
+	    Får 
+
+	    
+    
+
+
+
+
+	    
+
+
+
+
+
+
+
+
+	

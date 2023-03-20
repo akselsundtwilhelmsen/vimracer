@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+ 
+    <groupId>TDT4100_project</groupId>
+    <artifactId>tdt4100_v2023_prosjekt_boilerplate</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+ 
+    <name>tdt4100_v2023_prosjekt_boilerplate</name>
+	
+
+   <dependencies>
+
+ 	<dependency>
+		<groupId>org.openjfx</groupId>
+	  <artifactId>javafx-fxml</artifactId>
+	  <version>19</version>
+	</dependency>
+
+
+	<!-- JUnit 5 -->
+	<dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-engine</artifactId>
+        <version>5.7.0</version>
+	</dependency>
+
+    <!-- <dependency> -->
+    <!--   <groupId>commons-lang</groupId> -->
+    <!--   <artifactId>commons-lang</artifactId> -->
+    <!--   <version>2.1</version> -->
+    <!-- </dependency> -->
+
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-utils</artifactId>
+      <version>1.1</version>
+    </dependency>
+
+  </dependencies>
+
+  <build>
+	<plugins>
+	  <plugin>
+		<artifactId>maven-compiler-plugin</artifactId>
+		<version>3.8.0</version>
+		<configuration>
+		  <release>17</release>
+		</configuration>
+	  </plugin>
+	  <plugin>
+		  <artifactId>maven-surefire-plugin</artifactId>
+		  <version>3.0.0-M5</version>
+		  <configuration>
+			  <argLine>--enable-preview</argLine>
+		  </configuration>
+	  </plugin>
+	  <plugin>
+		  <artifactId>maven-failsafe-plugin</artifactId>
+		  <version>3.0.0-M5</version>
+		  <configuration>
+			  <argLine>--enable-preview</argLine>
+		  </configuration>
+	  </plugin>
+	    <!-- <plugin> -->
+		<!-- <groupId>org.apache.maven.plugins</groupId> -->
+		<!-- <artifactId>maven-jar-plugin</artifactId> -->
+		<!-- <version>3.3.0</version> -->
+		<!-- <configuration> -->
+		    <!-- <archive> -->
+			<!-- <manifest> -->
+			    <!-- <addClasspath>true</addClasspath> -->
+			    <!-- <mainClass>ExampleProjectApp.java</mainClass> -->
+			<!-- </manifest> -->
+		    <!-- </archive> -->
+		<!-- </configuration> -->
+	    <!-- </plugin> -->
+
+	    <plugin>
+	        <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <!-- <mainClass>ExampleProjectApp.java</mainClass> -->
+                    <mainClass>TDT4100-prosjekt-bragv.src.main.java.exampleproject.ExampleProjectApp</mainClass>
+
+                    <!-- <arguments> -->
+                    <!--     <argument>""%classpath"</argument> -->
+                    <!-- </arguments> -->
+                </configuration>
+	    </plugin>
+
+	    <!-- <plugin> -->
+		<!-- <groupId>org.springframework.boot</groupId> -->
+		<!-- <artifactId>spring-boot-maven-plugin</artifactId> -->
+                <!-- <version>3.0.4</version> -->
+		<!-- <configuration> -->
+		    <!-- <mainClass>ExampleProjectApp.java</mainClass> -->
+		    <!-- <layout>JAR</layout> -->
+		<!-- </configuration> -->
+		<!-- <executions> -->
+		    <!-- <execution> -->
+			<!-- <goals> -->
+			    <!-- <goal>repackage</goal> -->
+			<!-- </goals> -->
+		    <!-- </execution> -->
+		<!-- </executions> -->
+	    <!-- </plugin> -->
+
+	    <!-- <plugin> -->
+		<!-- <groupId>org.apache.maven.plugins</groupId> -->
+		<!-- <artifactId>maven-shade-plugin</artifactId> -->
+		<!-- <version>3.4.1</version> -->
+		<!-- <executions> -->
+		    <!-- <execution> -->
+		    <!-- <phase>package</phase> -->
+			<!-- <goals> -->
+			    <!-- <goal>shade</goal> -->
+			<!-- </goals> -->
+			<!-- <configuration> -->
+			    <!-- <transformers> -->
+				<!-- <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer"> -->
+				    <!-- <mainClass>ExampleProjectApp.java</mainClass> -->
+				<!-- </transformer> -->
+			    <!-- </transformers> -->
+			<!-- </configuration> -->
+		    <!-- </execution> -->
+		<!-- </executions> -->
+	    <!-- </plugin> -->
+
+	</plugins>
+  </build>
+</project>
