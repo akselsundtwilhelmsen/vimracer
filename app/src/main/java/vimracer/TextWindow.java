@@ -25,7 +25,9 @@ public class TextWindow {
         return this.toString().equals(t.toString());
     }
 
-    public void setRandomText(int numberOfWords, int numberOfLines) {
+    public void setRandomText() {
+        int numberOfWords = 12;
+        int numberOfLines = 8;
         text = new ArrayList<>();
         String randomString = "";
         Random random = new Random();
