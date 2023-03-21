@@ -23,7 +23,7 @@ public class Controller implements Initializable {
 
     @FXML
     public void onVimDoThing() {
-        vim.setText("yea");
+        vim.setRandomText(10,10);
         vimWindow.setText(vim.toString());
     }
 
