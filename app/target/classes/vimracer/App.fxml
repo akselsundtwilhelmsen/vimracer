@@ -10,7 +10,7 @@
    <children>
       <AnchorPane prefHeight="400.0" prefWidth="247.0">
          <children>
-            <Text fx:id="fasit" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fasit" wrappingWidth="220.7294921875">
+            <Text fx:id="soulutionText" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fasit" wrappingWidth="220.7294921875">
                <font>
                   <Font name="Ubuntu Mono" size="13.0" />
                </font>
@@ -19,7 +19,7 @@
       </AnchorPane>
       <AnchorPane onKeyPressed="#handleOnKeyPressed" prefHeight="400.0" prefWidth="247.0">
          <children>
-            <Text fx:id="vimWindow" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Vim" wrappingWidth="220.7294921875">
+            <Text fx:id="vimText" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Vim" wrappingWidth="220.7294921875">
                <font>
                   <Font name="Ubuntu Mono" size="13.0" />
                </font>

@@ -10,21 +10,21 @@ import javafx.scene.text.Text;
 
 public class Controller implements Initializable {
 
+    TextWindow soultions;
     Vim vim;
 
-    @FXML private Text fasit;
-    @FXML private Text vimWindow;
+    @FXML private Text soulutionText;
+    @FXML private Text vimText;
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
         vim = new Vim();
-        
     }
 
     @FXML
     public void onVimDoThing() {
         vim.setRandomText(10,10);
-        vimWindow.setText(vim.toString());
+        vimText.setText(vim.toString());
     }
 
     @FXML
