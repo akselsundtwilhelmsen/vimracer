@@ -5,7 +5,7 @@ import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 
 public class Controller implements Initializable {
@@ -28,8 +28,8 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    public void handleOnKeyPressed() {
-        vim.setRandomText(10,10);
+    public void handleOnKeyPressed(KeyEvent event) {
+        vim.keyPress(event);
         vimWindow.setText(vim.toString());
     }
 
