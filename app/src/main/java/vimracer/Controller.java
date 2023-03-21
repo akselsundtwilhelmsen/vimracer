@@ -24,7 +24,13 @@ public class Controller implements Initializable {
     @FXML
     public void onVimDoThing() {
         vim.setText("yea");
-        fasit.setText(vim.toString());
+        vimWindow.setText(vim.toString());
+    }
+
+    @FXML
+    public void handleOnKeyPressed() {
+        vim.setRandomText(10,10);
+        vimWindow.setText(vim.toString());
     }
 
     // public void setVimText(String text) {
