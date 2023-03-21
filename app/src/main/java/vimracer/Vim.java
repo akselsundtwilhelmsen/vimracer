@@ -1,11 +1,11 @@
 package vimracer;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class Vim {
     private ArrayList<String> text;
     private ArrayList<Integer> cursor;
-    private Controller controller;
 
     public Vim() {
         text = new ArrayList<>();
@@ -13,6 +13,13 @@ public class Vim {
     }
 
     public void setText(String text) {
-        controller.setVimText(text);
+        this.text = new ArrayList<>();
+        this.text.add(text);
+        
+    }
+
+    public String toString() {
+        return text.stream()
+            .collect(Collectors.joining("\n"));
     }
 }

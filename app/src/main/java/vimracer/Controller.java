@@ -5,25 +5,31 @@ import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 
 public class Controller implements Initializable {
 
-    @FXML
-    private Text fasit;
-    @FXML
-    private Text vimWindow;
+    Vim vim;
+
+    @FXML private Text fasit;
+    @FXML private Text vimWindow;
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
-        Vim vim = new Vim();
-        vim.setText("yesplesa");
-
+        vim = new Vim();
+        
     }
 
-    public void setVimText(String text) {
-        vimWindow.setText(text);
+    @FXML
+    public void onVimDoThing() {
+        vim.setText("yea");
+        fasit.setText(vim.toString());
     }
+
+    // public void setVimText(String text) {
+    //     vimWindow.setText(text);
+    // }
 
 
 
