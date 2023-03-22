@@ -6,10 +6,9 @@ import java.util.Scanner; // Import the Scanner class to read text files
 
 public class TextLoader {
 
-
   public static void main(String[] args) {
     try {
-      File myObj = new File("Vim.java");
+      File myObj = new File("exampletext.txt");
       Scanner myReader = new Scanner(myObj);
       while (myReader.hasNextLine()) {
         String data = myReader.nextLine();
