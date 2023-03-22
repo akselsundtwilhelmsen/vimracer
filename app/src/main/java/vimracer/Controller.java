@@ -23,14 +23,14 @@ public class Controller implements Initializable {
 
     @FXML
     public void onVimDoThing() {
-        vim.setRandomText(10,10);
+        vim.setRandomText();
         vimText.setText(vim.toString());
     }
 
     @FXML
     public void handleOnKeyPressed(KeyEvent event) {
         vim.keyPress(event);
-        vimWindow.setText(vim.toString());
+        vimText.setText(vim.toString());
     }
 
     // public void setVimText(String text) {
