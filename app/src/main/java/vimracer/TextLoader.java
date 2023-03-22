@@ -1,14 +1,16 @@
 package vimracer;
 
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 public class TextLoader {
     private ArrayList<String> lines;
 
-<<<<<<< HEAD
     public TextLoader() {
         lines = new ArrayList<>();
-=======
+    }
   public static void main(String[] args) {
     try {
       File myObj = new File("exampletext.txt");
@@ -21,8 +23,8 @@ public class TextLoader {
     } catch (FileNotFoundException e) {
       System.out.println("An error occurred.");
       e.printStackTrace();
->>>>>>> origin/main
     }
+  }
 
     private void setDefaultText() {
         lines = new ArrayList<>();
