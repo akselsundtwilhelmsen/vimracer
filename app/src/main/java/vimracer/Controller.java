@@ -10,7 +10,7 @@ import javafx.scene.text.Text;
 
 public class Controller implements Initializable {
 
-    TextWindow soultions;
+    TextWindow soulution;
     Vim vim;
 
     @FXML private Text soulutionText;
@@ -19,6 +19,8 @@ public class Controller implements Initializable {
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
         vim = new Vim();
+        soulution = new TextWindow();
+        soulution.setText("Aa");
     }
 
     @FXML
@@ -31,8 +33,17 @@ public class Controller implements Initializable {
     public void handleOnKeyPressed(KeyEvent event) {
         vim.keyPress(event);
         vimText.setText(vim.toString());
+        if (isTextsEqual()) {
+            // midlertidig
+            soulution.setText("Congratulations! You won");
+            soulutionText.setText(soulution.toString());
+        }
     }
 
+
+    private boolean isTextsEqual() {
+        return soulution.equals(vim);
+    }
     // public void setVimText(String text) {
     //     vimWindow.setText(text);
     // }

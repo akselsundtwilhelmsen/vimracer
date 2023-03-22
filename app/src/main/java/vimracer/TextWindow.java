@@ -7,6 +7,10 @@ import java.util.stream.Collectors;
 public class TextWindow {
     private ArrayList<String> lines;
 
+    public TextWindow() {
+        lines = new ArrayList<>();
+    }
+
     public void setText(ArrayList text) {
         this.lines = text;
     }

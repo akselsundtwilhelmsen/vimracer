@@ -14,8 +14,7 @@ public class App extends Application {
 
         primaryStage.setTitle("Example App");
         primaryStage.setScene(scene);
-        primaryStage.show()
-        ;
+        primaryStage.show();
     }  
 
     public static void main(String[] args) {
