@@ -5,10 +5,11 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 public class TextWindow {
-    private ArrayList<String> lines;
+    ArrayList<String> lines;
 
     public TextWindow() {
         lines = new ArrayList<>();
+        lines.add("");
     }
 
     public void setText(ArrayList text) {
