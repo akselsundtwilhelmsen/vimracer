@@ -5,19 +5,19 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 public class TextWindow {
-    private ArrayList<String> text;
+    private ArrayList<String> lines;
 
     public void setText(ArrayList text) {
-        this.text = text;
+        this.lines = text;
     }
 
     public void setText(String text) {
-        this.text = new ArrayList<>();
-        this.text.add(text);
+        this.lines = new ArrayList<>();
+        this.lines.add(text);
     }
 
     public String toString() {
-        return text.stream()
+        return lines.stream()
             .collect(Collectors.joining("\n"));
     }
 
@@ -28,7 +28,7 @@ public class TextWindow {
     public void setRandomText() {
         int numberOfWords = 12;
         int numberOfLines = 8;
-        text = new ArrayList<>();
+        lines = new ArrayList<>();
         String randomString = "";
         Random random = new Random();
         for (int k = 0; k < numberOfLines; k++) {
@@ -39,7 +39,7 @@ public class TextWindow {
                 }
                 randomString = randomString + new String(word) + " ";
             }
-            text.add(randomString);
+            lines.add(randomString);
         }
     }
     
