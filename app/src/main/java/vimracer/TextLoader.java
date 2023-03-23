@@ -10,8 +10,6 @@ public class TextLoader {
 
     public TextLoader() {
         lines = new ArrayList<>();
-<<<<<<< HEAD
-=======
     }
   public static void main(String[] args) {
     try {
@@ -25,7 +23,6 @@ public class TextLoader {
     } catch (FileNotFoundException e) {
       System.out.println("An error occurred.");
       e.printStackTrace();
->>>>>>> origin/main
     }
   }
 

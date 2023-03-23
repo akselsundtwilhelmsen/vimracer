@@ -23,11 +23,11 @@ public class Controller implements Initializable {
         soulution.setText("Aa");
     }
 
-    // @FXML
-    // public void onVimDoThing() {
-    //     vim.setRandomText();
-    //     vimText.setText(vim.toString());
-    // }
+    @FXML
+    public void onVimDoThing() {
+        vim.setRandomText();
+        vimText.setText(vim.toString());
+    }
 
     @FXML
     public void handleOnKeyPressed(KeyEvent event) {
@@ -40,14 +40,10 @@ public class Controller implements Initializable {
         }
     }
 
-
     private boolean isTextsEqual() {
         return soulution.equals(vim);
     }
     // public void setVimText(String text) {
     //     vimWindow.setText(text);
     // }
-
-
-
 }
