@@ -1,5 +1,6 @@
 package vimracer;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import javafx.scene.input.KeyEvent;
 
@@ -7,6 +8,7 @@ public class Vim extends TextWindow{
     private int[] cursor;
     private char mode; // must be n(ormal), v(isual), or i(nsert);
     private boolean shiftHeld;
+    private ArrayList<Object> commands; //inneholder kommandoer (String), tall, og bevegelser (int[])
 
     public Vim() {
         super();
@@ -15,6 +17,12 @@ public class Vim extends TextWindow{
         this.mode = 'i';
         this.shiftHeld = false;
     }
+
+
+    // Plan for normal (og viusal) mode
+    // få KeyEvent input
+    // fortløpende til en array med lett-håndterbare kommandoer
+    // når denne listen er utførbar vil den bli utført
 
     public void keyPress(KeyEvent event) {
         String keyString = event.getCode().toString();
@@ -45,6 +53,7 @@ public class Vim extends TextWindow{
             return;
         }
 
+        
         switch (keyString) {
             case "a":
                 insertString("a");
@@ -99,4 +108,51 @@ public class Vim extends TextWindow{
         return true;
     }
 
+    private int getLastNumber() {
+        if (commands.size() == 0) {
+            return 1;
+        }
+        if (!(commands.get(commands.size()-1) instanceof Integer)) {
+            return 1;
+        }
+        return (int) commands.get(commands.size()-1);
+    }
+
+    private void generateMovement(String operator) {
+        int length = getLastNumber();
+        int[] newPos = cursor.clone();
+        for (int i = 0; i < length; i++) {
+            switch (operator) {
+                case "|":
+                    newPos[0] = 0;
+                    operator = "l";
+                case "0":
+                    newPos[0] = 0;
+                case "F":
+                    break;
+                case "ge":
+                    break;
+                case "b":
+                    break;
+                case "h":
+                    newPos[0]--;
+                case "l":
+                    newPos[0]++;
+                case "e":
+                    break;
+                case "w":
+                    break;
+                case "t":
+                    break;
+                case "f":
+                    break;
+                case "$":
+                    newPos[0] = lines.get(newPos[1]).length()-1;
+            }
+
+            newPos[1] = Math.min(lines.size()-1, Math.max(0, newPos[0]));
+            newPos[0] = Math.min(lines.get(newPos[1]).length()-1, Math.max(0, newPos[0]));
+        }
+        return newPos;
+    }
 }
