@@ -17,7 +17,7 @@
             </Text>
          </children>
       </AnchorPane>
-      <AnchorPane onKeyPressed="#handleOnKeyPressed" prefHeight="400.0" prefWidth="247.0">
+      <AnchorPane onKeyPressed="#handleOnKeyPressed" onKeyReleased="#handleOnKeyReleased" prefHeight="400.0" prefWidth="247.0">
          <children>
             <Text fx:id="vimText" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Vim" wrappingWidth="220.7294921875">
                <font>

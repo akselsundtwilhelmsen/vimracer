@@ -40,6 +40,11 @@ public class Controller implements Initializable {
         }
     }
 
+    @FXML
+    public void handleOnKeyReleased(KeyEvent event) {
+        vim.keyRelease(event);
+    }
+
     private boolean isTextsEqual() {
         return soulution.equals(vim);
     }
