@@ -4,12 +4,57 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Random;
 
 public class TextLoader {
     private ArrayList<String> lines;
 
     public TextLoader() {
         lines = new ArrayList<>();
+    }
+
+    public void garbler(int intensityPercentage) {
+        //intensityPercentage is the percentage of words affected by the garbler
+        int wordStartIndex = 0;
+        int lineNumber = 0;
+        for (String line : this.lines) {
+            String[] wordArray = line.split(" ");
+
+            for (String word : wordArray) {
+                Random random = new Random();
+                int[] cursor = {wordStartIndex, lineNumber};
+                if (random.nextInt(101 - intensityPercentage) == 1) {
+                    switch (random.nextInt(4)) {
+                        case 0:
+                            this.delete(cursor, word.length());
+                            break;
+                        case 1:
+                            this.insert(cursor, word.length());
+                            break;
+                        case 2:
+                            this.change(cursor, word.length());
+                            break;
+                        case 3:
+                            this.capitalize(cursor, word.length());
+                            break;
+                    }
+                }
+                wordStartIndex += word.length() + 1; // increase by wordlength + space
+            }
+            lineNumber += 1;
+        }
+    }
+
+    public void delete(int[] cursor, int wordlength) {
+    }
+
+    public void insert(int[] cursor, int wordlength) {
+    }
+
+    public void change(int[] cursor, int wordlength) {
+    }
+
+    public void capitalize(int[] cursor, int wordlength) {
     }
 
     public static void main(String[] args) {
