@@ -13,7 +13,7 @@ public class Vim extends TextWindow{
     private String currentCommand;
 
     private final ArrayList<String> LegalMovementCommands;
-    private final ArrayList<String> LegalModeshiftCommands;
+    private final ArrayList<String> LegalInsertModeCommands;
     private final ArrayList<String> LegalCommands;
 
     public Vim() {
@@ -27,10 +27,10 @@ public class Vim extends TextWindow{
         this.currentCommand = new String();
 
         this.LegalMovementCommands = new ArrayList<>(Arrays.asList("0","F","ge","b","h","l","e","w","t","f","$","|","gg","{","}","k","j","G"));
-        this.LegalModeshiftCommands = new ArrayList<>(Arrays.asList("i","I","a","A","o","O"));
+        this.LegalInsertModeCommands = new ArrayList<>(Arrays.asList("i","I","a","A","o","O"));
         this.LegalCommands = new ArrayList<>();
         this.LegalCommands.addAll(LegalMovementCommands);
-        this.LegalCommands.addAll(LegalModeshiftCommands);
+        this.LegalCommands.addAll(LegalInsertModeCommands);
 
         // int[] test = new int[2];
         // test[0] = -1;
@@ -73,7 +73,7 @@ public class Vim extends TextWindow{
             return;
         }
 
-        //lager og sjekker kommando
+        //generate legal String-command TODO: numbers
         currentCommand = currentCommand + keyString;
 
         if (! LegalCommands.stream()
@@ -83,11 +83,28 @@ public class Vim extends TextWindow{
 
         System.out.println(currentCommand);
 
-        //legger til kommando i kommandolisten 
+        //covert String-command normal command and add to command list
         if (LegalMovementCommands.contains(keyString)) {
             generateMovement(keyString);
-            cursor = ((int[]) commands.get(commands.size()-1));
-            System.out.println(String.format("%d %d",cursor[0],cursor[1]));
+        }
+
+        if (LegalInsertModeCommands.contains(keyString)) {
+            generateInsertCommand(keyString);
+        }
+
+        //execute the command list
+        for (Object command : commands) {
+            if (command instanceof int[]) {
+                System.out.println(String.format("%d %d",cursor[0],cursor[1]));
+                cursor = ((int[]) command);
+                System.out.println(String.format("%d %d",cursor[0],cursor[1]));
+            } else if (command instanceof String) {
+                switch ((String) command) {
+                    case "i":
+                        setMode('i');
+                        break;
+                }
+            }
         }
     }
 
@@ -122,13 +139,18 @@ public class Vim extends TextWindow{
         removeUnderCursor();
     }
 
+    public void setMode(char mode) {
+        if ("ni".indexOf(mode) == -1) throw new IllegalArgumentException();
+        this.mode = mode;
+    }
+
     private boolean validCursorPos(int[] cursor) {
         if (cursor.length != 2) return false;
         if (0 > cursor[1] || cursor[1] >= lines.size()) return false;
         int currentLength = lines.get(cursor[1]).length();
         if (cursor[0] < 0) return false;
-        if (mode == 'n' && currentLength != 0 && currentLength <= cursor[0]) return false;
-        if (currentLength < cursor[0]) return false;
+        // if (mode == 'n' && currentLength != 0 && currentLength <= cursor[0]) return false;
+        // if (currentLength < cursor[0]) return false;
         return true;
     }
 
@@ -154,6 +176,7 @@ public class Vim extends TextWindow{
                     break;
                 case "0":
                     newPos[0] = 0;
+                    break;
                 case "F":
                     break;
                 case "ge":
@@ -176,6 +199,7 @@ public class Vim extends TextWindow{
                     break;
                 case "$":
                     newPos[0] = lines.get(newPos[1]).length()-1;
+                    operator = "j";
                     break;
                 case "gg":
                     newPos[1] = 0;
@@ -193,14 +217,21 @@ public class Vim extends TextWindow{
                 case "G":
                     newPos[1] = lines.size()-1;
             }
-
-            if (validCursorPos(newPos)) {
-                prevPos = newPos.clone();
-            // } else {
-            //     System.out.println("bad move!");
-            }
-            // System.out.println(String.format("newpos: %d %d",prevPos[0],prevPos[1]));
         }
         commands.add(prevPos);
+    }
+
+    private void generateInsertCommand(String operator) {
+        switch (operator) {
+            case "i":
+                break;
+            case "I":
+                generateMovement("0");
+            case "a":
+                generateMovement("l");
+            case "A":
+                generateMovement("$");
+        }
+        commands.add("i");
     }
 }

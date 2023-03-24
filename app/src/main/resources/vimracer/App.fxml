@@ -25,7 +25,7 @@
                   <Font name="Ubuntu Mono" size="13.0" />
                </font>
             </Text>
-            <!-- <Button/> -->
+            <Button/>
          </children>
       </AnchorPane>
       <AnchorPane prefHeight="354.0" prefWidth="111.0" style="-fx-background-color: #0B032D;">
