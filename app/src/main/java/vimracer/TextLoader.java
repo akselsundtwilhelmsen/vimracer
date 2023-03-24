@@ -46,15 +46,31 @@ public class TextLoader {
     }
 
     public void delete(int[] cursor, int wordlength) {
+        String oldLine = this.lines.get(cursor[1]);
+        String newLine = oldLine.substring(0, cursor[0]) + oldLine.substring(cursor[0]+wordlength);
+        this.lines.set(cursor[1], newLine);
     }
 
     public void insert(int[] cursor, int wordlength) {
+        String insert = "INSERTEDWORD"; // TODO: change, generate word
+        String oldLine = this.lines.get(cursor[1]);
+        String newLine = oldLine.substring(0, cursor[0]) + insert + " " + oldLine.substring(cursor[0]);
+        this.lines.set(cursor[1], newLine);
     }
 
     public void change(int[] cursor, int wordlength) {
+        String change = "CHANGEDWORD"; // TODO: change, generate word
+        String oldLine = this.lines.get(cursor[1]);
+        String newLine = oldLine.substring(0, cursor[0]) + change + " " + oldLine.substring(cursor[0]+change.length());
+        this.lines.set(cursor[1], newLine);
     }
 
     public void capitalize(int[] cursor, int wordlength) {
+        String oldLine = this.lines.get(cursor[1]);
+        String word = oldLine.substring(cursor[0], cursor[0]+wordlength);
+        word = word.toUpperCase();
+        String newLine = oldLine.substring(0, cursor[0]) + word + " " + oldLine.substring(cursor[0]+word.length());
+        this.lines.set(cursor[1], newLine);
     }
 
     public static void main(String[] args) {
