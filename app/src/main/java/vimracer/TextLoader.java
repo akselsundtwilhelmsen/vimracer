@@ -11,6 +11,7 @@ public class TextLoader {
 
     public TextLoader() {
         lines = new ArrayList<>();
+        this.setDefaultText();
     }
 
     public void garbler(int intensityPercentage) {
