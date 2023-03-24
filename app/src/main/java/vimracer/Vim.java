@@ -20,7 +20,12 @@ public class Vim extends TextWindow{
         this.shiftHeld = false;
         this.commands = new ArrayList<>();
 
-        this.legalMovementKeys = new ArrayList<>(Arrays.asList("0","F","ge","b","h","l","e","w","t","f","$","|"));
+        this.legalMovementKeys = new ArrayList<>(Arrays.asList("0","F","ge","b","h","l","e","w","t","f","$","|","gg","{","}","k","j","G"));
+
+        // int[] test = new int[2];
+        // test[0] = -1;
+        // test[1] = 0;
+        // if (validCursorPos(test)) System.err.println("wtf!!");
     }
 
 
@@ -98,10 +103,10 @@ public class Vim extends TextWindow{
         removeUnderCursor();
     }
 
-    private boolean validCursorPos(int[] pos) {
-        int currentLength = lines.get(cursor[1]).length();
-        if (pos.length != 2) return false;
+    private boolean validCursorPos(int[] cursor) {
+        if (cursor.length != 2) return false;
         if (0 > cursor[1] || cursor[1] >= lines.size()) return false;
+        int currentLength = lines.get(cursor[1]).length();
         if (cursor[0] < 0) return false;
         if (mode == 'n' && currentLength != 0 && currentLength <= cursor[0]) return false;
         if (currentLength < cursor[0]) return false;
@@ -124,6 +129,10 @@ public class Vim extends TextWindow{
         int[] prevPos = cursor.clone();
         for (int i = 0; i < length; i++) {
             switch (operator) {
+                case "|":
+                    newPos[0] = 0;
+                    operator = "l"; //flytter til høyre hvis length > 1
+                    break;
                 case "0":
                     newPos[0] = 0;
                 case "F":
@@ -133,11 +142,11 @@ public class Vim extends TextWindow{
                 case "b":
                     break;
                 case "h":
-                    System.out.println(String.format("newpos: %d %d",newPos[0],newPos[1]));
-                    newPos[0]--;
-                    System.out.println(String.format("newpos: %d %d",newPos[0],newPos[1]));
+                    newPos[0] = prevPos[0]-1;
+                    break;
                 case "l":
-                    newPos[0]++;
+                    newPos[0] = prevPos[0]+1;
+                    break;
                 case "e":
                     break;
                 case "w":
@@ -148,19 +157,31 @@ public class Vim extends TextWindow{
                     break;
                 case "$":
                     newPos[0] = lines.get(newPos[1]).length()-1;
-                case "|":
-                    newPos[0] = 0;
-                    operator = "l"; //flytter til høyre hvis length > 1
+                    break;
+                case "gg":
+                    newPos[1] = 0;
+                    break;
+                case "{":
+                    break;
+                case "}":
+                    break;
+                case "k":
+                    newPos[1] = prevPos[1]-1;
+                    break;
+                case "j":
+                    newPos[1] = prevPos[1]+1;
+                    break;
+                case "G":
+                    newPos[1] = lines.size()-1;
             }
 
-            System.out.println(String.format("newpos: %d %d",newPos[0],newPos[1]));
-            if (! validCursorPos(newPos)) {
-                System.out.println("clamped'!");
-                newPos = prevPos.clone();
+            if (validCursorPos(newPos)) {
+                prevPos = newPos.clone();
+            } else {
+                System.out.println("bad move!");
             }
-            prevPos = newPos.clone();
-
+            System.out.println(String.format("newpos: %d %d",prevPos[0],prevPos[1]));
         }
-        commands.add(newPos);
+        commands.add(prevPos);
     }
 }
