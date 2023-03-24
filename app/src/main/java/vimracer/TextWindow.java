@@ -12,7 +12,7 @@ public class TextWindow {
         lines.add("");
     }
 
-    public void setText(ArrayList text) {
+    public void setText(ArrayList<String> text) {
         this.lines = text;
     }
 
