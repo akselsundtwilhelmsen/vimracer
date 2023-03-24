@@ -8,9 +8,13 @@ public class Vim extends TextWindow{
     private int[] cursor;
     private char mode; // must be n(ormal), v(isual), or i(nsert);
     private boolean shiftHeld;
-    private ArrayList<Object> commands; //inneholder kommandoer (String), tall, og bevegelser (int[])
 
-    private final ArrayList<String> legalMovementKeys;
+    private ArrayList<Object> commands; //inneholder kommandoer (String), tall, og bevegelser (int[])
+    private String currentCommand;
+
+    private final ArrayList<String> LegalMovementCommands;
+    private final ArrayList<String> LegalModeshiftCommands;
+    private final ArrayList<String> LegalCommands;
 
     public Vim() {
         super();
@@ -18,9 +22,15 @@ public class Vim extends TextWindow{
         Arrays.fill(cursor,0);
         this.mode = 'i';
         this.shiftHeld = false;
-        this.commands = new ArrayList<>();
 
-        this.legalMovementKeys = new ArrayList<>(Arrays.asList("0","F","ge","b","h","l","e","w","t","f","$","|","gg","{","}","k","j","G"));
+        this.commands = new ArrayList<>();
+        this.currentCommand = new String();
+
+        this.LegalMovementCommands = new ArrayList<>(Arrays.asList("0","F","ge","b","h","l","e","w","t","f","$","|","gg","{","}","k","j","G"));
+        this.LegalModeshiftCommands = new ArrayList<>(Arrays.asList("i","I","a","A","o","O"));
+        this.LegalCommands = new ArrayList<>();
+        this.LegalCommands.addAll(LegalMovementCommands);
+        this.LegalCommands.addAll(LegalModeshiftCommands);
 
         // int[] test = new int[2];
         // test[0] = -1;
@@ -63,12 +73,21 @@ public class Vim extends TextWindow{
             return;
         }
 
-        
-        if (legalMovementKeys.contains(keyString)) {
+        //lager og sjekker kommando
+        currentCommand = currentCommand + keyString;
+
+        if (! LegalCommands.stream()
+            .anyMatch(s -> currentCommand.startsWith(s) && currentCommand.length() <= s.length())) {
+                currentCommand = "";
+        }
+
+        System.out.println(currentCommand);
+
+        //legger til kommando i kommandolisten 
+        if (LegalMovementCommands.contains(keyString)) {
             generateMovement(keyString);
             cursor = ((int[]) commands.get(commands.size()-1));
             System.out.println(String.format("%d %d",cursor[0],cursor[1]));
-            // System.out.println(String.format("%d %d", ((int[])commands.get(commands.size()-1))[0],((int[])commands.get(commands.size()-1))[1]));
         }
     }
 
@@ -177,10 +196,10 @@ public class Vim extends TextWindow{
 
             if (validCursorPos(newPos)) {
                 prevPos = newPos.clone();
-            } else {
-                System.out.println("bad move!");
+            // } else {
+            //     System.out.println("bad move!");
             }
-            System.out.println(String.format("newpos: %d %d",prevPos[0],prevPos[1]));
+            // System.out.println(String.format("newpos: %d %d",prevPos[0],prevPos[1]));
         }
         commands.add(prevPos);
     }
