@@ -7,8 +7,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
-import javafx.stage.PopupWindow.AnchorLocation;
+// import javafx.stage.PopupWindow.AnchorLocation;
 
 public class Controller implements Initializable {
 
@@ -17,7 +18,7 @@ public class Controller implements Initializable {
 
     @FXML private Text soulutionText;
     @FXML private Text vimText;
-    @FXML private AnchorPane vimPane;
+    @FXML private Pane vimPane;
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
@@ -41,7 +42,6 @@ public class Controller implements Initializable {
             soulution.setText("Congratulations! You won");
             soulutionText.setText(soulution.toString());
         }
-        vimPane.requestLayout();
     }
 
     @FXML

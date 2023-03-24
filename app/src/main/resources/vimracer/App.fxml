@@ -7,9 +7,10 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="354.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vimracer.Controller">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800" prefWidth="1300" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="vimracer.Controller">
    <children>
-      <AnchorPane prefHeight="400.0" prefWidth="247.0" style="-fx-background-color: #536271;">
+      <AnchorPane fx:id="textPane" HBox.hgrow="ALWAYS">
+      <Pane prefWidth="600" style="-fx-background-color: #536271;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Text fx:id="soulutionText" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fasit" wrappingWidth="220.7294921875">
                <font>
@@ -17,22 +18,23 @@
                </font>
             </Text>
          </children>
-      </AnchorPane>
-      <AnchorPane fx:id="vimPane" onKeyPressed="#handleOnKeyPressed" onKeyReleased="#handleOnKeyReleased" prefHeight="400.0" prefWidth="247.0" style="-fx-background-color: #6A687A;">
+      </Pane>
+      <Pane fx:id="vimPane" onKeyPressed="#handleOnKeyPressed" onKeyReleased="#handleOnKeyReleased" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #6A687A;" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <Text fx:id="vimText" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Vim" wrappingWidth="220.7294921875">
                <font>
                   <Font name="Ubuntu Mono" size="13.0" />
                </font>
             </Text>
-            <Button/>
+            <Button />
          </children>
+      </Pane>
       </AnchorPane>
-      <AnchorPane prefHeight="354.0" prefWidth="111.0" style="-fx-background-color: #0B032D;">
+      <AnchorPane prefHeight="354.0" prefWidth="100" style="-fx-background-color: #0B032D;">
          <children>
-            <Pane layoutX="19.0" layoutY="49.0" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #FF8552;" />
-            <Pane layoutX="19.0" layoutY="25.0" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #297373;" />
-            <Pane layoutX="19.0" layoutY="73.0" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #E9D758;" />
+            <Pane layoutX="14.0" layoutY="50.0" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #FF8552;" />
+            <Pane layoutX="14.0" layoutY="26.0" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #297373;" />
+            <Pane layoutX="14.0" layoutY="74.0" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #E9D758;" />
          </children>
       </AnchorPane>
    </children>
