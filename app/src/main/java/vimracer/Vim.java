@@ -81,8 +81,6 @@ public class Vim extends TextWindow{
                 currentCommand = "";
         }
 
-        System.out.println(currentCommand);
-
         //covert String-command normal command and add to command list
         if (LegalMovementCommands.contains(keyString)) {
             generateMovement(keyString);
@@ -92,7 +90,11 @@ public class Vim extends TextWindow{
             generateInsertCommand(keyString);
         }
 
-        //execute the command list
+        //execute the command list 
+        //TODO: the command list can fill over multiple keypresses (e.g. d-i-w)
+        //TODO: it must dedect if it's executable (execute and clear), start of a legal command (continue), or illegal command (clear)
+        //temporary soulution is to just execute and clear it
+
         for (Object command : commands) {
             if (command instanceof int[]) {
                 System.out.println(String.format("%d %d",cursor[0],cursor[1]));
@@ -106,6 +108,7 @@ public class Vim extends TextWindow{
                 }
             }
         }
+        commands.clear();
     }
 
     public void keyRelease(KeyEvent event) {
@@ -218,7 +221,7 @@ public class Vim extends TextWindow{
                     newPos[1] = lines.size()-1;
             }
         }
-        commands.add(prevPos);
+        commands.add(newPos);
     }
 
     private void generateInsertCommand(String operator) {
@@ -227,10 +230,13 @@ public class Vim extends TextWindow{
                 break;
             case "I":
                 generateMovement("0");
+                break;
             case "a":
                 generateMovement("l");
+                break;
             case "A":
                 generateMovement("$");
+                break;
         }
         commands.add("i");
     }
