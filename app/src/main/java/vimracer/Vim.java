@@ -102,9 +102,12 @@ public class Vim extends TextWindow{
                 cursor = ((int[]) command);
             } else if (command instanceof String) {
                 switch ((String) command) {
-                    case "i":
+                    case "insert":
                         setMode('i');
                         break;
+                    case "insertLine":
+                        insertLine(cursor[1]);
+                        cursor[0] = 0;
                 }
             }
         }
@@ -141,6 +144,13 @@ public class Vim extends TextWindow{
         if (cursor[0] == 0) return;
         cursor[0]--;
         removeUnderCursor();
+    }
+
+    private void insertLine(int lineNumber) {
+        System.out.println("yuh");
+        if (lineNumber > lines.size()) throw new IllegalArgumentException();
+        if (lineNumber == lines.size()) lines.add("");
+        lines.add(lineNumber, "");
     }
 
     public void setMode(char mode) {
@@ -251,7 +261,14 @@ public class Vim extends TextWindow{
                 generateMovement("$");
                 generateMovement("l");
                 break;
+            case "o":
+                generateMovement("j");
+                commands.add("insertLine");
+                break;
+            case "O":
+                commands.add("insertLine");
+                break;
         }
-        commands.add("i");
+        commands.add("insert");
     }
 }
