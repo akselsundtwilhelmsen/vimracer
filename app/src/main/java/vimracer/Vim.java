@@ -2,6 +2,8 @@ package vimracer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+
 import javafx.scene.input.KeyEvent;
 
 public class Vim extends TextWindow{
@@ -97,9 +99,7 @@ public class Vim extends TextWindow{
 
         for (Object command : commands) {
             if (command instanceof int[]) {
-                System.out.println(String.format("%d %d",cursor[0],cursor[1]));
                 cursor = ((int[]) command);
-                System.out.println(String.format("%d %d",cursor[0],cursor[1]));
             } else if (command instanceof String) {
                 switch ((String) command) {
                     case "i":
@@ -109,6 +109,7 @@ public class Vim extends TextWindow{
             }
         }
         commands.clear();
+        System.out.println(String.format("%d %d",cursor[0],cursor[1]));
     }
 
     public void keyRelease(KeyEvent event) {
@@ -167,10 +168,22 @@ public class Vim extends TextWindow{
         return (int) commands.get(commands.size()-1);
     }
 
+    private int[] getLastMovement() {
+        if (commands.size() == 0) {
+            return cursor.clone();
+        }
+        return commands.stream()
+            .sorted(Collections.reverseOrder())
+            .filter(o -> o instanceof int[])
+            .map(o -> (int[]) o)
+            .findFirst()
+            .orElse(cursor);
+    }
+
     private void generateMovement(String operator) {
         int length = getLastNumber();
-        int[] newPos = cursor.clone();
-        int[] prevPos = cursor.clone();
+        int[] newPos = getLastMovement().clone();
+        int[] prevPos = newPos.clone();
         for (int i = 0; i < length; i++) {
             switch (operator) {
                 case "|":
@@ -236,6 +249,7 @@ public class Vim extends TextWindow{
                 break;
             case "A":
                 generateMovement("$");
+                generateMovement("l");
                 break;
         }
         commands.add("i");
