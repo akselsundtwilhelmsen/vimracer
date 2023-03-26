@@ -20,23 +20,25 @@ public class Controller implements Initializable {
     @FXML private Text vimText;
     // @FXML private Pane vimPane;
 
+    final int lineLength = 70;
+
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
         TextLoader textLoader = new TextLoader();
         vim = new Vim();
         solution = new TextWindow();
         solution.setText(textLoader.getText());
-        solutionText.setText(solution.toString());
+        solutionText.setText(solution.toString(lineLength));
     }
 
     @FXML
     public void handleOnKeyPressed(KeyEvent event) {
         vim.keyPress(event);
-        vimText.setText(vim.toString());
+        vimText.setText(vim.toString(lineLength));
         if (isTextsEqual()) {
             // midlertidig
             solution.setText("Congratulations! You won");
-            solutionText.setText(solution.toString());
+            solutionText.setText(solution.toString(lineLength));
         }
     }
 

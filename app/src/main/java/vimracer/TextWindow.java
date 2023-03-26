@@ -21,13 +21,39 @@ public class TextWindow {
         this.lines.add(text);
     }
 
-    public String toString() {
-        // return lines.stream().collect(Collectors.joining("\n"));
+    public String toString() { //without line numbers
+        return lines.stream().collect(Collectors.joining("\n"));
+    }
+
+    public String toString(int maxLineLength) {
+        final int padding = 2;
+        maxLineLength -= padding + 2; // to account for line number and padding
+
         String outString = "";
         int lineNumber = 0;
         for (String line : lines) {
             lineNumber++;
-            outString += lineNumber + " " + line + "\n";
+
+            int currentPadding = padding - ("" + lineNumber).length(); // amount of padding needed for the current line
+            String paddingString = "";
+            for (int i=0; i < currentPadding; i++) {
+                paddingString += " ";
+            }
+
+            String paddingStringOverflow = " "; // amount of padding needed after a line overflow
+            for (int i=0; i < padding; i++) {
+                paddingStringOverflow += " ";
+            }
+
+            if (line.length() < maxLineLength) {
+                outString += paddingString + lineNumber + " " + line + "\n";
+            }
+            else {
+                outString += paddingString + lineNumber + " " + line.substring(0, maxLineLength) + "\n";
+                for (int i=0; i < line.length()/maxLineLength ; i++) {
+                    outString += paddingStringOverflow + line.substring(maxLineLength) + "\n";
+                }
+            }
         }
         return outString;
     }
@@ -39,22 +65,4 @@ public class TextWindow {
     public boolean equals(TextWindow t) {
         return this.toString().equals(t.toString());
     }
-
-    // public void setRandomText() {
-    //     int numberOfWords = 12;
-    //     int numberOfLines = 8;
-    //     lines = new ArrayList<>();
-    //     String randomString = "";
-    //     Random random = new Random();
-    //     for (int k = 0; k < numberOfLines; k++) {
-    //         for(int i = 0; i < numberOfWords; i++) {
-    //             char[] word = new char[random.nextInt(8)+3]; // words of length 3 through 10. (1 and 2 letter words are boring.)
-    //             for(int j = 0; j < word.length; j++) {
-    //                 word[j] = (char)('a' + random.nextInt(26));
-    //             }
-    //             randomString = randomString + new String(word) + " ";
-    //         }
-    //         lines.add(randomString);
-    //     }
-    // }
 }

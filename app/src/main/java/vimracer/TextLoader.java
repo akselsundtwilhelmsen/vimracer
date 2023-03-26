@@ -103,6 +103,10 @@ public class TextLoader {
         lines.add("It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.");
         lines.add("In the beginning God created the heavens and the earthlineNumber.");
         lines.add("The quick brown fox jumped over the lazy dog.");
+        lines.add("The quick brown fox jumped over the lazy dog.");
+        lines.add("The quick brown fox jumped over the lazy dog.");
+        lines.add("The quick brown fox jumped over the lazy dog.");
+        lines.add("The quick brown fox jumped over the lazy dog.");
     }
 
 
