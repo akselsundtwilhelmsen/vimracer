@@ -22,7 +22,18 @@ public class TextWindow {
     }
 
     public String toString() {
-        return lines.stream().collect(Collectors.joining("\n"));
+        // return lines.stream().collect(Collectors.joining("\n"));
+        String outString = "";
+        int lineNumber = 0;
+        for (String line : lines) {
+            lineNumber++;
+            outString += lineNumber + " " + line + "\n";
+        }
+        return outString;
+    }
+
+    public String toStringRelativeNum() {
+        return "";
     }
 
     public boolean equals(TextWindow t) {

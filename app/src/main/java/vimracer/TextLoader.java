@@ -72,7 +72,7 @@ public class TextLoader {
         // String oldLine = this.lines.get(cursor[1]);
         // String newLine = oldLine.substring(0, cursor[0]) + insert + " " + oldLine.substring(cursor[0]);
         // this.newLines.set(cursor[1], newLine);
-        return "INSERTEDWORD" + " " + word;
+        return "inserted" + " " + word;
     }
 
     public String change(String word) {
@@ -80,7 +80,7 @@ public class TextLoader {
         // String oldLine = this.lines.get(cursor[1]);
         // String newLine = oldLine.substring(0, cursor[0]) + change + " " + oldLine.substring(cursor[0]+change.length());
         // this.newLines.set(cursor[1], newLine);
-        return "CHANGEDWORD";
+        return "changed";
     }
 
     public String capitalize(String word) {
