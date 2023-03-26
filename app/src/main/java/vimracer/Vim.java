@@ -14,9 +14,10 @@ public class Vim extends TextWindow{
     private ArrayList<Object> commands; //inneholder kommandoer (String), tall, og bevegelser (int[])
     private String currentCommand;
 
-    private final ArrayList<String> LegalMovementCommands;
-    private final ArrayList<String> LegalInsertModeCommands;
-    private final ArrayList<String> LegalCommands;
+    private final ArrayList<String> LegalMovementKeys;
+    private final ArrayList<String> LegalInsertModeKeys;
+    private final ArrayList<String> LegalOperatorKeys; 
+    private final ArrayList<String> LegalKeys;
 
     public Vim() {
         super();
@@ -28,11 +29,13 @@ public class Vim extends TextWindow{
         this.commands = new ArrayList<>();
         this.currentCommand = new String();
 
-        this.LegalMovementCommands = new ArrayList<>(Arrays.asList("0","F","ge","b","h","l","e","w","t","f","$","|","gg","{","}","k","j","G"));
-        this.LegalInsertModeCommands = new ArrayList<>(Arrays.asList("i","I","a","A","o","O"));
-        this.LegalCommands = new ArrayList<>();
-        this.LegalCommands.addAll(LegalMovementCommands);
-        this.LegalCommands.addAll(LegalInsertModeCommands);
+        this.LegalMovementKeys = new ArrayList<>(Arrays.asList("0","F","ge","b","h","l","e","w","t","f","$","|","gg","{","}","k","j","G"));
+        this.LegalInsertModeKeys = new ArrayList<>(Arrays.asList("i","I","a","A","o","O"));
+        this.LegalOperatorKeys = new ArrayList<>(Arrays.asList("d","D","y","Y","c","C",">","<","x","X"));
+        this.LegalKeys = new ArrayList<>();
+        this.LegalKeys.addAll(LegalMovementKeys);
+        this.LegalKeys.addAll(LegalInsertModeKeys);
+        this.LegalKeys.addAll(LegalOperatorKeys);
 
         // int[] test = new int[2];
         // test[0] = -1;
@@ -78,18 +81,22 @@ public class Vim extends TextWindow{
         //generate legal String-command TODO: numbers
         currentCommand = currentCommand + keyString;
 
-        if (! LegalCommands.stream()
+        if (! LegalKeys.stream()
             .anyMatch(s -> currentCommand.startsWith(s) && currentCommand.length() <= s.length())) {
                 currentCommand = "";
         }
 
         //covert String-command normal command and add to command list
-        if (LegalMovementCommands.contains(keyString)) {
+        if (LegalMovementKeys.contains(keyString)) {
             generateMovement(keyString);
         }
 
-        if (LegalInsertModeCommands.contains(keyString)) {
+        if (LegalInsertModeKeys.contains(keyString)) {
             generateInsertCommand(keyString);
+        }
+
+        if (LegalOperatorKeys.contains(keyString)) {
+            generateOperationCommand(keyString);
         }
 
         //execute the command list 
@@ -108,6 +115,12 @@ public class Vim extends TextWindow{
                     case "insertLine":
                         insertLine(cursor[1]);
                         cursor[0] = 0;
+                        break;
+                    case "deleteMotion":
+                        if (getLastMovement().equals(cursor)) return; //midlertidig
+                        System.out.println("cuh");
+                        removeBetween(cursor,getLastMovement());
+                        break;
                 }
             }
         }
@@ -132,6 +145,28 @@ public class Vim extends TextWindow{
         cursor[0] += s.length();
     }
 
+    private void removeBetween(int[] pos1, int[] pos2) {
+        if (pos1[1] < pos2[1] || (pos1[1] == pos2[1] && pos1[0] < pos2[0])) {
+            int[] temp = pos1;
+            pos1 = pos2;
+            pos2 = temp;
+        }
+
+        //fjerner mellom posisjoner på samme linje
+        if (pos1[1] == pos2[2]) {
+            lines.set(pos1[1], lines.get(pos1[1]).substring(0,pos1[0]) + lines.get(pos1[1]).substring(pos2[0]));
+            return;
+        }
+
+        //fjerner fra 1. posisjon og ut linjen, alle linjene mellom, og til 2. posisjon
+        lines.set(pos1[1], lines.get(pos1[1]).substring(0,pos1[0]));
+        for (int i = 0; i < pos2[1]-pos1[1]-2; i++) {
+            removeLine(pos1[1]+1);
+        }
+        lines.set(pos1[1]+1, lines.get(pos1[1]+1).substring(pos2[0]));
+
+    }
+
     private void removeUnderCursor() {
         if (lines.get(cursor[1]).length() == 0) return;
         lines.set(cursor[1], lines.get(cursor[1]).substring(0,cursor[0]) + lines.get(cursor[1]).substring(cursor[0]+1));
@@ -147,10 +182,14 @@ public class Vim extends TextWindow{
     }
 
     private void insertLine(int lineNumber) {
-        System.out.println("yuh");
-        if (lineNumber > lines.size()) throw new IllegalArgumentException();
+        if (0 > lineNumber || lineNumber > lines.size()) throw new IllegalArgumentException();
         if (lineNumber == lines.size()) lines.add("");
         lines.add(lineNumber, "");
+    }
+
+    private void removeLine(int lineNumber) {
+        if (0 > lineNumber || lineNumber > lines.size()-1) throw new IllegalArgumentException();
+        lines.remove(lineNumber);
     }
 
     public void setMode(char mode) {
@@ -178,10 +217,8 @@ public class Vim extends TextWindow{
         return (int) commands.get(commands.size()-1);
     }
 
+    //last movement in command list, returns cursor position if non found
     private int[] getLastMovement() {
-        if (commands.size() == 0) {
-            return cursor.clone();
-        }
         return commands.stream()
             .sorted(Collections.reverseOrder())
             .filter(o -> o instanceof int[])
@@ -190,15 +227,25 @@ public class Vim extends TextWindow{
             .orElse(cursor);
     }
 
-    private void generateMovement(String operator) {
+    //last command in command list, returns cursor position if non found
+    private String getLastCommand() {
+        return commands.stream()
+            .sorted(Collections.reverseOrder())
+            .filter(o -> o instanceof String)
+            .map(o -> (String) o)
+            .findFirst()
+            .orElse("");
+    }
+
+    private void generateMovement(String key) {
         int length = getLastNumber();
         int[] newPos = getLastMovement().clone();
         int[] prevPos = newPos.clone();
         for (int i = 0; i < length; i++) {
-            switch (operator) {
+            switch (key) {
                 case "|":
                     newPos[0] = 0;
-                    operator = "l"; //flytter til høyre hvis length > 1
+                    key = "l"; //flytter til høyre hvis length > 1
                     break;
                 case "0":
                     newPos[0] = 0;
@@ -225,7 +272,7 @@ public class Vim extends TextWindow{
                     break;
                 case "$":
                     newPos[0] = lines.get(newPos[1]).length()-1;
-                    operator = "j";
+                    key = "j";
                     break;
                 case "gg":
                     newPos[1] = 0;
@@ -247,8 +294,8 @@ public class Vim extends TextWindow{
         commands.add(newPos);
     }
 
-    private void generateInsertCommand(String operator) {
-        switch (operator) {
+    private void generateInsertCommand(String key) {
+        switch (key) {
             case "i":
                 break;
             case "I":
@@ -270,5 +317,14 @@ public class Vim extends TextWindow{
                 break;
         }
         commands.add("insert");
+    }
+
+    private void generateOperationCommand(String key) {
+        // String lastCommand = getLastCommand();
+        switch (key) {
+            case "d":
+                commands.add("deleteMotion");
+                break;
+        }
     }
 }
