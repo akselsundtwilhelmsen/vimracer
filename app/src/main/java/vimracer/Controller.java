@@ -6,41 +6,39 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
+// import javafx.scene.layout.AnchorPane;
+// import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 // import javafx.stage.PopupWindow.AnchorLocation;
 
 public class Controller implements Initializable {
 
-    TextWindow soulution;
+    TextWindow solution;
     Vim vim;
 
-    @FXML private Text soulutionText;
+    @FXML private Text solutionText;
     @FXML private Text vimText;
-    @FXML private Pane vimPane;
+    // @FXML private Pane vimPane;
+
+    final int lineLength = 70;
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
+        TextLoader textLoader = new TextLoader();
         vim = new Vim();
-        soulution = new TextWindow();
-        soulution.setText("Aa");
+        solution = new TextWindow();
+        solution.setText(textLoader.getText());
+        solutionText.setText(solution.toString(lineLength));
     }
-
-    // @FXML
-    // public void onVimDoThing() {
-    //     vim.setRandomText();
-    //     vimText.setText(vim.toString());
-    // }
 
     @FXML
     public void handleOnKeyPressed(KeyEvent event) {
         vim.keyPress(event);
-        vimText.setText(vim.toString());
+        vimText.setText(vim.toString(lineLength));
         if (isTextsEqual()) {
             // midlertidig
-            soulution.setText("Congratulations! You won");
-            soulutionText.setText(soulution.toString());
+            solution.setText("Congratulations! You won");
+            solutionText.setText(solution.toString(lineLength));
         }
     }
 
@@ -50,8 +48,9 @@ public class Controller implements Initializable {
     }
 
     private boolean isTextsEqual() {
-        return soulution.equals(vim);
+        return solution.equals(vim);
     }
+
     // public void setVimText(String text) {
     //     vimWindow.setText(text);
     // }
