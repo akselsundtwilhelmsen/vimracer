@@ -15,10 +15,14 @@ public class Vim extends TextWindow{
     private ArrayList<Object> commands; //inneholder kommandoer (String), tall, og bevegelser (int[])
     private String currentCommand;
 
-    private final ArrayList<String> LegalMovementKeys;
-    private final ArrayList<String> LegalInsertModeKeys;
-    private final ArrayList<String> LegalOperatorKeys; 
+    //possible keyboard commands 
+    private final ArrayList<String> LegalMovementKeys = new ArrayList<>(Arrays.asList("0","F","ge","b","h","l","e","w","t","f","$","|","gg","{","}","k","j","G"));
+    private final ArrayList<String> LegalInsertModeKeys = new ArrayList<>(Arrays.asList("i","I","a","A","o","O"));
+    private final ArrayList<String> LegalOperatorKeys = new ArrayList<>(Arrays.asList("d","D","y","Y","c","C",">","<","x","X","J"));
     private final ArrayList<String> LegalKeys;
+
+    //regexes
+    // private final String wordBeginning = "([\w\s]\W)|(\W\w)";
 
     public Vim() {
         super();
@@ -30,9 +34,6 @@ public class Vim extends TextWindow{
         this.commands = new ArrayList<>();
         this.currentCommand = new String();
 
-        this.LegalMovementKeys = new ArrayList<>(Arrays.asList("0","F","ge","b","h","l","e","w","t","f","$","|","gg","{","}","k","j","G"));
-        this.LegalInsertModeKeys = new ArrayList<>(Arrays.asList("i","I","a","A","o","O"));
-        this.LegalOperatorKeys = new ArrayList<>(Arrays.asList("d","D","y","Y","c","C",">","<","x","X","J"));
         this.LegalKeys = new ArrayList<>();
         this.LegalKeys.addAll(LegalMovementKeys);
         this.LegalKeys.addAll(LegalInsertModeKeys);
@@ -172,9 +173,6 @@ public class Vim extends TextWindow{
         for (int i = 0; i < pos2[1]-pos1[1]+1; i++) {
             removeLine(pos1[1]);
         }
-
-
-
     }
 
     private void removeUnderCursor() {
@@ -222,6 +220,8 @@ public class Vim extends TextWindow{
         // if (currentLength < cursor[0]) return false;
         return true;
     }
+
+    // private int[] nextInstanceOf(String Regex)
 
     private int getLastNumber() {
         if (commands.size() == 0) {
