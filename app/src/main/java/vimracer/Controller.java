@@ -6,10 +6,7 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.input.KeyEvent;
-// import javafx.scene.layout.AnchorPane;
-// import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
-// import javafx.stage.PopupWindow.AnchorLocation;
 
 public class Controller implements Initializable {
 
@@ -50,8 +47,4 @@ public class Controller implements Initializable {
     private boolean isTextsEqual() {
         return solution.equals(vim);
     }
-
-    // public void setVimText(String text) {
-    //     vimWindow.setText(text);
-    // }
 }
