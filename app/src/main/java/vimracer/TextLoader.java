@@ -107,6 +107,7 @@ public class TextLoader {
         lines.add("The quick brown fox jumped over the lazy dog.");
         lines.add("The quick brown fox jumped over the lazy dog.");
         lines.add("The quick brown fox jumped over the lazy dog.");
+        lines.add("01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789ferdig");
     }
 
 

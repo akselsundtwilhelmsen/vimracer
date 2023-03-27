@@ -20,7 +20,7 @@ public class Controller implements Initializable {
     @FXML private Text vimText;
     // @FXML private Pane vimPane;
 
-    final int lineLength = 70;
+    final int lineLength = 80;
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
