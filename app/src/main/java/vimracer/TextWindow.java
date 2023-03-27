@@ -31,6 +31,7 @@ public class TextWindow {
 
         String outString = "";
         int lineNumber = 0;
+
         for (String line : lines) {
             lineNumber++;
 
@@ -40,7 +41,7 @@ public class TextWindow {
                 paddingString += " ";
             }
 
-            String paddingStringOverflow = " "; // amount of padding needed after a line overflow
+            String paddingStringOverflow = " "; // amount of padding needed after line overflow
             for (int i=0; i < padding; i++) {
                 paddingStringOverflow += " ";
             }
@@ -50,8 +51,16 @@ public class TextWindow {
             }
             else {
                 outString += paddingString + lineNumber + " " + line.substring(0, maxLineLength) + "\n";
-                for (int i=0; i < line.length()/maxLineLength ; i++) {
-                    outString += paddingStringOverflow + line.substring(maxLineLength) + "\n";
+                int counter = 1;
+                while (true) {
+                    counter += 1;
+                    if (line.length() > maxLineLength*counter) {
+                        outString += paddingStringOverflow + line.substring((counter-1)*maxLineLength, counter*maxLineLength) + "\n";
+                    }
+                    else {
+                        outString += paddingStringOverflow + line.substring((counter-1)*maxLineLength) + "\n";
+                        break;
+                    }
                 }
             }
         }
