@@ -12,7 +12,7 @@
       <AnchorPane fx:id="textPane" HBox.hgrow="ALWAYS">
       <Pane prefWidth="600" style="-fx-background-color: #536271;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Text fx:id="solutionText" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fasit" wrappingWidth="560">
+            <Text fx:id="solutionText" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Solution" wrappingWidth="560">
                <font>
                   <Font name="Ubuntu Mono" size="13.0" />
                </font>
@@ -26,7 +26,7 @@
                   <Font name="Ubuntu Mono" size="13.0" />
                </font>
             </Text>
-            <Button />
+            <Button layoutY="10000"/> 
          </children>
       </Pane>
       </AnchorPane>
@@ -35,6 +35,16 @@
             <Pane layoutX="14.0" layoutY="50.0" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #FF8552;" />
             <Pane layoutX="14.0" layoutY="26.0" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #297373;" />
             <Pane layoutX="14.0" layoutY="74.0" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #E9D758;" />
+            <Pane layoutX="14.0" layoutY="752.0" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #000000;">
+               <children>
+                  <Text fx:id="stopwatchText" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="stopwatch" textAlignment="CENTER" underline="true" wrappingWidth="73.0">
+                     <font>
+                        <Font name="Ubuntu Mono" size="13.0" />
+                     </font>
+                  </Text>
+                  <Button layoutY="10000"/> 
+               </children>
+            </Pane>
          </children>
       </AnchorPane>
    </children>

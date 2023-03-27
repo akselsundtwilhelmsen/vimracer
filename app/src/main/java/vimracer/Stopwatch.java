@@ -11,10 +11,6 @@ public class Stopwatch {
         return System.currentTimeMillis() - this.startTime;
     }
 
-    public long getDigitsByIndex(long n, int start, int stop) {
-        return 0L;
-    }
-
     public String toString() { // 00:00:00
         long elapsedTime = this.getElapsedTime();
         long milliSec = elapsedTime % 1000;
