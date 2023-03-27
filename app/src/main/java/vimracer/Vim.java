@@ -32,7 +32,7 @@ public class Vim extends TextWindow{
 
         this.LegalMovementKeys = new ArrayList<>(Arrays.asList("0","F","ge","b","h","l","e","w","t","f","$","|","gg","{","}","k","j","G"));
         this.LegalInsertModeKeys = new ArrayList<>(Arrays.asList("i","I","a","A","o","O"));
-        this.LegalOperatorKeys = new ArrayList<>(Arrays.asList("d","D","y","Y","c","C",">","<","x","X"));
+        this.LegalOperatorKeys = new ArrayList<>(Arrays.asList("d","D","y","Y","c","C",">","<","x","X","J"));
         this.LegalKeys = new ArrayList<>();
         this.LegalKeys.addAll(LegalMovementKeys);
         this.LegalKeys.addAll(LegalInsertModeKeys);
@@ -54,12 +54,12 @@ public class Vim extends TextWindow{
         String keyString = event.getCode().toString();
 
         // behandler input, TODO: bør kanskje finne ut om dette kan gjøres automatisk
-        if (keyString == "SHIFT") {
+        if (keyString.equals("SHIFT")) {
             shiftHeld = true;
             return;
         }
 
-        if (keyString == "ESCAPE") {
+        if (keyString.equals("ESCAPE")) {
             mode = 'n';
             if (!validCursorPos(cursor)) cursor[0]--;
             return;
@@ -77,6 +77,10 @@ public class Vim extends TextWindow{
         if (mode == 'i') {
             if (keyString == "BACK_SPACE") {
                 backspace();
+            } else if (keyString == "ENTER") { //does not work because enter presses the button
+                insertLine(cursor[1]+1);
+                cursor[1]++;
+                cursor[0] = 0;
             } else {
                 insertString(keyString);
             }
@@ -128,6 +132,9 @@ public class Vim extends TextWindow{
                         if (! (commands.get(index+1) instanceof int[])) return; //midlertidig
                         removeBetween(cursor,(int[]) commands.get(index+1));
                         break;
+                    case "joinLines":
+                        cursor[0] = lines.get(cursor[1]).length();
+                        joinLines(cursor[1], cursor[1]+1);
                 }
             }
             index++;
@@ -155,20 +162,13 @@ public class Vim extends TextWindow{
             pos2 = temp;
         }
 
-        //fjerner mellom posisjoner på samme linje
+        //fjerner mellom posisjoner på samme linje on the same line
         if (pos1[1] == pos2[1]) {
             lines.set(pos1[1], lines.get(pos1[1]).substring(0,pos1[0]) + lines.get(pos1[1]).substring(pos2[0]));
             return;
         }
 
-        // //fjerner fra 1. posisjon og ut linjen, alle linjene mellom, og til 2. posisjon
-        // lines.set(pos1[1], lines.get(pos1[1]).substring(0,pos1[0]));
-        // for (int i = 0; i < pos2[1]-pos1[1]-2; i++) {
-        //     removeLine(pos1[1]+1);
-        // }
-        // lines.set(pos1[1]+1, lines.get(pos1[1]+1).substring(pos2[0]));
-
-        //fjerner alle linjene fra og med 1. til og med andre posisjon
+        //Remove all lines between and including pos1 and pos2
         for (int i = 0; i < pos2[1]-pos1[1]+1; i++) {
             removeLine(pos1[1]);
         }
@@ -200,6 +200,12 @@ public class Vim extends TextWindow{
     private void removeLine(int lineNumber) {
         if (0 > lineNumber || lineNumber > lines.size()-1) throw new IllegalArgumentException();
         lines.remove(lineNumber);
+    }
+
+    private void joinLines(int lineNumber1, int lineNumber2) {
+        if (lineNumber1 >= lines.size() && lineNumber2 >= lines.size()) throw new IllegalArgumentException();
+        lines.set(lineNumber1, lines.get(lineNumber1) + lines.get(lineNumber2));
+        removeLine(lineNumber2);
     }
 
     public void setMode(char mode) {
@@ -348,6 +354,9 @@ public class Vim extends TextWindow{
             case "X":
                 commands.add("deleteMotion");
                 generateMovement("h");
+                break;
+            case "J":
+                commands.add("joinLines");
                 break;
         }
     }
