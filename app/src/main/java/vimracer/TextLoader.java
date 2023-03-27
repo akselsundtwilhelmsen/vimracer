@@ -15,7 +15,6 @@ public class TextLoader {
 
     public void garbleByWord(int intensityPercentage) {
         //intensityPercentage is the percentage of words affected by the garbler
-        int lineNumber = 0;
         for (String line : this.lines) {
             String[] wordArray = line.split(" ");
             String newLine = "";
@@ -78,7 +77,7 @@ public class TextLoader {
         lines.add("Ask not what your country can do for you, ask what you can do for your country.");
         lines.add("I have a dream that one day this nation will rise up and live out the true meaning of its creed: We hold these truths to be self-evident, that all men are created equal.");
         lines.add("It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.");
-        lines.add("In the beginning God created the heavens and the earthlineNumber.");
+        lines.add("In the beginning God created the heavens and the earth.");
         lines.add("The quick brown fox jumped over the lazy dog.");
         lines.add("The quick brown fox jumped over the lazy dog.");
         lines.add("The quick brown fox jumped over the lazy dog.");
