@@ -110,6 +110,7 @@ public class Vim extends TextWindow{
         //TODO: it must dedect if it's executable (execute and clear), start of a legal command (continue), or illegal command (clear)
         //temporary soulution is to just execute and clear it
 
+        int index = 0;
         for (Object command : commands) {
             if (command instanceof int[]) {
                 cursor = ((int[]) command);
@@ -123,11 +124,13 @@ public class Vim extends TextWindow{
                         cursor[0] = 0;
                         break;
                     case "deleteMotion":
-                        if (getLastMovement().equals(cursor)) return; //midlertidig
-                        removeBetween(cursor,getLastMovement());
+                        if (commands.size() <= index+1) return; //midlertidig
+                        if (! (commands.get(index+1) instanceof int[])) return; //midlertidig
+                        removeBetween(cursor,(int[]) commands.get(index+1));
                         break;
                 }
             }
+            index++;
         }
         commands.clear();
         System.out.println(String.format("%d %d",cursor[0],cursor[1]));
@@ -138,11 +141,6 @@ public class Vim extends TextWindow{
             shiftHeld = false;
             return;
         }
-    }
-
-    private void moveCursor(int[] pos) {
-        if (!validCursorPos(pos)) throw new IllegalArgumentException();
-        cursor = pos;
     }
 
     private void insertString(String s) {
@@ -163,19 +161,26 @@ public class Vim extends TextWindow{
             return;
         }
 
-        //fjerner fra 1. posisjon og ut linjen, alle linjene mellom, og til 2. posisjon
-        lines.set(pos1[1], lines.get(pos1[1]).substring(0,pos1[0]));
-        for (int i = 0; i < pos2[1]-pos1[1]-2; i++) {
-            removeLine(pos1[1]+1);
+        // //fjerner fra 1. posisjon og ut linjen, alle linjene mellom, og til 2. posisjon
+        // lines.set(pos1[1], lines.get(pos1[1]).substring(0,pos1[0]));
+        // for (int i = 0; i < pos2[1]-pos1[1]-2; i++) {
+        //     removeLine(pos1[1]+1);
+        // }
+        // lines.set(pos1[1]+1, lines.get(pos1[1]+1).substring(pos2[0]));
+
+        //fjerner alle linjene fra og med 1. til og med andre posisjon
+        for (int i = 0; i < pos2[1]-pos1[1]+1; i++) {
+            removeLine(pos1[1]);
         }
-        lines.set(pos1[1]+1, lines.get(pos1[1]+1).substring(pos2[0]));
+
+
 
     }
 
     private void removeUnderCursor() {
         if (lines.get(cursor[1]).length() == 0) return;
         lines.set(cursor[1], lines.get(cursor[1]).substring(0,cursor[0]) + lines.get(cursor[1]).substring(cursor[0]+1));
-        if (! validCursorPos(cursor)) {
+        if (! validCursorPos(cursor)) { 
             cursor[0]--; 
         }
     }
@@ -334,6 +339,15 @@ public class Vim extends TextWindow{
             case "D":
                 commands.add("deleteMotion");
                 generateMovement("$");
+                break;
+            case "x":
+                commands.add("deleteMotion");
+                generateMovement("l");
+                generateMovement("h");
+                break;
+            case "X":
+                commands.add("deleteMotion");
+                generateMovement("h");
                 break;
         }
     }

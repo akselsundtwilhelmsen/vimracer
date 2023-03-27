@@ -7,7 +7,7 @@ import javafx.scene.Scene;
 public class App extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception {  
+    public void start(Stage primaryStage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("App.fxml"));
         Scene scene = new Scene(loader.load());
         loader.setController(new Controller());
