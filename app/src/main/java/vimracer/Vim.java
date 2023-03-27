@@ -3,6 +3,7 @@ package vimracer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.stream.Stream;
 
 import javafx.scene.input.KeyEvent;
 
@@ -52,6 +53,7 @@ public class Vim extends TextWindow{
     public void keyPress(KeyEvent event) {
         String keyString = event.getCode().toString();
 
+        // behandler input, TODO: bør kanskje finne ut om dette kan gjøres automatisk
         if (keyString == "SHIFT") {
             shiftHeld = true;
             return;
@@ -61,6 +63,10 @@ public class Vim extends TextWindow{
             mode = 'n';
             if (!validCursorPos(cursor)) cursor[0]--;
             return;
+        }
+
+        if (keyString.startsWith("DIGIT"))  {
+            keyString = keyString.substring(5);
         }
 
         if (!shiftHeld && keyString.length() == 1) {
@@ -118,7 +124,6 @@ public class Vim extends TextWindow{
                         break;
                     case "deleteMotion":
                         if (getLastMovement().equals(cursor)) return; //midlertidig
-                        System.out.println("cuh");
                         removeBetween(cursor,getLastMovement());
                         break;
                 }
@@ -146,14 +151,14 @@ public class Vim extends TextWindow{
     }
 
     private void removeBetween(int[] pos1, int[] pos2) {
-        if (pos1[1] < pos2[1] || (pos1[1] == pos2[1] && pos1[0] < pos2[0])) {
+        if (pos1[1] > pos2[1] || (pos1[1] == pos2[1] && pos1[0] > pos2[0])) {
             int[] temp = pos1;
             pos1 = pos2;
             pos2 = temp;
         }
 
         //fjerner mellom posisjoner på samme linje
-        if (pos1[1] == pos2[2]) {
+        if (pos1[1] == pos2[1]) {
             lines.set(pos1[1], lines.get(pos1[1]).substring(0,pos1[0]) + lines.get(pos1[1]).substring(pos2[0]));
             return;
         }
@@ -219,12 +224,13 @@ public class Vim extends TextWindow{
 
     //last movement in command list, returns cursor position if non found
     private int[] getLastMovement() {
-        return commands.stream()
-            .sorted(Collections.reverseOrder())
+        Stream<Object> commandStream = commands.stream();
+        commandStream = Stream.concat(Stream.of(cursor), commandStream);
+        return commandStream
             .filter(o -> o instanceof int[])
             .map(o -> (int[]) o)
-            .findFirst()
-            .orElse(cursor);
+            .reduce((a,b) -> b)
+            .get();
     }
 
     //last command in command list, returns cursor position if non found
@@ -324,6 +330,10 @@ public class Vim extends TextWindow{
         switch (key) {
             case "d":
                 commands.add("deleteMotion");
+                break;
+            case "D":
+                commands.add("deleteMotion");
+                generateMovement("$");
                 break;
         }
     }

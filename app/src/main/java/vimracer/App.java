@@ -12,7 +12,7 @@ public class App extends Application {
         Scene scene = new Scene(loader.load());
         loader.setController(new Controller());
 
-        primaryStage.setTitle("Example App");
+        primaryStage.setTitle("Vimracer");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
