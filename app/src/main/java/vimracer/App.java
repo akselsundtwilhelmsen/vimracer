@@ -30,7 +30,7 @@ public class App extends Application {
         //     }
         // }));
         // updateStopwatch.setCycleCount(Timeline.INDEFINITE);
-        // updateStopwatch.play();
+        // updateStopwatch.play();s
     }
 
     public static void main(String[] args) {

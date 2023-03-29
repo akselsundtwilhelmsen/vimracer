@@ -3,6 +3,7 @@ package vimracer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.regex.*;
 import java.util.stream.Stream;
 
 import javafx.scene.input.KeyEvent;
@@ -22,7 +23,9 @@ public class Vim extends TextWindow{
     private final ArrayList<String> LegalKeys;
 
     //regexes
-    // private final String wordBeginning = "([\w\s]\W)|(\W\w)";
+    private final Pattern wordBeginning = Pattern.compile("([\\w\\s][^\\w\\s])|(\\W\\w)");
+    // private final Pattern wordBeginning = Pattern.compile("(\\W\\w)");
+
 
     public Vim() {
         super();
@@ -76,6 +79,9 @@ public class Vim extends TextWindow{
 
         
         if (mode == 'i') {
+            if (keyString.equals("1")) keyString = " "; //TODO: get regular enter and space to work and remove these
+            if (keyString.equals("2")) keyString = "ENTER";
+
             if (keyString == "BACK_SPACE") {
                 backspace();
             } else if (keyString == "ENTER") { //does not work because enter presses the button
@@ -221,7 +227,17 @@ public class Vim extends TextWindow{
         return true;
     }
 
-    // private int[] nextInstanceOf(String Regex)
+    private int[] nextInstanceOf(Pattern regex, int[] from) {
+        int[] newPos = from.clone();
+        String string = lines.get(from[1]).substring(from[0]+1);
+        Matcher matcher = regex.matcher(string);
+        if (matcher.find()) {
+            System.out.format("next pattern: %d\n",matcher.start());
+            newPos[0] = matcher.start() + (lines.get(from[1]).length() - string.length());
+        }
+        return newPos;
+        
+    }
 
     private int getLastNumber() {
         if (commands.size() == 0) {
@@ -282,6 +298,8 @@ public class Vim extends TextWindow{
                 case "e":
                     break;
                 case "w":
+                    newPos = nextInstanceOf(wordBeginning,newPos);
+                    newPos[0]++; 
                     break;
                 case "t":
                     break;
