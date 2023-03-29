@@ -17,14 +17,15 @@ public class Vim extends TextWindow{
     private String currentCommand;
 
     //possible keyboard commands 
-    private final ArrayList<String> LegalMovementKeys = new ArrayList<>(Arrays.asList("0","F","ge","b","h","l","e","w","t","f","$","|","gg","{","}","k","j","G"));
+    private final ArrayList<String> LegalMovementKeys = new ArrayList<>(Arrays.asList("0","F","ge","b","h","l","e","w","W","t","f","$","|","gg","{","}","k","j","G"));
     private final ArrayList<String> LegalInsertModeKeys = new ArrayList<>(Arrays.asList("i","I","a","A","o","O"));
     private final ArrayList<String> LegalOperatorKeys = new ArrayList<>(Arrays.asList("d","D","y","Y","c","C",">","<","x","X","J"));
     private final ArrayList<String> LegalKeys;
 
     //regexes
     private final Pattern wordBeginning = Pattern.compile("([\\w\\s][^\\w\\s])|(\\W\\w)");
-    // private final Pattern wordBeginning = Pattern.compile("(\\W\\w)");
+    private final Pattern WORDBeginning = Pattern.compile("(\\s.)");
+    private final Pattern wordEnd = Pattern.compile("([^\\w\\s][\\w\\s])|(\\w\\W)|[^\\s]$");
 
 
     public Vim() {
@@ -232,8 +233,12 @@ public class Vim extends TextWindow{
         String string = lines.get(from[1]).substring(from[0]+1);
         Matcher matcher = regex.matcher(string);
         if (matcher.find()) {
-            System.out.format("next pattern: %d\n",matcher.start());
+            System.out.format("next pattern: \"%s\", starts at %d\n",matcher.group(0),matcher.start());
             newPos[0] = matcher.start() + (lines.get(from[1]).length() - string.length());
+        // } else if (lines.size() < from[1]) {
+        //     from[0] = 0;
+        //     from[1]++;
+        //     return nextInstanceOf(regex, from);
         }
         return newPos;
         
@@ -296,10 +301,15 @@ public class Vim extends TextWindow{
                     newPos[0] = prevPos[0]+1;
                     break;
                 case "e":
+                    newPos = nextInstanceOf(wordEnd,newPos);
                     break;
                 case "w":
                     newPos = nextInstanceOf(wordBeginning,newPos);
-                    newPos[0]++; 
+                    if (! prevPos.equals(newPos)) newPos[0]++; 
+                    break;
+                case "W":
+                    newPos = nextInstanceOf(WORDBeginning,newPos);
+                    if (! prevPos.equals(newPos)) newPos[0]++; 
                     break;
                 case "t":
                     break;
