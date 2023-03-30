@@ -42,11 +42,6 @@ public class Vim extends TextWindow{
         this.LegalKeys.addAll(LegalMovementKeys);
         this.LegalKeys.addAll(LegalInsertModeKeys);
         this.LegalKeys.addAll(LegalOperatorKeys);
-
-        // int[] test = new int[2];
-        // test[0] = -1;
-        // test[1] = 0;
-        // if (validCursorPos(test)) System.err.println("wtf!!");
     }
 
 
@@ -104,6 +99,11 @@ public class Vim extends TextWindow{
                 currentCommand = "";
         }
 
+        generateCommand(keyString);
+        executeCommandList();
+    }
+
+    private void generateCommand(String keyString) {
         //covert String-command normal command and add to command list
         if (LegalMovementKeys.contains(keyString)) {
             generateMovement(keyString);
@@ -116,12 +116,12 @@ public class Vim extends TextWindow{
         if (LegalOperatorKeys.contains(keyString)) {
             generateOperationCommand(keyString);
         }
+    }
 
-        //execute the command list 
-        //TODO: the command list can fill over multiple keypresses (e.g. d-i-w)
-        //TODO: it must dedect if it's executable (execute and clear), start of a legal command (continue), or illegal command (clear)
-        //temporary soulution is to just execute and clear it
-
+    //TODO: the command list can fill over multiple keypresses (e.g. d-i-w)
+    //TODO: it must dedect if it's executable (execute and clear), start of a legal command (continue), or illegal command (clear)
+    //temporary soulution is to just execute and clear it
+    private void executeCommandList() {
         int index = 0;
         for (Object command : commands) {
             if (command instanceof int[]) {
@@ -242,9 +242,30 @@ public class Vim extends TextWindow{
             }
         } else if (lines.size() > from[1]+2) {
             from[0] = 0;
-            from[1]++;
-            System.out.println("?");
+           from[1]++;
             return nextInstanceOf(regex, from, endOfRegex); //this might be very inefficient (creates new variables each recurtion)
+        }
+        return newPos;
+    }
+
+    private int[] prevInstanceOf(Pattern regex, int[] from, boolean endOfRegex) {
+        int[] newPos = from.clone();
+        String string = lines.get(from[1]).substring(0,from[0]);
+        Matcher matcher = regex.matcher(string);
+        boolean found = false;
+        while (matcher.find()) {
+            found = true;
+            if (endOfRegex) {
+                newPos[0] = matcher.end()-1;
+            } else {
+                newPos[0] = matcher.start();
+            }
+            System.out.format("next pattern: \"%s\", starts at %d\n",matcher.group(0),matcher.start());
+        }
+        if (!found && from[1] > 1) {
+            from[1]--;
+            from[0] = lines.get(from[1]).length();
+            return prevInstanceOf(regex, from, endOfRegex); //this might be very inefficient (creates new variables each recurtion)
         }
         return newPos;
     }
@@ -298,6 +319,7 @@ public class Vim extends TextWindow{
                 case "ge":
                     break;
                 case "b":
+                    newPos = prevInstanceOf(WORDBeginning, prevPos, shiftHeld);
                     break;
                 case "h":
                     newPos[0] = prevPos[0]-1;
