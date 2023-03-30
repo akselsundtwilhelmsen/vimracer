@@ -228,20 +228,25 @@ public class Vim extends TextWindow{
         return true;
     }
 
-    private int[] nextInstanceOf(Pattern regex, int[] from) {
+    private int[] nextInstanceOf(Pattern regex, int[] from, boolean endOfRegex) {
         int[] newPos = from.clone();
         String string = lines.get(from[1]).substring(from[0]+1);
         Matcher matcher = regex.matcher(string);
         if (matcher.find()) {
             System.out.format("next pattern: \"%s\", starts at %d\n",matcher.group(0),matcher.start());
-            newPos[0] = matcher.start() + (lines.get(from[1]).length() - string.length());
-        // } else if (lines.size() < from[1]) {
-        //     from[0] = 0;
-        //     from[1]++;
-        //     return nextInstanceOf(regex, from);
+            newPos[0] = (lines.get(from[1]).length() - string.length());
+            if (endOfRegex) {
+                newPos[0] += matcher.end()-1;
+            } else {
+                newPos[0] += matcher.start();
+            }
+        } else if (lines.size() > from[1]+2) {
+            from[0] = 0;
+            from[1]++;
+            System.out.println("?");
+            return nextInstanceOf(regex, from, endOfRegex); //this might be very inefficient (creates new variables each recurtion)
         }
         return newPos;
-        
     }
 
     private int getLastNumber() {
@@ -301,15 +306,13 @@ public class Vim extends TextWindow{
                     newPos[0] = prevPos[0]+1;
                     break;
                 case "e":
-                    newPos = nextInstanceOf(wordEnd,newPos);
+                    newPos = nextInstanceOf(wordEnd,newPos,false);
                     break;
                 case "w":
-                    newPos = nextInstanceOf(wordBeginning,newPos);
-                    if (! prevPos.equals(newPos)) newPos[0]++; 
+                    newPos = nextInstanceOf(wordBeginning,newPos,true);
                     break;
                 case "W":
-                    newPos = nextInstanceOf(WORDBeginning,newPos);
-                    if (! prevPos.equals(newPos)) newPos[0]++; 
+                    newPos = nextInstanceOf(WORDBeginning,newPos,true);
                     break;
                 case "t":
                     break;
