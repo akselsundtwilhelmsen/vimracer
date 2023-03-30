@@ -11,13 +11,13 @@ public class KeypressCounter {
         this.count++;
     }
 
-    public void keypress(int n) {
+    public void keypress(int n) { // maybe unnecessary
         for (int i = 0; i < n; i++) {
             this.count++;
         }
     }
 
-    public int getCount() {
-        return this.count;
+    public String getCount() {
+        return "" + this.count;
     }
 }
