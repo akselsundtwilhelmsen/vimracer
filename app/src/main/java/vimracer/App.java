@@ -23,14 +23,14 @@ public class App extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        // Timeline updateStopwatch = new Timeline(new KeyFrame(Duration.seconds(0.001), new EventHandler<ActionEvent>() {
-        //     @Override
-        //     public void handle(ActionEvent event) {
-        //         controller.updateStopwatch();
-        //     }
-        // }));
-        // updateStopwatch.setCycleCount(Timeline.INDEFINITE);
-        // updateStopwatch.play();s
+        Timeline updateStopwatch = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                controller.testMethod();
+            }
+        }));
+        updateStopwatch.setCycleCount(Timeline.INDEFINITE);
+        updateStopwatch.play();
     }
 
     public static void main(String[] args) {

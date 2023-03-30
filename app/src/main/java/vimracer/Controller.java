@@ -14,14 +14,13 @@ public class Controller implements Initializable {
 
     TextWindow solution;
     Vim vim;
-    Stopwatch stopwatch;
+    public static Stopwatch stopwatch;
     KeypressCounter keypressCounter;
 
     @FXML private Text solutionText;
     @FXML private Text vimText;
     // @FXML private Pane vimPane;
-    @FXML private Text stopwatchText;
-    //TODO: legg til keypresscounter i UI!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111111
+    @FXML public Text stopwatchText;
 
     final int lineLength = 80;
 
@@ -37,6 +36,7 @@ public class Controller implements Initializable {
 
         stopwatchText.setFill(Color.RED);
         stopwatchText.setText(stopwatch.toString());
+        System.out.println(stopwatch.toString());
     }
 
     @FXML
@@ -49,6 +49,7 @@ public class Controller implements Initializable {
             solution.setText("Congratulations! You won");
             solutionText.setText(solution.toString(lineLength));
         }
+        System.out.println(stopwatch.toString());
     }
 
     @FXML
@@ -58,7 +59,13 @@ public class Controller implements Initializable {
 
     @FXML
     public void updateStopwatch() {
-        stopwatchText.setText(stopwatch.toString());
+        if (stopwatch != null) { // bør være unødvendig
+            stopwatchText.setText(stopwatch.toString());
+        }
+    }
+
+    public static void testMethod() {
+        System.out.println(stopwatch);
     }
 
     private boolean isTextsEqual() {
