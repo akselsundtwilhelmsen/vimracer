@@ -20,7 +20,7 @@ public class App extends Application {
         Controller controller = new Controller();
         loader.setController(controller);
 
-        primaryStage.setTitle("Example App");
+        primaryStage.setTitle("Vimracer");
         primaryStage.setScene(scene);
         primaryStage.show();
 

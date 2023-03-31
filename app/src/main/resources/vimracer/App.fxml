@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -32,9 +34,24 @@
       </AnchorPane>
       <AnchorPane prefHeight="354.0" prefWidth="100" style="-fx-background-color: #0B032D;">
          <children>
-            <Pane layoutX="14.0" layoutY="50.0" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #FF8552;" />
-            <Pane layoutX="14.0" layoutY="26.0" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #297373;" />
-            <Pane layoutX="14.0" layoutY="74.0" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #E9D758;" />
+            <Pane onMouseClicked="#startGame" layoutX="14.0" layoutY="67.0" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #297373;">
+               <children>
+                  <Text layoutX="1.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="New Game" textAlignment="CENTER" wrappingWidth="71.18896484375" />
+               </children></Pane>
+            <Pane onMouseClicked="#endGame" layoutX="14.0" layoutY="91.0" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #FF8552;">
+               <children>
+                  <Text layoutX="6.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="End Game" textAlignment="CENTER" wrappingWidth="61.30908203125" />
+               </children>
+            </Pane>
+            <Pane layoutX="14.0" layoutY="115.0" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #E9D758;">
+               <children>
+                  <Text layoutX="21.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Next" textAlignment="CENTER" />
+               </children></Pane>
+            <Pane layoutX="14.0" layoutY="139.0" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #4bea68;">
+               <children>
+                  <Text layoutX="9.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Previous" />
+               </children>
+            </Pane>
             <Pane layoutX="14.0" layoutY="752.0" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #000000;">
                <children>
                   <Text fx:id="stopwatchText" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="stopwatch" textAlignment="CENTER" underline="true" wrappingWidth="73.0">
@@ -55,6 +72,11 @@
                   <Button layoutY="10000" />
                </children>
             </Pane>
+            <ImageView fitHeight="43.0" fitWidth="100.0" layoutX="29.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../paprika.png" />
+               </image>
+            </ImageView>
          </children>
       </AnchorPane>
    </children>
