@@ -121,8 +121,9 @@ public class Vim extends TextWindow{
     //TODO: the command list can fill over multiple keypresses (e.g. d-i-w)
     //TODO: it must dedect if it's executable (execute and clear), start of a legal command (continue), or illegal command (clear)
     //temporary soulution is to just execute and clear it
-    private void executeCommandList() {
+    private void executeCommandList() { 
         int index = 0;
+        int[] movement;
         for (Object command : commands) {
             if (command instanceof int[]) {
                 cursor = ((int[]) command);
@@ -138,11 +139,22 @@ public class Vim extends TextWindow{
                     case "deleteMotion":
                         if (commands.size() <= index+1) return; //midlertidig
                         if (! (commands.get(index+1) instanceof int[])) return; //midlertidig
-                        removeBetween(cursor,(int[]) commands.get(index+1));
+                        movement = (int[]) commands.get(index+1);
+                        removeBetween(cursor, movement);
+                        if (! smallerPosition(cursor, movement)) commands.remove(index + 1);
                         break;
                     case "joinLines":
                         cursor[0] = lines.get(cursor[1]).length();
                         joinLines(cursor[1], cursor[1]+1);
+                        break;
+                    case "change":
+                        if (commands.size() <= index+1) return; //midlertidig
+                        if (! (commands.get(index+1) instanceof int[])) return; //midlertidig
+                        movement = (int[]) commands.get(index+1);
+                        removeBetween(cursor, movement);
+                        if (! smallerPosition(cursor, movement)) commands.remove(index + 1);
+                        setMode('i');
+                        break;
                 }
             }
             index++;
@@ -164,7 +176,7 @@ public class Vim extends TextWindow{
     }
 
     private void removeBetween(int[] pos1, int[] pos2) {
-        if (pos1[1] > pos2[1] || (pos1[1] == pos2[1] && pos1[0] > pos2[0])) {
+        if (smallerPosition(pos1, pos2)) {
             int[] temp = pos1;
             pos1 = pos2;
             pos2 = temp;
@@ -226,6 +238,10 @@ public class Vim extends TextWindow{
         // if (mode == 'n' && currentLength != 0 && currentLength <= cursor[0]) return false;
         // if (currentLength < cursor[0]) return false;
         return true;
+    }
+
+    private boolean smallerPosition(int[] smaller, int[] bigger) {
+        return (smaller[1] > bigger[1] || (smaller[1] == bigger[1] && smaller[0] > bigger[0]));
     }
 
     private int[] nextInstanceOf(Pattern regex, int[] from, boolean endOfRegex) {
@@ -398,6 +414,9 @@ public class Vim extends TextWindow{
             case "D":
                 commands.add("deleteMotion");
                 generateMovement("$");
+                break;
+            case "c":
+                commands.add("change");
                 break;
             case "x":
                 commands.add("deleteMotion");
