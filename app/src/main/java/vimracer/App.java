@@ -26,7 +26,7 @@ public class App extends Application {
         Timeline updateStopwatch = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                controller.testMethod();
+                // controller.testMethod();
             }
         }));
         updateStopwatch.setCycleCount(Timeline.INDEFINITE);

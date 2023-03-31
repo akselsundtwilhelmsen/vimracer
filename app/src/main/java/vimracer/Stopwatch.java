@@ -18,11 +18,4 @@ public class Stopwatch {
         long min = (elapsedTime / 1000) / 60;
         return String.format("%02d:%02d:%03d", min, sec, milliSec);
     }
-
-    public static void main(String[] args) {
-        Stopwatch a = new Stopwatch();
-        while (true) {
-            System.out.println(a.toString());
-        }
-    }
 }

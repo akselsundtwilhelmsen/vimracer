@@ -21,6 +21,7 @@ public class Controller implements Initializable {
     @FXML private Text vimText;
     // @FXML private Pane vimPane;
     @FXML public Text stopwatchText;
+    @FXML public Text keypressCounterText;
 
     final int lineLength = 80;
 
@@ -34,8 +35,10 @@ public class Controller implements Initializable {
         solution.setText(textLoader.getText());
         solutionText.setText(solution.toString(lineLength));
 
-        stopwatchText.setFill(Color.RED);
+        keypressCounterText.setText(keypressCounter.getCount());
+        keypressCounterText.setFill(Color.RED);
         stopwatchText.setText(stopwatch.toString());
+        stopwatchText.setFill(Color.RED);
         System.out.println(stopwatch.toString());
     }
 
@@ -49,7 +52,7 @@ public class Controller implements Initializable {
             solution.setText("Congratulations! You won");
             solutionText.setText(solution.toString(lineLength));
         }
-        System.out.println(stopwatch.toString());
+        keypressCounterText.setText(keypressCounter.getCount());
     }
 
     @FXML

@@ -26,7 +26,7 @@
                   <Font name="Ubuntu Mono" size="13.0" />
                </font>
             </Text>
-            <Button layoutY="10000"/> 
+            <Button layoutY="10000" /> 
          </children>
       </Pane>
       </AnchorPane>
@@ -42,7 +42,17 @@
                         <Font name="Ubuntu Mono" size="13.0" />
                      </font>
                   </Text>
-                  <Button layoutY="10000"/> 
+                  <Button layoutY="10000" /> 
+               </children>
+            </Pane>
+            <Pane layoutX="14.0" layoutY="728.0" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #111111;">
+               <children>
+                  <Text fx:id="keypressCounterText" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="keypressCounter" textAlignment="CENTER" underline="true" wrappingWidth="73.0">
+                     <font>
+                        <Font name="Ubuntu Mono" size="13.0" />
+                     </font>
+                  </Text>
+                  <Button layoutY="10000" />
                </children>
             </Pane>
          </children>
