@@ -48,12 +48,7 @@ public class Controller implements Initializable {
     public void handleOnKeyPressed(KeyEvent event) {
         vim.keyPress(event);
         vimText.setText(vim.toString(lineLength));
-
-        if (this.game != null) {
-            this.game.keypress(); //TODO: flytt denne til vim.java for å unngå registrering av ugyldige tastetrykk
-            keypressCounterText.setText(this.game.getKeypressCounter());
-            this.updateStopwatch(); //dette må kjøres på interval
-        }
+        this.updateKeypressCounter();
     }
 
     @FXML
@@ -64,15 +59,23 @@ public class Controller implements Initializable {
     @FXML
     public void updateStopwatch() {
         if (this.game != null) {
-            System.out.println("yeah");
             this.stopwatchText.setText(game.getStopwatch());
+        }
+    }
+
+    @FXML
+    public void updateKeypressCounter() {
+        if (this.game != null) {
+            this.game.keypress(); 
+            keypressCounterText.setText(this.game.getKeypressCounter());
+            this.updateStopwatch(); //dette må kjøres på interval, TEMPORARY
         }
     }
 
     @FXML
     public void startGame() {
         this.game = new Game(this);
-        System.out.println("startGame");
+        this.updateKeypressCounter();
         this.updateStopwatch();
     }
 

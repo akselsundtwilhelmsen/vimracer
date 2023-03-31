@@ -1,16 +1,65 @@
 package vimracer;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 public class TextLoader {
     private ArrayList<String> lines;
     private ArrayList<String> newLines;
+    String promptPath = "src/main/resources/prompts/";
+    private ArrayList<String> fileNameArray = new ArrayList<>();
 
     public TextLoader() {
         lines = new ArrayList<>();
         newLines = new ArrayList<>();
-        this.setDefaultText();
+        this.listFiles(promptPath);
+        this.readFromFile("p2.txt"); // temporary
+        System.out.println(fileNameArray);
+    }
+
+    public void readFromFile(String fileName) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(promptPath+fileName));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+            reader.close();
+        }
+        catch (IOException error) {
+            System.out.println("error");
+            error.printStackTrace();
+        }
+    }
+
+    public void listFiles(String promptPath) {
+        // fileNameArray = this.listFiles(promptPath);
+        // System.out.println(fileNameArray);
+
+        // ArrayList<String> fileNameArray = new ArrayList<String>();
+        File directory = new File(promptPath);
+        File[] files = directory.listFiles();
+        for (int i = 0; i < files.length; i++) {
+            if (files[i].isFile()) {
+                this.fileNameArray.add(files[i].getName());
+            }
+        }
+    }
+
+    public void randomFileNameArrayOrder() {
+
+    }
+
+    public void nextFile() {
+
+    }
+
+    public void prevFile() {
+
     }
 
     public void garbleByWord(int intensityPercentage) {
@@ -71,19 +120,6 @@ public class TextLoader {
     private void setDefaultText() {
         lines = new ArrayList<>();
         lines.add("The quick brown fox jumped over the lazy dog.");
-        lines.add("Mary had a little lamb, its fleece was white as snow.");
-        lines.add("The rain in Spain falls mainly on the plain.");
-        lines.add("To be or not to be, that is the question.");
-        lines.add("Ask not what your country can do for you, ask what you can do for your country.");
-        lines.add("I have a dream that one day this nation will rise up and live out the true meaning of its creed: We hold these truths to be self-evident, that all men are created equal.");
-        lines.add("It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.");
-        lines.add("In the beginning God created the heavens and the earth.");
-        lines.add("The quick brown fox jumped over the lazy dog.");
-        lines.add("The quick brown fox jumped over the lazy dog.");
-        lines.add("The quick brown fox jumped over the lazy dog.");
-        lines.add("The quick brown fox jumped over the lazy dog.");
-        lines.add("The quick brown fox jumped over the lazy dog.");
-        lines.add("01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789ferdig");
     }
 
 

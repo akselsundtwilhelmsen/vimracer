@@ -14,7 +14,7 @@
       <AnchorPane fx:id="textPane" HBox.hgrow="ALWAYS">
       <Pane prefWidth="600" style="-fx-background-color: #FFFFFF;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Text fx:id="solutionText" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Solution" wrappingWidth="560">
+            <Text fx:id="solutionText" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" 1" wrappingWidth="560">
                <font>
                   <Font name="Ubuntu Mono" size="13.0" />
                </font>
