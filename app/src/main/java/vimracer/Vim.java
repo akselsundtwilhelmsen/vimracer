@@ -13,20 +13,7 @@ public class Vim extends TextWindow{
     private char mode; // must be n(ormal), v(isual), or i(nsert);
     private boolean shiftHeld;
 
-    private ArrayList<Object> commands; //inneholder kommandoer (String), tall, og bevegelser (int[])
-    private String currentCommand;
-
-    //possible keyboard commands 
-    private final ArrayList<String> LegalMovementKeys = new ArrayList<>(Arrays.asList("0","F","ge","b","h","l","e","w","W","t","f","$","|","gg","{","}","k","j","G"));
-    private final ArrayList<String> LegalInsertModeKeys = new ArrayList<>(Arrays.asList("i","I","a","A","o","O"));
-    private final ArrayList<String> LegalOperatorKeys = new ArrayList<>(Arrays.asList("d","D","y","Y","c","C",">","<","x","X","J"));
-    private final ArrayList<String> LegalKeys;
-
-    //regexes
-    private final Pattern wordBeginning = Pattern.compile("([\\w\\s][^\\w\\s])|(\\W\\w)");
-    private final Pattern WORDBeginning = Pattern.compile("(\\s.)");
-    private final Pattern wordEnd = Pattern.compile("([^\\w\\s][\\w\\s])|(\\w\\W)|[^\\s]$");
-
+    private VimCommandList commands; //inneholder kommandoer (String), tall, og bevegelser (int[])
 
     public Vim() {
         super();
@@ -35,13 +22,7 @@ public class Vim extends TextWindow{
         this.mode = 'i';
         this.shiftHeld = false;
 
-        this.commands = new ArrayList<>();
-        this.currentCommand = new String();
-
-        this.LegalKeys = new ArrayList<>();
-        this.LegalKeys.addAll(LegalMovementKeys);
-        this.LegalKeys.addAll(LegalInsertModeKeys);
-        this.LegalKeys.addAll(LegalOperatorKeys);
+        this.commands = new VimCommandList(this);
     }
 
 
@@ -87,34 +68,14 @@ public class Vim extends TextWindow{
             } else {
                 insertString(keyString);
             }
-            System.out.println(String.format("%d %d",cursor[0],cursor[1]));
             return;
         }
 
-        //generate legal String-command TODO: numbers
-        currentCommand = currentCommand + keyString;
+        commands.buildCommandList(keyString);
 
-        if (! LegalKeys.stream()
-            .anyMatch(s -> currentCommand.startsWith(s) && currentCommand.length() <= s.length())) {
-                currentCommand = "";
-        }
-
-        generateCommand(keyString);
-        executeCommandList();
-    }
-
-    private void generateCommand(String keyString) {
-        //covert String-command normal command and add to command list
-        if (LegalMovementKeys.contains(keyString)) {
-            generateMovement(keyString);
-        }
-
-        if (LegalInsertModeKeys.contains(keyString)) {
-            generateInsertCommand(keyString);
-        }
-
-        if (LegalOperatorKeys.contains(keyString)) {
-            generateOperationCommand(keyString);
+        if (commands.isCommandListExecutable()) {
+            executeCommandList();
+            commands.clear();
         }
     }
 
@@ -124,43 +85,43 @@ public class Vim extends TextWindow{
     private void executeCommandList() { 
         int index = 0;
         int[] movement;
-        for (Object command : commands) {
+        Object command;
+        while (commands.hasNext()) {
+            command = commands.next();
             if (command instanceof int[]) {
-                cursor = ((int[]) command);
-            } else if (command instanceof String) {
-                switch ((String) command) {
-                    case "insert":
-                        setMode('i');
-                        break;
-                    case "insertLine":
-                        insertLine(cursor[1]);
-                        cursor[0] = 0;
-                        break;
-                    case "deleteMotion":
-                        if (commands.size() <= index+1) return; //midlertidig
-                        if (! (commands.get(index+1) instanceof int[])) return; //midlertidig
-                        movement = (int[]) commands.get(index+1);
-                        removeBetween(cursor, movement);
-                        if (! smallerPosition(cursor, movement)) commands.remove(index + 1);
-                        break;
-                    case "joinLines":
-                        cursor[0] = lines.get(cursor[1]).length();
-                        joinLines(cursor[1], cursor[1]+1);
-                        break;
-                    case "change":
-                        if (commands.size() <= index+1) return; //midlertidig
-                        if (! (commands.get(index+1) instanceof int[])) return; //midlertidig
-                        movement = (int[]) commands.get(index+1);
-                        removeBetween(cursor, movement);
-                        if (! smallerPosition(cursor, movement)) commands.remove(index + 1);
-                        setMode('i');
-                        break;
-                }
+                cursor = (int[]) command;
+                continue;
             }
-            index++;
+            switch ((String) command) {
+                case "insert":
+                    setMode('i');
+                    break;
+                case "insertLine":
+                    insertLine(cursor[1]);
+                    cursor[0] = 0;
+                    break;
+                case "deleteMotion":
+                    if (commands.size() <= index+1) return; //midlertidig
+                    if (! (commands.get(index+1) instanceof int[])) return; //midlertidig
+                    movement = (int[]) commands.get(index+1);
+                    removeBetween(cursor, movement);
+                    if (! smallerPosition(cursor, movement)) commands.remove(index + 1);
+                    break;
+                case "joinLines":
+                    cursor[0] = lines.get(cursor[1]).length();
+                    joinLines(cursor[1], cursor[1]+1);
+                    break;
+                case "change":
+                    if (commands.size() <= index+1) return; //midlertidig
+                    if (! (commands.get(index+1) instanceof int[])) return; //midlertidig
+                    movement = (int[]) commands.get(index+1);
+                    removeBetween(cursor, movement);
+                    if (! smallerPosition(cursor, movement)) commands.remove(index + 1);
+                    setMode('i');
+                    break;                                                                                                            
+            }
         }
-        commands.clear();
-        System.out.println(String.format("%d %d",cursor[0],cursor[1]));
+        System.out.format("\nPosition: %d %d",cursor[0],cursor[1]);
     }
 
     public void keyRelease(KeyEvent event) {
@@ -230,6 +191,10 @@ public class Vim extends TextWindow{
         this.mode = mode;
     }
 
+    public int[] getCursor() {
+        return cursor.clone();
+    }
+
     private boolean validCursorPos(int[] cursor) {
         if (cursor.length != 2) return false;
         if (0 > cursor[1] || cursor[1] >= lines.size()) return false;
@@ -284,152 +249,5 @@ public class Vim extends TextWindow{
             return prevInstanceOf(regex, from, endOfRegex); //this might be very inefficient (creates new variables each recurtion)
         }
         return newPos;
-    }
-
-    private int getLastNumber() {
-        if (commands.size() == 0) {
-            return 1;
-        }
-        if (!(commands.get(commands.size()-1) instanceof Integer)) {
-            return 1;
-        }
-        return (int) commands.get(commands.size()-1);
-    }
-
-    //last movement in command list, returns cursor position if non found
-    private int[] getLastMovement() {
-        Stream<Object> commandStream = commands.stream();
-        commandStream = Stream.concat(Stream.of(cursor), commandStream);
-        return commandStream
-            .filter(o -> o instanceof int[])
-            .map(o -> (int[]) o)
-            .reduce((a,b) -> b)
-            .get();
-    }
-
-    //last command in command list, returns cursor position if non found
-    private String getLastCommand() {
-        return commands.stream()
-            .sorted(Collections.reverseOrder())
-            .filter(o -> o instanceof String)
-            .map(o -> (String) o)
-            .findFirst()
-            .orElse("");
-    }
-
-    private void generateMovement(String key) {
-        int length = getLastNumber();
-        int[] newPos = getLastMovement().clone();
-        int[] prevPos = newPos.clone();
-        for (int i = 0; i < length; i++) {
-            switch (key) {
-                case "|":
-                    newPos[0] = 0;
-                    key = "l"; //flytter til høyre hvis length > 1
-                    break;
-                case "0":
-                    newPos[0] = 0;
-                    break;
-                case "F":
-                    break;
-                case "ge":
-                    break;
-                case "b":
-                    newPos = prevInstanceOf(WORDBeginning, prevPos, shiftHeld);
-                    break;
-                case "h":
-                    newPos[0] = prevPos[0]-1;
-                    break;
-                case "l":
-                    newPos[0] = prevPos[0]+1;
-                    break;
-                case "e":
-                    newPos = nextInstanceOf(wordEnd,newPos,false);
-                    break;
-                case "w":
-                    newPos = nextInstanceOf(wordBeginning,newPos,true);
-                    break;
-                case "W":
-                    newPos = nextInstanceOf(WORDBeginning,newPos,true);
-                    break;
-                case "t":
-                    break;
-                case "f":
-                    break;
-                case "$":
-                    newPos[0] = lines.get(newPos[1]).length()-1;
-                    key = "j";
-                    break;
-                case "gg":
-                    newPos[1] = 0;
-                    break;
-                case "{":
-                    break;
-                case "}":
-                    break;
-                case "k":
-                    newPos[1] = prevPos[1]-1;
-                    break;
-                case "j":
-                    newPos[1] = prevPos[1]+1;
-                    break;
-                case "G":
-                    newPos[1] = lines.size()-1;
-            }
-        }
-        commands.add(newPos);
-    }
-
-    private void generateInsertCommand(String key) {
-        switch (key) {
-            case "i":
-                break;
-            case "I":
-                generateMovement("0");
-                break;
-            case "a":
-                generateMovement("l");
-                break;
-            case "A":
-                generateMovement("$");
-                generateMovement("l");
-                break;
-            case "o":
-                generateMovement("j");
-                commands.add("insertLine");
-                break;
-            case "O":
-                commands.add("insertLine");
-                break;
-        }
-        commands.add("insert");
-    }
-
-    private void generateOperationCommand(String key) {
-        // String lastCommand = getLastCommand();
-        switch (key) {
-            case "d":
-                commands.add("deleteMotion");
-                break;
-            case "D":
-                commands.add("deleteMotion");
-                generateMovement("$");
-                break;
-            case "c":
-                commands.add("change");
-                break;
-            case "x":
-                commands.add("deleteMotion");
-                generateMovement("l");
-                generateMovement("h");
-                break;
-            case "X":
-                commands.add("deleteMotion");
-                generateMovement("h");
-                break;
-            case "J":
-                commands.add("joinLines");
-                break;
-        }
     }
 }
