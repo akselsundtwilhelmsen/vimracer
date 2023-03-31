@@ -55,11 +55,11 @@ public class TextLoader {
     }
 
     public void nextFile() {
-
+        System.out.println("next file");
     }
 
     public void prevFile() {
-
+        System.out.println("previous file");
     }
 
     public void garbleByWord(int intensityPercentage) {

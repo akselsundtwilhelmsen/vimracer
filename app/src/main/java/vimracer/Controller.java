@@ -10,6 +10,12 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.scene.paint.Color;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.util.Duration;
+
 public class Controller implements Initializable {
 
     TextWindow solution;
@@ -34,6 +40,16 @@ public class Controller implements Initializable {
         vim = new Vim();
         solution = new TextWindow();
         this.populateUI();
+
+        final Controller c = this;
+        Timeline updateStopwatch = new Timeline(new KeyFrame(Duration.seconds(1/60f), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                c.updateStopwatch();
+            }
+        }));
+        updateStopwatch.setCycleCount(Timeline.INDEFINITE);
+        updateStopwatch.play();
     }
 
     @FXML
@@ -56,7 +72,7 @@ public class Controller implements Initializable {
         vim.keyRelease(event);
     }
 
-    @FXML
+    // @FXML
     public void updateStopwatch() {
         if (this.game != null) {
             this.stopwatchText.setText(game.getStopwatch());
@@ -81,5 +97,13 @@ public class Controller implements Initializable {
 
     public void endGame() {
         this.game = null;
+    }
+
+    public void nextFile() {
+        this.textLoader.nextFile();
+    }
+
+    public void prevFile() {
+        this.textLoader.prevFile();
     }
 }
