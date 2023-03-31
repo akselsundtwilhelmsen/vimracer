@@ -41,9 +41,7 @@ public class Controller implements Initializable {
         solution.setText(textLoader.getText());
         solutionText.setText(solution.toString(lineLength));
         keypressCounterText.setText("0");
-        keypressCounterText.setFill(Color.RED);
         stopwatchText.setText("00:00:000");
-        stopwatchText.setFill(Color.RED);
     }
 
     @FXML
