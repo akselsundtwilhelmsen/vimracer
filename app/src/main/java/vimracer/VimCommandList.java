@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 public class VimCommandList implements Iterator {
@@ -17,6 +18,11 @@ public class VimCommandList implements Iterator {
     private final ArrayList<String> LegalInsertModeKeys = new ArrayList<>(Arrays.asList("i","I","a","A","o","O"));
     private final ArrayList<String> LegalOperatorKeys = new ArrayList<>(Arrays.asList("d","D","y","Y","c","C",">","<","x","X","J"));
     private final ArrayList<String> LegalKeys;
+    
+    //regexes
+    private final Pattern wordBeginning = Pattern.compile("([\\w\\s][^\\w\\s])|(\\W\\w)");
+    private final Pattern WORDBeginning = Pattern.compile("(\\s.)");
+    private final Pattern wordEnd = Pattern.compile("([^\\w\\s][\\w\\s])|(\\w\\W)|[^\\s]$");
 
     public VimCommandList(Vim vim) {
         this.commands = new ArrayList<>();
@@ -134,7 +140,7 @@ public class VimCommandList implements Iterator {
                 case "ge":
                     break;
                 case "b":
-                    // newPos = prevInstanceOf(WORDBeginning, prevPos, shiftHeld);
+                    newPos = vim.prevInstanceOf(WORDBeginning, prevPos, false);
                     break;
                 case "h":
                     newPos[0] = prevPos[0]-1;
@@ -143,13 +149,13 @@ public class VimCommandList implements Iterator {
                     newPos[0] = prevPos[0]+1;
                     break;
                 case "e":
-                    // newPos = nextInstanceOf(wordEnd,newPos,false);
+                    newPos = vim.nextInstanceOf(wordEnd,newPos,false);
                     break;
                 case "w":
-                    // newPos = nextInstanceOf(wordBeginning,newPos,true);
+                    newPos = vim.nextInstanceOf(wordBeginning,newPos,true);
                     break;
                 case "W":
-                    // newPos = nextInstanceOf(WORDBeginning,newPos,true);
+                    newPos = vim.nextInstanceOf(WORDBeginning,newPos,true);
                     break;
                 case "t":
                     break;

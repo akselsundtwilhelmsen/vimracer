@@ -210,7 +210,7 @@ public class Vim extends TextWindow{
         return (smaller[1] > bigger[1] || (smaller[1] == bigger[1] && smaller[0] > bigger[0]));
     }
 
-    private int[] nextInstanceOf(Pattern regex, int[] from, boolean endOfRegex) {
+    public int[] nextInstanceOf(Pattern regex, int[] from, boolean endOfRegex) {
         int[] newPos = from.clone();
         String string = lines.get(from[1]).substring(from[0]+1);
         Matcher matcher = regex.matcher(string);
@@ -230,7 +230,7 @@ public class Vim extends TextWindow{
         return newPos;
     }
 
-    private int[] prevInstanceOf(Pattern regex, int[] from, boolean endOfRegex) {
+    public int[] prevInstanceOf(Pattern regex, int[] from, boolean endOfRegex) {
         int[] newPos = from.clone();
         String string = lines.get(from[1]).substring(0,from[0]);
         Matcher matcher = regex.matcher(string);
