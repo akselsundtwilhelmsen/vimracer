@@ -104,6 +104,7 @@ public class Vim extends TextWindow{
                     if (commands.size() <= index+1) return; //midlertidig
                     if (! (commands.get(index+1) instanceof int[])) return; //midlertidig
                     movement = (int[]) commands.get(index+1);
+                    System.out.format(", hello?");
                     removeBetween(cursor, movement);
                     if (! smallerPosition(cursor, movement)) commands.remove(index + 1);
                     break;
