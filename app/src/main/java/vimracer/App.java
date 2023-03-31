@@ -1,4 +1,5 @@
 package vimracer;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
@@ -26,7 +27,7 @@ public class App extends Application {
         Timeline updateStopwatch = new Timeline(new KeyFrame(Duration.seconds(1), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                // controller.testMethod();
+                controller.updateStopwatch();
             }
         }));
         updateStopwatch.setCycleCount(Timeline.INDEFINITE);
