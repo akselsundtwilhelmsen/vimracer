@@ -14,8 +14,11 @@ public class Controller implements Initializable {
 
     TextWindow solution;
     Vim vim;
-    public static Stopwatch stopwatch;
+    public Stopwatch stopwatch;
     KeypressCounter keypressCounter;
+    TextLoader textLoader;
+
+    Game game;
 
     @FXML private Text solutionText;
     @FXML private Text vimText;
@@ -27,32 +30,32 @@ public class Controller implements Initializable {
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
-        TextLoader textLoader = new TextLoader();
+        textLoader = new TextLoader();
         vim = new Vim();
         solution = new TextWindow();
-        stopwatch = new Stopwatch(); // burde gjøres når spillet startes
-        keypressCounter = new KeypressCounter(); //burde gjøres når spillet startes
+        this.populateUI();
+    }
+
+    @FXML
+    public void populateUI() {
         solution.setText(textLoader.getText());
         solutionText.setText(solution.toString(lineLength));
-
-        keypressCounterText.setText(keypressCounter.getCount());
+        keypressCounterText.setText("0");
         keypressCounterText.setFill(Color.RED);
-        stopwatchText.setText(stopwatch.toString());
+        stopwatchText.setText("00:00:000");
         stopwatchText.setFill(Color.RED);
-        System.out.println(stopwatch.toString());
     }
 
     @FXML
     public void handleOnKeyPressed(KeyEvent event) {
         vim.keyPress(event);
-        keypressCounter.keypress();
         vimText.setText(vim.toString(lineLength));
-        if (isTextsEqual()) {
-            // midlertidig
-            solution.setText("Congratulations! You won");
-            solutionText.setText(solution.toString(lineLength));
+
+        if (this.game != null) {
+            this.game.keypress(); //TODO: flytt denne til vim.java for å unngå registrering av ugyldige tastetrykk
+            keypressCounterText.setText(this.game.getKeypressCounter());
+            this.updateStopwatch(); //dette må kjøres på interval
         }
-        keypressCounterText.setText(keypressCounter.getCount());
     }
 
     @FXML
@@ -62,16 +65,20 @@ public class Controller implements Initializable {
 
     @FXML
     public void updateStopwatch() {
-        if (stopwatch != null) { // bør være unødvendig
-            stopwatchText.setText(stopwatch.toString());
+        if (this.game != null) {
+            System.out.println("yeah");
+            this.stopwatchText.setText(game.getStopwatch());
         }
     }
 
-    public static void testMethod() {
-        System.out.println(stopwatch);
+    @FXML
+    public void startGame() {
+        this.game = new Game(this);
+        System.out.println("startGame");
+        this.updateStopwatch();
     }
 
-    private boolean isTextsEqual() {
-        return solution.equals(vim);
+    public void endGame() {
+        this.game = null;
     }
 }

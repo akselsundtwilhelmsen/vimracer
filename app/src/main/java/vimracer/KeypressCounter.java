@@ -12,9 +12,7 @@ public class KeypressCounter {
     }
 
     public void keypress(int n) { // maybe unnecessary
-        for (int i = 0; i < n; i++) {
-            this.count++;
-        }
+        this.count += n;
     }
 
     public String getCount() {
