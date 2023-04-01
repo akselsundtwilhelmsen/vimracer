@@ -2,6 +2,7 @@ package vimracer;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 import java.io.File;
 import java.io.BufferedReader;
@@ -10,20 +11,24 @@ import java.io.FileReader;
 public class TextLoader {
     private ArrayList<String> lines;
     private ArrayList<String> newLines;
-    String promptPath = "src/main/resources/prompts/";
+    private final String promptPath = "src/main/resources/prompts/";
     private ArrayList<String> fileNameArray = new ArrayList<>();
+    private int currentIndex;
 
     public TextLoader() {
-        lines = new ArrayList<>();
-        newLines = new ArrayList<>();
-        this.listFiles(promptPath);
-        this.readFromFile("p2.txt"); // temporary
-        System.out.println(fileNameArray);
+        this.lines = new ArrayList<>();
+        this.newLines = new ArrayList<>();
+        this.currentIndex = 0;
+        this.listFiles(promptPath); // get files
+        Collections.shuffle(this.fileNameArray); // randomize file name order
+        this.readFromFile();
     }
 
-    public void readFromFile(String fileName) {
+    public void readFromFile() {
+        String fileName = this.fileNameArray.get(this.currentIndex);
         try {
             BufferedReader reader = new BufferedReader(new FileReader(promptPath+fileName));
+            this.lines = new ArrayList<String>(); // clears current lines
             String line;
             while ((line = reader.readLine()) != null) {
                 lines.add(line);
@@ -37,10 +42,6 @@ public class TextLoader {
     }
 
     public void listFiles(String promptPath) {
-        // fileNameArray = this.listFiles(promptPath);
-        // System.out.println(fileNameArray);
-
-        // ArrayList<String> fileNameArray = new ArrayList<String>();
         File directory = new File(promptPath);
         File[] files = directory.listFiles();
         for (int i = 0; i < files.length; i++) {
@@ -50,16 +51,26 @@ public class TextLoader {
         }
     }
 
-    public void randomFileNameArrayOrder() {
-
-    }
-
     public void nextFile() {
-        System.out.println("next file");
+        if (currentIndex < this.fileNameArray.size()-1) {
+            currentIndex++;
+        }
+        else {
+            currentIndex = 0;
+        }
+        this.readFromFile();
+        System.out.println("next");
     }
 
     public void prevFile() {
-        System.out.println("previous file");
+        if (currentIndex > 0) {
+            currentIndex--;
+        }
+        else {
+            currentIndex = this.fileNameArray.size()-1;
+        }
+        this.readFromFile();
+        System.out.println("next");
     }
 
     public void garbleByWord(int intensityPercentage) {

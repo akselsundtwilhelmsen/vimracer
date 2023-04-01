@@ -19,6 +19,7 @@
                   <Font name="Ubuntu Mono" size="13.0" />
                </font>
             </Text>
+            <!-- <Button layoutY="10000" />  -->
          </children>
       </Pane>
       <Pane fx:id="vimPane" onKeyPressed="#handleOnKeyPressed" onKeyReleased="#handleOnKeyReleased" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #000000;" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -49,14 +50,14 @@
                      </font></Text>
                </children>
             </Pane>
-            <Pane layoutX="14.0" layoutY="153.0" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #4EBC72;">
+            <Pane layoutX="14.0" layoutY="153.0" onMouseClicked="#nextFile" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #4EBC72;">
                <children>
                   <Text layoutX="21.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Next" textAlignment="CENTER">
                      <font>
                         <Font name="Ubuntu Mono" size="13.0" />
                      </font></Text>
                </children></Pane>
-            <Pane layoutX="14.0" layoutY="177.0" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #50e080;">
+            <Pane layoutX="14.0" layoutY="177.0" onMouseClicked="#prevFile" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #50e080;">
                <children>
                   <Text layoutX="9.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Previous">
                      <font>
@@ -66,7 +67,7 @@
             </Pane>
             <Pane layoutX="14.0" layoutY="752.0" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #000000;">
                <children>
-                  <Text fx:id="stopwatchText" fill="RED" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="stopwatch" textAlignment="CENTER" underline="true" wrappingWidth="73.0">
+                  <Text fx:id="stopwatchText" fill="RED" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00:00:000" textAlignment="CENTER" underline="true" wrappingWidth="73.0">
                      <font>
                         <Font name="Ubuntu Mono" size="13.0" />
                      </font>
@@ -76,7 +77,7 @@
             </Pane>
             <Pane layoutX="14.0" layoutY="728.0" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #000000;">
                <children>
-                  <Text fx:id="keypressCounterText" fill="RED" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="keypress" textAlignment="CENTER" underline="true" wrappingWidth="73.0">
+                  <Text fx:id="keypressCounterText" fill="RED" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER" underline="true" wrappingWidth="73.0">
                      <font>
                         <Font name="Ubuntu Mono" size="13.0" />
                      </font>

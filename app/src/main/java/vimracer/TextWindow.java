@@ -20,11 +20,11 @@ public class TextWindow {
         this.lines.add(text);
     }
 
-    public String toString() { //without line numbers
+    public String toString() { // without line numbers
         return lines.stream().collect(Collectors.joining("\n"));
     }
 
-    public String toString(int maxLineLength) {
+    public String toString(int maxLineLength) { // with line numbers
         final int padding = 2;
         maxLineLength -= padding + 2; // to account for line number and padding
 
@@ -64,10 +64,6 @@ public class TextWindow {
             }
         }
         return outString;
-    }
-
-    public String toStringRelativeNum() {
-        return "";
     }
 
     public boolean equals(TextWindow t) {

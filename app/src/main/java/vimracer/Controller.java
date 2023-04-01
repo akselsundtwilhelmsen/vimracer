@@ -2,13 +2,12 @@ package vimracer;
 
 import java.net.URL;
 import java.util.ResourceBundle;
-// import java.util.Set;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
-import javafx.scene.paint.Color;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -28,11 +27,11 @@ public class Controller implements Initializable {
 
     @FXML private Text solutionText;
     @FXML private Text vimText;
-    // @FXML private Pane vimPane;
+    @FXML private Pane vimPane;
     @FXML public Text stopwatchText;
     @FXML public Text keypressCounterText;
 
-    final int lineLength = 80;
+    final int lineLength = 86;
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
@@ -41,7 +40,7 @@ public class Controller implements Initializable {
         solution = new TextWindow();
         this.populateUI();
 
-        final Controller c = this;
+        final Controller c = this; // Oskar & Mathias hack
         Timeline updateStopwatch = new Timeline(new KeyFrame(Duration.seconds(1/60f), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -56,8 +55,6 @@ public class Controller implements Initializable {
     public void populateUI() {
         solution.setText(textLoader.getText());
         solutionText.setText(solution.toString(lineLength));
-        keypressCounterText.setText("0");
-        stopwatchText.setText("00:00:000");
     }
 
     @FXML
@@ -83,12 +80,12 @@ public class Controller implements Initializable {
     public void updateKeypressCounter() {
         if (this.game != null) {
             this.game.keypress(); 
-            keypressCounterText.setText(this.game.getKeypressCounter());
+            this.keypressCounterText.setText(this.game.getKeypressCounter());
             this.updateStopwatch(); //dette må kjøres på interval, TEMPORARY
         }
     }
 
-    @FXML
+    // @FXML
     public void startGame() {
         this.game = new Game(this);
         this.updateKeypressCounter();
@@ -105,5 +102,10 @@ public class Controller implements Initializable {
 
     public void prevFile() {
         this.textLoader.prevFile();
+    }
+
+    public void updateSolution() {
+        System.out.println("test");
+        this.solutionText.setText(solution.toString());
     }
 }
