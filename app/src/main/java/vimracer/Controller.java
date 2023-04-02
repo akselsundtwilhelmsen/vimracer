@@ -88,7 +88,7 @@ public class Controller implements Initializable {
     // @FXML
     public void startGame() {
         this.game = new Game(this);
-        this.updateKeypressCounter();
+        this.keypressCounterText.setText(this.game.getKeypressCounter());
         this.updateStopwatch();
     }
 
@@ -97,15 +97,20 @@ public class Controller implements Initializable {
     }
 
     public void nextFile() {
+        this.endGame();
         this.textLoader.nextFile();
+        this.updateSolution();
     }
 
     public void prevFile() {
+        this.endGame();
         this.textLoader.prevFile();
+        this.updateSolution();
     }
 
     public void updateSolution() {
-        System.out.println("test");
-        this.solutionText.setText(solution.toString());
+        // this.solutionText.setText(solution.toString()); // dette funker på magisk vis
+        this.solutionText.setText(solution.toString(lineLength));
+        solution.setText(textLoader.getText());
     }
 }

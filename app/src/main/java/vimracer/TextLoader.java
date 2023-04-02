@@ -59,7 +59,6 @@ public class TextLoader {
             currentIndex = 0;
         }
         this.readFromFile();
-        System.out.println("next");
     }
 
     public void prevFile() {
@@ -70,7 +69,6 @@ public class TextLoader {
             currentIndex = this.fileNameArray.size()-1;
         }
         this.readFromFile();
-        System.out.println("next");
     }
 
     public void garbleByWord(int intensityPercentage) {
@@ -135,6 +133,10 @@ public class TextLoader {
 
 
     public ArrayList<String> getText() {
+        return this.lines;
+    }
+
+    public ArrayList<String> getGarbledText() {
         this.garbleByWord(100);
         return this.newLines;
     }
