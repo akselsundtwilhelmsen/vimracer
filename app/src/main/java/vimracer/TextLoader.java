@@ -36,7 +36,6 @@ public class TextLoader {
             reader.close();
         }
         catch (IOException error) {
-            System.out.println("error");
             error.printStackTrace();
         }
     }

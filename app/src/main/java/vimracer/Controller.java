@@ -109,8 +109,7 @@ public class Controller implements Initializable {
     }
 
     public void updateSolution() {
-        // this.solutionText.setText(solution.toString()); // dette funker på magisk vis
-        this.solutionText.setText(solution.toString(lineLength));
         solution.setText(textLoader.getText());
+        this.solutionText.setText(solution.toString(lineLength));
     }
 }
