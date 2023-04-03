@@ -97,8 +97,8 @@ public class Vim extends TextWindow{
                     cursor[0] = 0;
                     break;
                 case "deleteMotion":
-                    if (commands.size() <= index+1) return; //midlertidig
-                    if (! (commands.get(index+1) instanceof int[])) return; //midlertidig
+                    // if (commands.size() <= index+1) return; //midlertidig
+                    // if (! (commands.get(index+1) instanceof int[])) return; //midlertidig
                     movement = (int[]) commands.get(index+1);
                     removeBetween(cursor, movement);
                     if (! smallerPosition(cursor, movement)) commands.remove(index + 1);
@@ -108,8 +108,8 @@ public class Vim extends TextWindow{
                     joinLines(cursor[1], cursor[1]+1);
                     break;
                 case "change":
-                    if (commands.size() <= index+1) return; //midlertidig
-                    if (! (commands.get(index+1) instanceof int[])) return; //midlertidig
+                    // if (commands.size() <= index+1) return; //midlertidig
+                    // if (! (commands.get(index+1) instanceof int[])) return; //midlertidig
                     movement = (int[]) commands.get(index+1);
                     removeBetween(cursor, movement);
                     if (! smallerPosition(cursor, movement)) commands.remove(index + 1);
