@@ -14,10 +14,13 @@ public class VimCommandList implements Iterator {
     private int index;
     private Vim vim;
 
-    private final ArrayList<String> LegalMovementKeys = new ArrayList<>(Arrays.asList("0","F","ge","b","h","l","e","w","W","t","f","$","|","gg","{","}","k","j","G"));
-    private final ArrayList<String> LegalInsertModeKeys = new ArrayList<>(Arrays.asList("i","I","a","A","o","O"));
-    private final ArrayList<String> LegalOperatorKeys = new ArrayList<>(Arrays.asList("d","D","y","Y","c","C",">","<","x","X","J"));
-    private final ArrayList<String> LegalKeys;
+    private final ArrayList<String> MovementKeys = new ArrayList<>(Arrays.asList("0","F","ge","b","h","l","e","w","W","t","f","$","|","gg","{","}","k","j","G"));
+    private final ArrayList<String> InsertModeKeys = new ArrayList<>(Arrays.asList("i","I","a","A","o","O"));
+    private final ArrayList<String> OperatorKeys = new ArrayList<>(Arrays.asList("d","D","y","Y","c","C",">","<","x","X","J"));
+    private final ArrayList<String> Keys;
+
+    private final ArrayList<String> MovementOperationCommands = new ArrayList<>(Arrays.asList("deleteMotion","change"));
+    private final ArrayList<String> StationaryOperationCommnads = new ArrayList<>(Arrays.asList("joinLines"));
     
     //regexes
     private final Pattern wordBeginning = Pattern.compile("([\\w\\s][^\\w\\s])|(\\W\\w)");
@@ -30,10 +33,10 @@ public class VimCommandList implements Iterator {
         this.index = -1;
         this.vim = vim;
 
-        this.LegalKeys = new ArrayList<>();
-        this.LegalKeys.addAll(LegalMovementKeys);
-        this.LegalKeys.addAll(LegalInsertModeKeys);
-        this.LegalKeys.addAll(LegalOperatorKeys);
+        this.Keys = new ArrayList<>();
+        this.Keys.addAll(MovementKeys);
+        this.Keys.addAll(InsertModeKeys);
+        this.Keys.addAll(OperatorKeys);
     }
 
     public void buildCommandList(String keyPress) {
@@ -43,26 +46,40 @@ public class VimCommandList implements Iterator {
         System.out.format(", keypress: %s",keyPresses);
         
         //covert String-command normal command and add to command list
-        if (LegalMovementKeys.contains(keyPresses)) {
+        if (MovementKeys.contains(keyPresses)) {
             generateMovement(keyPresses);
         }
 
-        if (LegalInsertModeKeys.contains(keyPresses)) {
+        if (InsertModeKeys.contains(keyPresses)) {
             generateInsertCommand(keyPresses);
         }
 
-        if (LegalOperatorKeys.contains(keyPresses)) {
+        if (OperatorKeys.contains(keyPresses)) {
             generateOperationCommand(keyPresses);
         }
 
-        if (LegalKeys.stream()
+        if (Keys.stream()
             .anyMatch(s -> !(keyPresses.startsWith(s)) || keyPresses.equals(s))) {
                 keyPresses = "";
         }
     }
 
     public boolean isCommandListExecutable() {
-        return true;
+        int index = 0;
+        for (Object command : commands) {
+            if (command instanceof String) {
+                command = (String) command;
+                if (MovementOperationCommands.indexOf(command) != -1) {
+                    if (commands.size() > index+1) {
+                        if (!(commands.get(index+1) instanceof int[])) {
+                            return false;
+                        }
+                    }
+                }
+            }
+            index++;
+        }
+        return (commands.size() > 0);
     }
 
     public void clear() {

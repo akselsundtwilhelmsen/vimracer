@@ -1,10 +1,7 @@
 package vimracer;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.regex.*;
-import java.util.stream.Stream;
 
 import javafx.scene.input.KeyEvent;
 
@@ -75,7 +72,6 @@ public class Vim extends TextWindow{
 
         if (commands.isCommandListExecutable()) {
             executeCommandList();
-            commands.clear();
         }
     }
 
@@ -104,7 +100,6 @@ public class Vim extends TextWindow{
                     if (commands.size() <= index+1) return; //midlertidig
                     if (! (commands.get(index+1) instanceof int[])) return; //midlertidig
                     movement = (int[]) commands.get(index+1);
-                    System.out.format(", hello?");
                     removeBetween(cursor, movement);
                     if (! smallerPosition(cursor, movement)) commands.remove(index + 1);
                     break;
@@ -122,6 +117,7 @@ public class Vim extends TextWindow{
                     break;                                                                                                            
             }
         }
+        commands.clear();
         System.out.format("\nPosition: %d %d",cursor[0],cursor[1]);
     }
 
@@ -215,7 +211,7 @@ public class Vim extends TextWindow{
         String string = lines.get(from[1]).substring(from[0]+1);
         Matcher matcher = regex.matcher(string);
         if (matcher.find()) {
-            System.out.format("next pattern: \"%s\", starts at %d\n",matcher.group(0),matcher.start());
+            System.out.format(", next pattern: \"%s\", starts at %d",matcher.group(0),matcher.start());
             newPos[0] = (lines.get(from[1]).length() - string.length());
             if (endOfRegex) {
                 newPos[0] += matcher.end()-1;
@@ -224,7 +220,7 @@ public class Vim extends TextWindow{
             }
         } else if (lines.size() > from[1]+2) {
             from[0] = 0;
-           from[1]++;
+            from[1]++;
             return nextInstanceOf(regex, from, endOfRegex); //this might be very inefficient (creates new variables each recurtion)
         }
         return newPos;
@@ -242,7 +238,7 @@ public class Vim extends TextWindow{
             } else {
                 newPos[0] = matcher.start();
             }
-            System.out.format("next pattern: \"%s\", starts at %d\n",matcher.group(0),matcher.start());
+            System.out.format(", next pattern: \"%s\", starts at %d",matcher.group(0),matcher.start());
         }
         if (!found && from[1] > 1) {
             from[1]--;
