@@ -1,11 +1,13 @@
 package vimracer;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.*;
+import java.util.stream.Collectors;
 
 import javafx.scene.input.KeyEvent;
 
-public class Vim extends TextWindow{
+public class Vim extends TextWindow {
     private int[] cursor;
     private char mode; // must be n(ormal), v(isual), or i(nsert);
     private boolean shiftHeld;
@@ -97,8 +99,6 @@ public class Vim extends TextWindow{
                     cursor[0] = 0;
                     break;
                 case "deleteMotion":
-                    // if (commands.size() <= index+1) return; //midlertidig
-                    // if (! (commands.get(index+1) instanceof int[])) return; //midlertidig
                     movement = (int[]) commands.get(index+1);
                     removeBetween(cursor, movement);
                     if (! smallerPosition(cursor, movement)) commands.remove(index + 1);
@@ -108,8 +108,6 @@ public class Vim extends TextWindow{
                     joinLines(cursor[1], cursor[1]+1);
                     break;
                 case "change":
-                    // if (commands.size() <= index+1) return; //midlertidig
-                    // if (! (commands.get(index+1) instanceof int[])) return; //midlertidig
                     movement = (int[]) commands.get(index+1);
                     removeBetween(cursor, movement);
                     if (! smallerPosition(cursor, movement)) commands.remove(index + 1);
@@ -211,7 +209,6 @@ public class Vim extends TextWindow{
         String string = lines.get(from[1]).substring(from[0]+1);
         Matcher matcher = regex.matcher(string);
         if (matcher.find()) {
-            System.out.format(", next pattern: \"%s\", starts at %d",matcher.group(0),matcher.start());
             newPos[0] = (lines.get(from[1]).length() - string.length());
             if (endOfRegex) {
                 newPos[0] += matcher.end()-1;
@@ -246,5 +243,44 @@ public class Vim extends TextWindow{
             return prevInstanceOf(regex, from, endOfRegex); //this might be very inefficient (creates new variables each recurtion)
         }
         return newPos;
+    }
+
+    public int[] nextInstanceOfMultiline(Pattern regex, int[] from, boolean endOfRegex) {
+        int[] newPos = from.clone();
+        //convert string-array to string whith linebreaks starting from from
+        String string = lines.get(from[1]).substring(from[0]+1) + "\n";
+        string += lines.stream().skip(from[1]+1).collect(Collectors.joining("\n")); 
+        //find match of regex
+        Matcher matcher = regex.matcher(string);
+        if (matcher.find()) {
+            int stringIndex;
+            if (endOfRegex) {
+                stringIndex = matcher.end()-1;
+            } else {
+                stringIndex = matcher.start();
+            }
+
+            //covert index in string to coordinate in string-array
+            Matcher newLine = Pattern.compile("\\n").matcher(string);
+            while (newLine.find()) {
+            }
+
+        }
+        return newPos;
+    }
+
+    public static void main(String[] args) {
+        Vim vim = new Vim();
+        ArrayList<String> vimtext = new ArrayList<>();
+        vimtext.add("first line of many");
+        vimtext.add("Second line of some");
+        vimtext.add("third line by far");
+        vimtext.add("fourth line gone");
+        vimtext.add("fifth and final line");
+        vim.setText(vimtext);
+        // String string = vimtext.get(0).substring(6) + "\n";
+        // string += vimtext.stream().skip(1).collect(Collectors.joining("\n"));
+        System.out.println(vim.toString());
+        // System.out.println(string);
     }
 }

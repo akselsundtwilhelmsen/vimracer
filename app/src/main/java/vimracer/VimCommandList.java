@@ -69,15 +69,11 @@ public class VimCommandList implements Iterator {
         for (Object command : commands) {
             if (command instanceof String) {
                 command = (String) command;
-                System.out.println("\n1");
                 if (MovementOperationCommands.indexOf(command) != -1) {
-                    System.out.println("2");
                     if (commands.size() <= index+1) {
                         return false;
                     }
-                    System.out.println("3");
                     if (!(commands.get(index+1) instanceof int[])) {
-                        System.out.println("4");
                         return false;
                     }
                 }
