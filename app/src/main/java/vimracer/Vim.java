@@ -9,10 +9,10 @@ import javafx.scene.input.KeyEvent;
 
 public class Vim extends TextWindow {
     private int[] cursor;
-    private char mode; // must be n(ormal), v(isual), or i(nsert);
+    private char mode; // must be n(ormal), v(isual), or i(nsert) ((visual) l(ine), (visual) b(lock), or r(eplace)?)
     private boolean shiftHeld;
 
-    private VimCommandList commands; //inneholder kommandoer (String), tall, og bevegelser (int[])
+    private VimCommandList commands; 
 
     public Vim() {
         super();
@@ -65,7 +65,7 @@ public class Vim extends TextWindow {
                 cursor[1]++;
                 cursor[0] = 0;
             } else {
-                insertString(keyString);
+                insertString(keyString,cursor);
             }
             return;
         }
@@ -113,6 +113,18 @@ public class Vim extends TextWindow {
                     if (! smallerPosition(cursor, movement)) commands.remove(index + 1);
                     setMode('i');
                     break;                                                                                                            
+                case "addIndent":
+                    movement = (int[]) commands.get(index+1);
+                    int start = cursor[1];
+                    int end = movement[1];
+                    if smallerPosition(cursor, movement) {
+                        int temp = from;
+                        start = to;
+                        end = from;
+                    }
+
+
+                    // for (int i = 0; )
             }
         }
         commands.clear();
@@ -126,9 +138,9 @@ public class Vim extends TextWindow {
         }
     }
 
-    private void insertString(String s) {
-        lines.set(cursor[1], lines.get(cursor[1]).substring(0,cursor[0]) + s + lines.get(cursor[1]).substring(cursor[0]));
-        cursor[0] += s.length();
+    private void insertString(String s, int[] pos) {
+        lines.set(pos[1], lines.get(pos[1]).substring(0,pos[0]) + s + lines.get(pos[1]).substring(pos[0]));
+        pos[0] += s.length();
     }
 
     private void removeBetween(int[] pos1, int[] pos2) {
@@ -147,6 +159,18 @@ public class Vim extends TextWindow {
         //Remove all lines between and including pos1 and pos2
         for (int i = 0; i < pos2[1]-pos1[1]+1; i++) {
             removeLine(pos1[1]);
+        }
+    }
+
+    private void addIndent(int lineNumber) {
+        // insertString("    ", (int[]) Arrays.asList(0,lineNumber));
+    }
+
+    private void removeIndent(int lineNumber) {
+        if (lines.get(lineNumber).startsWith("    ")) {
+            // removeBetween(cursor, cursor);
+        } else if (lines.get(lineNumber).startsWith("\t")) {
+            //remove
         }
     }
 
@@ -204,6 +228,7 @@ public class Vim extends TextWindow {
         return (smaller[1] > bigger[1] || (smaller[1] == bigger[1] && smaller[0] > bigger[0]));
     }
 
+    //TODO: replace these (2 following function) with their multiline counterpart (unwilling to do so until it can be tested in running program)
     public int[] nextInstanceOf(Pattern regex, int[] from, boolean endOfRegex) {
         int[] newPos = from.clone();
         String string = lines.get(from[1]).substring(from[0]+1);
@@ -264,7 +289,6 @@ public class Vim extends TextWindow {
             //find coordinate in String-array
             Matcher newLine = Pattern.compile("\\n").matcher(untilRegex);
             while (newLine.find()) {
-                // System.out.println("linebrek");
                 newPos[0] -= lines.get(newPos[1]).length() + 1;
                 newPos[1]++;
             }
@@ -322,9 +346,5 @@ public class Vim extends TextWindow {
         newPos[1] = 3;
         newPos = vim.nextInstanceOfMultiline(Pattern.compile("\\n\\n"), newPos, false);
         System.out.format("%d %d\n", newPos[0], newPos[1]);
-
-
-
-        // vimtext.stream().limit(3).forEach(System.out::println);;
     }
 }
