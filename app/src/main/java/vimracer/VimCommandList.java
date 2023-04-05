@@ -130,7 +130,7 @@ public class VimCommandList implements Iterator {
             .get();
     }
 
-    //last command in command list, returns cursor position if non found
+    //last command in command list
     private String getLastCommand() {
         return commands.stream()
             .sorted(Collections.reverseOrder())
