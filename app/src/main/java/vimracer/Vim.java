@@ -235,7 +235,6 @@ public class Vim extends TextWindow {
             } else {
                 newPos[0] = matcher.start();
             }
-            System.out.format(", next pattern: \"%s\", starts at %d",matcher.group(0),matcher.start());
         }
         if (!found && from[1] > 1) {
             from[1]--;
@@ -248,28 +247,59 @@ public class Vim extends TextWindow {
     public int[] nextInstanceOfMultiline(Pattern regex, int[] from, boolean endOfRegex) {
         int[] newPos = from.clone();
         //convert String-array to string whith linebreaks starting from from
-        String restOfText = lines.get(from[1]).substring(from[0]+1) + "\n";
-        restOfText += lines.stream().skip(from[1]+1).collect(Collectors.joining("\n")); 
+        String restOfText = lines.get(from[1]).substring(from[0]+1);
+        restOfText = restOfText + "\n" + lines.stream().skip(from[1]+1).collect(Collectors.joining("\n")); 
         //find match of regex
         Matcher matcher = regex.matcher(restOfText);
         if (matcher.find()) {
             String untilRegex;
             if (endOfRegex) {
-                untilRegex = restOfText.substring(matcher.end()-1);
-                newPos[0] += matcher.end()-1;
+                untilRegex = restOfText.substring(0,matcher.end());
+                newPos[0] += matcher.end();
             } else {
-                untilRegex = restOfText.substring(matcher.start());
-                newPos[0] += matcher.start();
+                untilRegex = restOfText.substring(0,matcher.start()+1);
+                newPos[0] += matcher.start()+1;
             }
 
             //find coordinate in String-array
-            int prevLinesSize = 0;
             Matcher newLine = Pattern.compile("\\n").matcher(untilRegex);
             while (newLine.find()) {
-                prevLinesSize += lines.get(newPos[1]).length();
+                // System.out.println("linebrek");
+                newPos[0] -= lines.get(newPos[1]).length() + 1;
                 newPos[1]++;
             }
-            newPos[0] -= prevLinesSize;
+        }
+        return newPos;
+    }
+
+    public int[] prevInstanceOfMultiline(Pattern regex, int[] from, boolean endOfRegex) {
+        int[] newPos = from.clone();
+        //convert String-array to strin.g whith linebreaks starting from from
+        String untilPosText = lines.get(from[1]).substring(0,from[0]);
+        untilPosText = lines.stream().limit(from[1]).collect(Collectors.joining("\n")) + "\n" + untilPosText; 
+        //find match of regex
+        Matcher matcher = regex.matcher(untilPosText);
+        boolean found = false;
+        int regexIndex = 0;
+        while (matcher.find()) {
+            found = true;
+            if (endOfRegex) {
+                regexIndex = matcher.end()-1;
+            } else {
+                regexIndex = matcher.start();
+            }
+        }
+
+        //find coordinate in String-array
+        if (found) {
+            String regexToPos = untilPosText.substring(regexIndex);
+            newPos[0] -= regexToPos.length();
+
+            Matcher newLine = Pattern.compile("\\n").matcher(regexToPos);
+            while (newLine.find()) {
+                newPos[1]--;
+                newPos[0] += lines.get(newPos[1]).length() + 1;
+            }
         }
         return newPos;
     }
@@ -277,17 +307,24 @@ public class Vim extends TextWindow {
     public static void main(String[] args) {
         Vim vim = new Vim();
         ArrayList<String> vimtext = new ArrayList<>();
-        vimtext.add("first line of many");
-        vimtext.add("Second line of some");
-        vimtext.add("third line by far");
-        vimtext.add("fourth line gone");
-        vimtext.add("fifth and final line");
+        vimtext.add("null linjer");
+        vimtext.add("en ener");
+        vimtext.add("to");
+        vimtext.add("tre");
+        vimtext.add("");
+        vimtext.add("fem");
+        vimtext.add("seks");
         vim.setText(vimtext);
-        // String string = vimtext.get(0).substring(6) + "\n";
-        // string += vimtext.stream().skip(1).collect(Collectors.joining("\n"));
         System.out.println(vim.toString());
-        int[] newPos = vim.nextInstanceOf(Pattern.compile("go"), vim.getCursor(), false);
+
+        int[] newPos = new int[2];
+        newPos[0] = 2;
+        newPos[1] = 3;
+        newPos = vim.nextInstanceOfMultiline(Pattern.compile("\\n\\n"), newPos, false);
         System.out.format("%d %d\n", newPos[0], newPos[1]);
-        // System.out.println(string);
+
+
+
+        // vimtext.stream().limit(3).forEach(System.out::println);;
     }
 }
