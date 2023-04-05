@@ -117,14 +117,30 @@ public class Vim extends TextWindow {
                     movement = (int[]) commands.get(index+1);
                     int start = cursor[1];
                     int end = movement[1];
-                    if smallerPosition(cursor, movement) {
-                        int temp = from;
-                        start = to;
-                        end = from;
+                    if (start < end) {
+                        int temp = start;
+                        start = end;
+                        end = temp;
                     }
 
+                    for (int i = start; i <= end; i++) {
+                        addIndent(i);
+                    }
+                    break;
+                case "removeIndent":
+                    movement = (int[]) commands.get(index+1);
+                    // int start = cursor[1];
+                    // int end = movement[1];
+                    // if (start < end) {
+                    //     int temp = start;
+                    //     start = end;
+                    //     end = temp;
+                    // }
 
-                    // for (int i = 0; )
+                    // for (int i = start; i <= end; i++) {
+                    //     removeIndent(i);
+                    // }
+                    break;
             }
         }
         commands.clear();

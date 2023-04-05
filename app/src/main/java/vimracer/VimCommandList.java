@@ -19,13 +19,18 @@ public class VimCommandList implements Iterator {
     private final ArrayList<String> OperatorKeys = new ArrayList<>(Arrays.asList("d","D","y","Y","c","C",">","<","x","X","J"));
     private final ArrayList<String> Keys;
 
-    private final ArrayList<String> MovementOperationCommands = new ArrayList<>(Arrays.asList("deleteMotion","change"));
+
+
+    private final ArrayList<String> OperatorFollowKeys = new ArrayList<>(Arrays.asList("i","a"));
+    private final ArrayList<String> OperatorFollowFollowKeys = new ArrayList<>(Arrays.asList("w","p",""));
+
+    private final ArrayList<String> MovementOperationCommands = new ArrayList<>(Arrays.asList("deleteMotion","change","addIndent","removeIndent"));
     private final ArrayList<String> StationaryOperationCommnads = new ArrayList<>(Arrays.asList("joinLines"));
     
     //regexes
-    private final Pattern wordBeginning = Pattern.compile("([\\w\\s][^\\w\\s])|(\\W\\w)");
-    private final Pattern WORDBeginning = Pattern.compile("(\\s.)");
-    private final Pattern wordEnd = Pattern.compile("([^\\w\\s][\\w\\s])|(\\w\\W)|[^\\s]$");
+    static final Pattern wordBeginning = Pattern.compile("([\\w\\s][^\\w\\s])|(\\W\\w)");
+    static final Pattern WORDBeginning = Pattern.compile("(\\s.)");
+    static final Pattern wordEnd = Pattern.compile("([^\\w\\s][\\w\\s])|(\\w\\W)|[^\\s]$");
 
     public VimCommandList(Vim vim) {
         this.commands = new ArrayList<>();
@@ -48,13 +53,9 @@ public class VimCommandList implements Iterator {
         //covert String-command normal command and add to command list
         if (MovementKeys.contains(keyPresses)) {
             generateMovement(keyPresses);
-        }
-
-        if (InsertModeKeys.contains(keyPresses)) {
+        } else if (InsertModeKeys.contains(keyPresses)) {
             generateInsertCommand(keyPresses);
-        }
-
-        if (OperatorKeys.contains(keyPresses)) {
+        } else if (OperatorKeys.contains(keyPresses)) {
             generateOperationCommand(keyPresses);
         }
 
@@ -253,6 +254,10 @@ public class VimCommandList implements Iterator {
             case "J":
                 commands.add("joinLines");
                 break;
+            case "<":
+                commands.add("removeIndent");
+            case ">":
+                commands.add("addIndent");
         }
     }
 }
