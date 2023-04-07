@@ -244,48 +244,7 @@ public class Vim extends TextWindow {
         return (smaller[1] > bigger[1] || (smaller[1] == bigger[1] && smaller[0] > bigger[0]));
     }
 
-    //TODO: replace these (2 following function) with their multiline counterpart (unwilling to do so until it can be tested in running program)
     public int[] nextInstanceOf(Pattern regex, int[] from, boolean endOfRegex) {
-        int[] newPos = from.clone();
-        String string = lines.get(from[1]).substring(from[0]+1);
-        Matcher matcher = regex.matcher(string);
-        if (matcher.find()) {
-            newPos[0] = (lines.get(from[1]).length() - string.length());
-            if (endOfRegex) {
-                newPos[0] += matcher.end()-1;
-            } else {
-                newPos[0] += matcher.start();
-            }
-        } else if (lines.size() > from[1]+2) {
-            from[0] = 0;
-            from[1]++;
-            return nextInstanceOf(regex, from, endOfRegex); //this might be very inefficient (creates new variables each recurtion)
-        }
-        return newPos;
-    }
-
-    public int[] prevInstanceOf(Pattern regex, int[] from, boolean endOfRegex) {
-        int[] newPos = from.clone();
-        String string = lines.get(from[1]).substring(0,from[0]);
-        Matcher matcher = regex.matcher(string);
-        boolean found = false;
-        while (matcher.find()) {
-            found = true;
-            if (endOfRegex) {
-                newPos[0] = matcher.end()-1;
-            } else {
-                newPos[0] = matcher.start();
-            }
-        }
-        if (!found && from[1] > 1) {
-            from[1]--;
-            from[0] = lines.get(from[1]).length();
-            return prevInstanceOf(regex, from, endOfRegex); //this might be very inefficient (creates new variables each recurtion)
-        }
-        return newPos;
-    }
-
-    public int[] nextInstanceOfMultiline(Pattern regex, int[] from, boolean endOfRegex) {
         int[] newPos = from.clone();
         //convert String-array to string whith linebreaks starting from from
         String restOfText = lines.get(from[1]).substring(from[0]+1);
@@ -312,7 +271,7 @@ public class Vim extends TextWindow {
         return newPos;
     }
 
-    public int[] prevInstanceOfMultiline(Pattern regex, int[] from, boolean endOfRegex) {
+    public int[] prevInstanceOf(Pattern regex, int[] from, boolean endOfRegex) {
         int[] newPos = from.clone();
         //convert String-array to strin.g whith linebreaks starting from from
         String untilPosText = lines.get(from[1]).substring(0,from[0]);
@@ -360,7 +319,7 @@ public class Vim extends TextWindow {
         int[] newPos = new int[2];
         newPos[0] = 2;
         newPos[1] = 3;
-        newPos = vim.nextInstanceOfMultiline(Pattern.compile("\\n\\n"), newPos, false);
+        // newPos = vim.nextInstanceOfMultiline(Pattern.compile("\\n\\n"), newPos, false);
         System.out.format("%d %d\n", newPos[0], newPos[1]);
     }
 }
