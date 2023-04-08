@@ -22,7 +22,7 @@ public class Controller implements Initializable {
     public Stopwatch stopwatch;
     KeypressCounter keypressCounter;
     TextLoader textLoader;
-    Highscore highscore;
+    Leaderboard leaderboard;
 
     Game game;
 
@@ -31,7 +31,7 @@ public class Controller implements Initializable {
     @FXML private Pane vimPane;
     @FXML public Text stopwatchText;
     @FXML public Text keypressCounterText;
-    @FXML public Text highscoreText;
+    @FXML public Text leaderboardText;
 
     final int lineLength = 86;
 
@@ -40,7 +40,7 @@ public class Controller implements Initializable {
         textLoader = new TextLoader();
         vim = new Vim();
         solution = new TextWindow();
-        highscore = new Highscore(textLoader);
+        leaderboard = new Leaderboard(textLoader);
         this.populateUI();
 
         final Controller c = this; // Oskar & Mathias hack
@@ -121,7 +121,7 @@ public class Controller implements Initializable {
     }
 
     private void updateHighScore() {
-        this.highscore.readFromFile(this.textLoader.getCurrentFileName());
-        this.highscoreText.setText(this.highscore.toString());
+        this.leaderboard.readFromFile(this.textLoader.getCurrentFileName());
+        this.leaderboardText.setText(this.leaderboard.toString());
     }
 }

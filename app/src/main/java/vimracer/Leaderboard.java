@@ -9,13 +9,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
-public class Highscore {
+public class Leaderboard {
 
     private final String path = "src/main/resources/prompts/highscores/";
     private ArrayList<String> lines;
     private LinkedHashMap<String, String> scores;
     
-    public Highscore(TextLoader textloader) {
+    public Leaderboard(TextLoader textloader) {
         this.readFromFile(textloader.getCurrentFileName());
     }
 

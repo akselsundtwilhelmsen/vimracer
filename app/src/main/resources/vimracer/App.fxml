@@ -92,7 +92,7 @@
             </Pane>
             <Pane layoutX="14.0" layoutY="311.0" prefHeight="291.0" prefWidth="73.0" style="-fx-background-color: #50e080;">
                <children>
-                  <Text fx:id="highscoreText" layoutX="6.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="highscore" textAlignment="LEFT" wrappingWidth="61.30908203125">
+                  <Text fx:id="leaderboardText" layoutX="6.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="highscore" textAlignment="LEFT" wrappingWidth="61.30908203125">
                      <font>
                         <Font name="Ubuntu Mono" size="13.0" />
                      </font>
