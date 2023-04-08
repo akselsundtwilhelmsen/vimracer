@@ -70,6 +70,10 @@ public class TextLoader {
         this.readFromFile();
     }
 
+    public String getCurrentFileName() {
+        return this.fileNameArray.get(currentIndex);
+    }
+
     public void garbleByWord(int intensityPercentage) {
         //intensityPercentage is the percentage of words affected by the garbler
         for (String line : this.lines) {
@@ -124,12 +128,6 @@ public class TextLoader {
     public String capitalize(String word) {
         return word.toUpperCase();
     }
-
-    private void setDefaultText() {
-        lines = new ArrayList<>();
-        lines.add("The quick brown fox jumped over the lazy dog.");
-    }
-
 
     public ArrayList<String> getText() {
         return this.lines;

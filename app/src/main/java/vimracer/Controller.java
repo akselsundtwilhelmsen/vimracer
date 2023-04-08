@@ -22,6 +22,7 @@ public class Controller implements Initializable {
     public Stopwatch stopwatch;
     KeypressCounter keypressCounter;
     TextLoader textLoader;
+    Highscore highscore;
 
     Game game;
 
@@ -30,6 +31,7 @@ public class Controller implements Initializable {
     @FXML private Pane vimPane;
     @FXML public Text stopwatchText;
     @FXML public Text keypressCounterText;
+    @FXML public Text highscoreText;
 
     final int lineLength = 86;
 
@@ -38,6 +40,7 @@ public class Controller implements Initializable {
         textLoader = new TextLoader();
         vim = new Vim();
         solution = new TextWindow();
+        highscore = new Highscore(textLoader);
         this.populateUI();
 
         final Controller c = this; // Oskar & Mathias hack
@@ -53,8 +56,8 @@ public class Controller implements Initializable {
 
     @FXML
     public void populateUI() {
-        solution.setText(textLoader.getText());
-        solutionText.setText(solution.toString(lineLength));
+        this.updateSolution();
+        this.updateHighScore();
     }
 
     @FXML
@@ -87,30 +90,38 @@ public class Controller implements Initializable {
     }
 
     // @FXML
-    public void startGame() {
+    public void startGame() { // on button start game
         this.game = new Game(this);
         this.keypressCounterText.setText(this.game.getKeypressCounter());
         this.updateStopwatch();
     }
 
-    public void endGame() {
+    public void endGame() { // on button end game
         this.game = null;
     }
 
-    public void nextFile() {
+    public void nextFile() { // on button next 
         this.endGame();
         this.textLoader.nextFile();
+        this.updateHighScore();
         this.updateSolution();
     }
 
-    public void prevFile() {
+    public void prevFile() { // on button previous
         this.endGame();
         this.textLoader.prevFile();
+        this.updateHighScore();
         this.updateSolution();
     }
 
-    public void updateSolution() {
+    @FXML
+    private void updateSolution() {
         solution.setText(textLoader.getText());
         this.solutionText.setText(solution.toString(lineLength));
+    }
+
+    private void updateHighScore() {
+        this.highscore.readFromFile(this.textLoader.getCurrentFileName());
+        this.highscoreText.setText(this.highscore.toString());
     }
 }
