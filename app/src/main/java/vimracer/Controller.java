@@ -59,6 +59,7 @@ public class Controller implements Initializable {
 
     @FXML
     public void handleOnKeyPressed(KeyEvent event) {
+        // her må det sjekkes om det er klart for å skrives
         vim.keyPress(event);
         vimText.setText(vim.toString(lineLength));
         this.updateKeypressCounter();
