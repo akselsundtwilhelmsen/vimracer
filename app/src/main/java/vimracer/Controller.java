@@ -58,6 +58,7 @@ public class Controller implements Initializable {
     public void populateUI() {
         this.updateSolution();
         this.updateLeaderboard();
+        this.setVimText();
     }
 
     @FXML
@@ -106,6 +107,7 @@ public class Controller implements Initializable {
         this.textLoader.nextFile();
         this.updateLeaderboard();
         this.updateSolution();
+        this.setVimText();
     }
 
     public void prevFile() { // on button previous
@@ -113,14 +115,23 @@ public class Controller implements Initializable {
         this.textLoader.prevFile();
         this.updateLeaderboard();
         this.updateSolution();
+        this.setVimText();
     }
 
     @FXML
+    public void setVimText() {
+        this.vim.setText(textLoader.getGarbledText());
+        this.vimText.setText(vim.toString(lineLength));
+    }
+
+
+    @FXML
     private void updateSolution() {
-        solution.setText(textLoader.getText());
+        this.solution.setText(textLoader.getText());
         this.solutionText.setText(solution.toString(lineLength));
     }
 
+    @FXML
     private void updateLeaderboard() {
         this.leaderboard.readFromFile(this.textLoader.getCurrentFileName());
         this.leaderboardText.setText(this.leaderboard.toString());

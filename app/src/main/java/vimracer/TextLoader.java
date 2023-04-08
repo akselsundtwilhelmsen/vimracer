@@ -77,6 +77,7 @@ public class TextLoader {
 
     public void garbleByWord(int intensityPercentage) {
         //intensityPercentage is the percentage of words affected by the garbler
+        newLines = new ArrayList<>();
         for (String line : this.lines) {
             String[] wordArray = line.split(" ");
             String newLine = "";
@@ -88,7 +89,7 @@ public class TextLoader {
                 Random random = new Random();
                 int randint = random.nextInt(101 - intensityPercentage)+1;
                 if (randint == 1) {
-                    String alteredWord = ""; // maybe change = ""; to ;
+                    String alteredWord = "";
                     switch (random.nextInt(4)) {
                         case 0:
                             alteredWord = this.delete(word);
