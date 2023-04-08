@@ -7,6 +7,7 @@ import java.util.Random;
 import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.lang.Math;
 
 public class TextLoader {
     private ArrayList<String> lines;
@@ -136,5 +137,15 @@ public class TextLoader {
     public ArrayList<String> getGarbledText() {
         this.garbleByWord(100);
         return this.newLines;
+    }
+
+    public boolean compareToSolution() { // might require a faster implementation
+        int loopLength = Math.min(lines.size(), newLines.size());
+        for (int i=0; i < loopLength; i++) {
+            System.out.println(lines.get(i));
+            System.out.println(newLines.get(i));
+            if (!lines.get(i).trim().equals(newLines.get(i).trim())) {return false;}
+        }
+        return true;
     }
 }

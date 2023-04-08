@@ -1,8 +1,4 @@
-man1
-345
-man2
-333
-man3
-699
-man4
-420
+man1,keypress,time
+man2,keypress,time
+man3,keypress,time
+man4,keypress,time

@@ -57,7 +57,7 @@ public class Controller implements Initializable {
     @FXML
     public void populateUI() {
         this.updateSolution();
-        this.updateHighScore();
+        this.updateLeaderboard();
     }
 
     @FXML
@@ -66,6 +66,7 @@ public class Controller implements Initializable {
         vim.keyPress(event);
         vimText.setText(vim.toString(lineLength));
         this.updateKeypressCounter();
+        textLoader.compareToSolution();
     }
 
     @FXML
@@ -103,14 +104,14 @@ public class Controller implements Initializable {
     public void nextFile() { // on button next 
         this.endGame();
         this.textLoader.nextFile();
-        this.updateHighScore();
+        this.updateLeaderboard();
         this.updateSolution();
     }
 
     public void prevFile() { // on button previous
         this.endGame();
         this.textLoader.prevFile();
-        this.updateHighScore();
+        this.updateLeaderboard();
         this.updateSolution();
     }
 
@@ -120,7 +121,7 @@ public class Controller implements Initializable {
         this.solutionText.setText(solution.toString(lineLength));
     }
 
-    private void updateHighScore() {
+    private void updateLeaderboard() {
         this.leaderboard.readFromFile(this.textLoader.getCurrentFileName());
         this.leaderboardText.setText(this.leaderboard.toString());
     }

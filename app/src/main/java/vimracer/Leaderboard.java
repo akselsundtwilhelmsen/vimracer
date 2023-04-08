@@ -7,13 +7,12 @@ import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 public class Leaderboard {
 
     private final String path = "src/main/resources/prompts/highscores/";
     private ArrayList<String> lines;
-    private LinkedHashMap<String, String> scores;
+    private ArrayList<String[]> scores;
     
     public Leaderboard(TextLoader textloader) {
         this.readFromFile(textloader.getCurrentFileName());
@@ -32,7 +31,7 @@ public class Leaderboard {
                 }
                 reader.close();
 
-                this.toHashMap();
+                this.fileToArray();
             }
         }
         catch (IOException error) {
@@ -40,12 +39,12 @@ public class Leaderboard {
         }
     }
 
-    public void writeToFile(String name, String time) {
+    public void writeToFile(String name, String keypress, String time) {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(path));
-            writer.write(name+"\n"+time+"\n");
-            for (String entry : scores.keySet()) {
-                writer.write(entry+"\n"+scores.get(entry)+"\n");
+            writer.write(name+","+keypress+","+time);
+            for (String[] line : scores) {
+                writer.write(line[0]+","+line[1]+","+line[2]);
             }
             writer.close();
         }
@@ -54,17 +53,18 @@ public class Leaderboard {
         }
     }
 
-    private void toHashMap() {
-        scores = new LinkedHashMap<String, String>();
-        for (int i=0; i < lines.size(); i += 2) {
-            scores.put(lines.get(i), lines.get(i+1));
+    private void fileToArray() {
+        scores = new ArrayList<String[]>();
+        for (int i=0; i < lines.size(); i++) {
+            // scores.put(lines.get(i), lines.get(i+1));
+            scores.add(lines.get(i).split(","));
         }
     }
 
-    public String toString() {
+    public String toString() { //TODO: option to sort by keypresses or time
         String outString = "";
-        for (String entry : scores.keySet()) {
-            outString += entry+"\n"+scores.get(entry)+"\n";
+        for (String[] line: scores) {
+            outString += line[0]+"\n"+line[1]+"\n"+line[2]+"\n\n";
         }
         return outString;
     }
