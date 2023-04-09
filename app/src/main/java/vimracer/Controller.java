@@ -28,7 +28,7 @@ public class Controller implements Initializable {
     @FXML private Text solutionText;
     @FXML private Text vimText;
     @FXML private Pane vimPane;
-    @FXML private Pane sidebar;
+    @FXML private Pane nameInputPane;
     @FXML public Text stopwatchText;
     @FXML public Text keypressCounterText;
     @FXML public Text leaderboardText;
@@ -42,7 +42,7 @@ public class Controller implements Initializable {
         solution = new TextWindow();
         leaderboard = new Leaderboard(textLoader);
         this.populateUI();
-        vimText.requestFocus();
+        nameInputPane.requestFocus();
 
         final Controller c = this; // Oskar & Mathias hack
         Timeline updateStopwatch = new Timeline(new KeyFrame(Duration.seconds(1/60f), new EventHandler<ActionEvent>() {
@@ -110,8 +110,7 @@ public class Controller implements Initializable {
         this.game = null;
         this.updateStopwatch();
         this.updateKeypressCounter();
-        sidebar.requestFocus();
-        
+        nameInputPane.requestFocus();
     }
 
     public void nextFile() { // on button next 
@@ -153,5 +152,10 @@ public class Controller implements Initializable {
     @FXML
     private void updateLeaderboard() {
         this.leaderboardText.setText(this.leaderboard.toString());
+    }
+
+    @FXML
+    public void enterName() {
+        System.out.println("in the name box");
     }
 }

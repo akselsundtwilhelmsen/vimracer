@@ -26,18 +26,20 @@ public class TextLoader {
     }
 
     public void readFromFile() {
-        String fileName = this.fileNameArray.get(this.currentIndex);
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(promptPath+fileName));
-            this.lines = new ArrayList<String>(); // clears current lines
-            String line;
-            while ((line = reader.readLine()) != null) {
-                lines.add(line);
+        if (fileNameArray.size() > 0) {
+            String fileName = this.fileNameArray.get(this.currentIndex);
+            try {
+                BufferedReader reader = new BufferedReader(new FileReader(promptPath+fileName));
+                this.lines = new ArrayList<String>(); // clears current lines
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    lines.add(line);
+                }
+                reader.close();
             }
-            reader.close();
-        }
-        catch (IOException error) {
-            error.printStackTrace();
+            catch (IOException error) {
+                error.printStackTrace();
+            }
         }
     }
 
