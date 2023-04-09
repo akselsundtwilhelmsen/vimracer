@@ -19,8 +19,6 @@ public class VimCommandList implements Iterator {
     private final ArrayList<String> OperatorKeys = new ArrayList<>(Arrays.asList("d","D","y","Y","c","C",">","<","x","X","J"));
     private final ArrayList<String> Keys;
 
-
-
     private final ArrayList<String> OperatorFollowKeys = new ArrayList<>(Arrays.asList("i","a"));
     private final ArrayList<String> OperatorFollowFollowKeys = new ArrayList<>(Arrays.asList("w","p",""));
 

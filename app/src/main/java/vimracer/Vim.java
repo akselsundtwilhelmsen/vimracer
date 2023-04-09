@@ -303,6 +303,14 @@ public class Vim extends TextWindow {
         return newPos;
     }
 
+    @Override
+    public String toString() {
+        // return lines.stream().limit(cursor[1]-1).collect(Collectors.joining("\n"))
+        // + "\n" + lines.get(cursor[0]).substring(0,cursor[0]-1) + "█" + lines.get(cursor[0]).substring(0,cursor[0]-1);
+        // + lines.stream().skip(cursor[1]).collect(Collectors.joining("\n"));
+        return "swag";
+    }
+
     public static void main(String[] args) {
         Vim vim = new Vim();
         ArrayList<String> vimtext = new ArrayList<>();

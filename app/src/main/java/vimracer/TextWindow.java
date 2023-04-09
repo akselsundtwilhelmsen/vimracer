@@ -24,7 +24,7 @@ public class TextWindow {
         return lines.stream().collect(Collectors.joining("\n"));
     }
 
-    public String toString(int maxLineLength) { // with line numbers
+    public String toString(int maxLineLength, int[] highlightPos) { // with line numbers
         final int padding = 2;
         maxLineLength -= padding + 2; // to account for line number and padding
 
@@ -64,6 +64,10 @@ public class TextWindow {
             }
         }
         return outString;
+    }
+
+    public String toString(int maxLineLength) { 
+        return toString(maxLineLength, null);
     }
 
     public boolean equals(TextWindow t) {
