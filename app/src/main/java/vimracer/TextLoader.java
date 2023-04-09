@@ -7,6 +7,7 @@ import java.util.Random;
 import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.lang.Math;
 
 public class TextLoader {
     private ArrayList<String> lines;
@@ -70,8 +71,13 @@ public class TextLoader {
         this.readFromFile();
     }
 
+    public String getCurrentFileName() {
+        return this.fileNameArray.get(currentIndex);
+    }
+
     public void garbleByWord(int intensityPercentage) {
         //intensityPercentage is the percentage of words affected by the garbler
+        newLines = new ArrayList<>();
         for (String line : this.lines) {
             String[] wordArray = line.split(" ");
             String newLine = "";
@@ -83,7 +89,7 @@ public class TextLoader {
                 Random random = new Random();
                 int randint = random.nextInt(101 - intensityPercentage)+1;
                 if (randint == 1) {
-                    String alteredWord = ""; // maybe change = ""; to ;
+                    String alteredWord = "";
                     switch (random.nextInt(4)) {
                         case 0:
                             alteredWord = this.delete(word);
@@ -125,12 +131,6 @@ public class TextLoader {
         return word.toUpperCase();
     }
 
-    private void setDefaultText() {
-        lines = new ArrayList<>();
-        lines.add("The quick brown fox jumped over the lazy dog.");
-    }
-
-
     public ArrayList<String> getText() {
         return this.lines;
     }
@@ -138,5 +138,15 @@ public class TextLoader {
     public ArrayList<String> getGarbledText() {
         this.garbleByWord(100);
         return this.newLines;
+    }
+
+    public boolean compareToSolution() { // might require a faster implementation
+        int loopLength = Math.min(lines.size(), newLines.size());
+        for (int i=0; i < loopLength; i++) {
+            System.out.println(lines.get(i));
+            System.out.println(newLines.get(i));
+            if (!lines.get(i).trim().equals(newLines.get(i).trim())) {return false;}
+        }
+        return true;
     }
 }

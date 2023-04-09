@@ -31,7 +31,4 @@ public class Game {
         return this.keypressCounter.getCount();
     }
 
-    public void compareToSolution() { //TODO!
-
-    }
 }

@@ -22,7 +22,7 @@ public class Controller implements Initializable {
     public Stopwatch stopwatch;
     KeypressCounter keypressCounter;
     TextLoader textLoader;
-
+    Leaderboard leaderboard;
     Game game;
 
     @FXML private Text solutionText;
@@ -30,6 +30,7 @@ public class Controller implements Initializable {
     @FXML private Pane vimPane;
     @FXML public Text stopwatchText;
     @FXML public Text keypressCounterText;
+    @FXML public Text leaderboardText;
 
     final int lineLength = 86;
 
@@ -38,6 +39,7 @@ public class Controller implements Initializable {
         textLoader = new TextLoader();
         vim = new Vim();
         solution = new TextWindow();
+        leaderboard = new Leaderboard(textLoader);
         this.populateUI();
 
         final Controller c = this; // Oskar & Mathias hack
@@ -53,15 +55,18 @@ public class Controller implements Initializable {
 
     @FXML
     public void populateUI() {
-        solution.setText(textLoader.getText());
-        solutionText.setText(solution.toString(lineLength));
+        this.updateSolution();
+        this.updateLeaderboard();
+        this.setVimText();
     }
 
     @FXML
     public void handleOnKeyPressed(KeyEvent event) {
+        // her må det sjekkes om det er klart for å skrives
         vim.keyPress(event);
         vimText.setText(vim.toString(lineLength));
         this.updateKeypressCounter();
+        textLoader.compareToSolution();
     }
 
     @FXML
@@ -74,6 +79,9 @@ public class Controller implements Initializable {
         if (this.game != null) {
             this.stopwatchText.setText(game.getStopwatch());
         }
+        else {
+            this.stopwatchText.setText("00:00:000");
+        }
     }
 
     @FXML
@@ -83,33 +91,62 @@ public class Controller implements Initializable {
             this.keypressCounterText.setText(this.game.getKeypressCounter());
             this.updateStopwatch(); //dette må kjøres på interval, TEMPORARY
         }
+        else {
+            this.keypressCounterText.setText("0");
+        }
     }
 
     // @FXML
-    public void startGame() {
+    public void startGame() { // on button start game
         this.game = new Game(this);
         this.keypressCounterText.setText(this.game.getKeypressCounter());
         this.updateStopwatch();
     }
 
-    public void endGame() {
+    public void endGame() { // on button end game
         this.game = null;
+        this.updateStopwatch();
+        this.updateKeypressCounter();
     }
 
-    public void nextFile() {
+    public void nextFile() { // on button next 
         this.endGame();
         this.textLoader.nextFile();
+        this.leaderboard.readFromFile(this.textLoader.getCurrentFileName());
+        this.updateLeaderboard();
         this.updateSolution();
+        this.setVimText();
     }
 
-    public void prevFile() {
+    public void prevFile() { // on button previous
         this.endGame();
         this.textLoader.prevFile();
+        this.leaderboard.readFromFile(this.textLoader.getCurrentFileName());
+        this.updateLeaderboard();
         this.updateSolution();
+        this.setVimText();
     }
 
-    public void updateSolution() {
-        solution.setText(textLoader.getText());
+    @FXML
+    public void setVimText() {
+        this.vim.setText(textLoader.getGarbledText());
+        this.vimText.setText(vim.toString(lineLength));
+    }
+
+    @FXML
+    public void sortLeaderboard() {
+        this.leaderboard.nextSort();
+        this.updateLeaderboard();
+    }
+
+    @FXML
+    private void updateSolution() {
+        this.solution.setText(textLoader.getText());
         this.solutionText.setText(solution.toString(lineLength));
+    }
+
+    @FXML
+    private void updateLeaderboard() {
+        this.leaderboardText.setText(this.leaderboard.toString());
     }
 }
