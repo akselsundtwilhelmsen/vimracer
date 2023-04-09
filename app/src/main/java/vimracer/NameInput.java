@@ -17,10 +17,14 @@ public class NameInput {
             }
         }
         else {
-            if (keyCode.length() == 1) {
+            if (keyCode.length() == 1 && name.length() < 9) {
                 name += event.getCode().toString().toLowerCase();
             }
         }
         System.out.println(name);
+    }
+
+    public String toString() {
+        return name;
     }
 }
