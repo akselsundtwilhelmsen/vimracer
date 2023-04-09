@@ -28,11 +28,10 @@
                   <Font name="Ubuntu Mono" size="13.0" />
                </font>
             </Text>
-            <Button layoutY="10000" /> 
          </children>
       </Pane>
       </AnchorPane>
-      <AnchorPane prefHeight="354.0" prefWidth="100" style="-fx-background-color: #E5C2C0;">
+      <AnchorPane fx:id="sidebar" prefHeight="354.0" prefWidth="100" style="-fx-background-color: #E5C2C0;">
          <children>
             <ImageView fitHeight="74.0" fitWidth="73.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
                <image>

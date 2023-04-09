@@ -28,6 +28,7 @@ public class Controller implements Initializable {
     @FXML private Text solutionText;
     @FXML private Text vimText;
     @FXML private Pane vimPane;
+    @FXML private Pane sidebar;
     @FXML public Text stopwatchText;
     @FXML public Text keypressCounterText;
     @FXML public Text leaderboardText;
@@ -41,6 +42,7 @@ public class Controller implements Initializable {
         solution = new TextWindow();
         leaderboard = new Leaderboard(textLoader);
         this.populateUI();
+        vimText.requestFocus();
 
         final Controller c = this; // Oskar & Mathias hack
         Timeline updateStopwatch = new Timeline(new KeyFrame(Duration.seconds(1/60f), new EventHandler<ActionEvent>() {
@@ -101,12 +103,15 @@ public class Controller implements Initializable {
         this.game = new Game(this);
         this.keypressCounterText.setText(this.game.getKeypressCounter());
         this.updateStopwatch();
+        vimText.requestFocus();
     }
 
     public void endGame() { // on button end game
         this.game = null;
         this.updateStopwatch();
         this.updateKeypressCounter();
+        sidebar.requestFocus();
+        
     }
 
     public void nextFile() { // on button next 
