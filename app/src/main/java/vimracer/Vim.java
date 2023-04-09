@@ -304,11 +304,8 @@ public class Vim extends TextWindow {
     }
 
     @Override
-    public String toString() {
-        // return lines.stream().limit(cursor[1]-1).collect(Collectors.joining("\n"))
-        // + "\n" + lines.get(cursor[0]).substring(0,cursor[0]-1) + "█" + lines.get(cursor[0]).substring(0,cursor[0]-1);
-        // + lines.stream().skip(cursor[1]).collect(Collectors.joining("\n"));
-        return "swag";
+    public String toString(int lineLength) {
+        return toString(lineLength, cursor);
     }
 
     public static void main(String[] args) {
@@ -322,12 +319,6 @@ public class Vim extends TextWindow {
         vimtext.add("fem");
         vimtext.add("seks");
         vim.setText(vimtext);
-        System.out.println(vim.toString());
-
-        int[] newPos = new int[2];
-        newPos[0] = 2;
-        newPos[1] = 3;
-        // newPos = vim.nextInstanceOfMultiline(Pattern.compile("\\n\\n"), newPos, false);
-        System.out.format("%d %d\n", newPos[0], newPos[1]);
+        System.out.println(vim.toString(86));
     }
 }

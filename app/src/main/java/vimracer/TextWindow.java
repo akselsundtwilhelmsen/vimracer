@@ -3,6 +3,8 @@ package vimracer;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+import javafx.scene.Cursor;
+
 public class TextWindow {
     ArrayList<String> lines;
 
@@ -43,6 +45,12 @@ public class TextWindow {
             String paddingStringOverflow = " "; // amount of padding needed after line overflow
             for (int i=0; i < padding; i++) {
                 paddingStringOverflow += " ";
+            }
+
+            if (highlightPos != null) {
+                if (highlightPos[1] == lineNumber-1) {
+                    line = line.substring(0, highlightPos[0]) + "█" + line.substring(highlightPos[0]+1);
+                }
             }
 
             if (line.length() < maxLineLength) {
