@@ -3,7 +3,6 @@ package vimracer;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-import javafx.scene.Cursor;
 
 public class TextWindow {
     ArrayList<String> lines;
