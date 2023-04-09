@@ -49,7 +49,11 @@ public class TextWindow {
 
             if (highlightPos != null) {
                 if (highlightPos[1] == lineNumber-1) {
-                    line = line.substring(0, highlightPos[0]) + "█" + line.substring(highlightPos[0]+1);
+                    if (line == "") {
+                        line = "█";
+                    } else {
+                        line = line.substring(0, highlightPos[0]) + "█" + line.substring(highlightPos[0]+1);
+                    }
                 }
             }
 
