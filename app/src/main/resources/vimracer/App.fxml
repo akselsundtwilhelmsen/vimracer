@@ -90,9 +90,18 @@
                   <Button layoutY="10000" />
                </children>
             </Pane>
-            <Pane layoutX="14.0" layoutY="311.0" prefHeight="291.0" prefWidth="73.0" style="-fx-background-color: #50e080;">
+            <Pane layoutX="14.0" layoutY="242.0" prefHeight="422.0" prefWidth="73.0" style="-fx-background-color: #4EBC72;">
                <children>
-                  <Text fx:id="leaderboardText" layoutX="6.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="highscore" textAlignment="LEFT" wrappingWidth="61.30908203125">
+                  <Text fx:id="leaderboardText" layoutX="6.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="leaderboard" textAlignment="LEFT" wrappingWidth="61.30908203125">
+                     <font>
+                        <Font name="Ubuntu Mono" size="13.0" />
+                     </font>
+                  </Text>
+               </children>
+            </Pane>
+            <Pane layoutX="14.0" layoutY="664.0" onMouseClicked="#sortLeaderboard" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #329F5B;">
+               <children>
+                  <Text layoutX="6.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sort" textAlignment="CENTER" wrappingWidth="61.30908203125">
                      <font>
                         <Font name="Ubuntu Mono" size="13.0" />
                      </font>

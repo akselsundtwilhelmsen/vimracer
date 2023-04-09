@@ -23,7 +23,6 @@ public class Controller implements Initializable {
     KeypressCounter keypressCounter;
     TextLoader textLoader;
     Leaderboard leaderboard;
-
     Game game;
 
     @FXML private Text solutionText;
@@ -105,6 +104,7 @@ public class Controller implements Initializable {
     public void nextFile() { // on button next 
         this.endGame();
         this.textLoader.nextFile();
+        this.leaderboard.readFromFile(this.textLoader.getCurrentFileName());
         this.updateLeaderboard();
         this.updateSolution();
         this.setVimText();
@@ -113,6 +113,7 @@ public class Controller implements Initializable {
     public void prevFile() { // on button previous
         this.endGame();
         this.textLoader.prevFile();
+        this.leaderboard.readFromFile(this.textLoader.getCurrentFileName());
         this.updateLeaderboard();
         this.updateSolution();
         this.setVimText();
@@ -124,6 +125,11 @@ public class Controller implements Initializable {
         this.vimText.setText(vim.toString(lineLength));
     }
 
+    @FXML
+    public void sortLeaderboard() {
+        this.leaderboard.nextSort();
+        this.updateLeaderboard();
+    }
 
     @FXML
     private void updateSolution() {
@@ -133,7 +139,6 @@ public class Controller implements Initializable {
 
     @FXML
     private void updateLeaderboard() {
-        this.leaderboard.readFromFile(this.textLoader.getCurrentFileName());
         this.leaderboardText.setText(this.leaderboard.toString());
     }
 }
