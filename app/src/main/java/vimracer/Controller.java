@@ -42,7 +42,7 @@ public class Controller implements Initializable {
         solution = new TextWindow();
         leaderboard = new Leaderboard(textLoader);
         this.populateUI();
-        nameInputPane.requestFocus();
+        nameInputPane.requestFocus(); // TODO: dette funker ikke her
 
         final Controller c = this; // Oskar & Mathias hack
         Timeline updateStopwatch = new Timeline(new KeyFrame(Duration.seconds(1/60f), new EventHandler<ActionEvent>() {

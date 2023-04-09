@@ -45,6 +45,7 @@ public class TextLoader {
 
     public void listFiles(String promptPath) {
         File directory = new File(promptPath);
+        System.out.println(directory);
         File[] files = directory.listFiles();
         if (files != null) {
             for (int i = 0; i < files.length; i++) {
