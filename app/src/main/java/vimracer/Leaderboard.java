@@ -87,10 +87,15 @@ public class Leaderboard {
         }
     }
 
-    public String toString() { //TODO: option to sort by keypresses or time
+    public String toString() {
         String outString = "";
+        int counter = 0; // to stop the loop before overflowing the textbox
         for (String[] line: scores) {
             outString += line[0]+"\n⌨️"+line[1]+"\n🕒"+line[2]+"\n\n";
+            counter += 1;
+            if (counter >= 8) {
+                break;
+            }
         }
         return outString;
     }

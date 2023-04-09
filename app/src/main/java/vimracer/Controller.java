@@ -79,6 +79,9 @@ public class Controller implements Initializable {
         if (this.game != null) {
             this.stopwatchText.setText(game.getStopwatch());
         }
+        else {
+            this.stopwatchText.setText("00:00:000");
+        }
     }
 
     @FXML
@@ -87,6 +90,9 @@ public class Controller implements Initializable {
             this.game.keypress(); 
             this.keypressCounterText.setText(this.game.getKeypressCounter());
             this.updateStopwatch(); //dette må kjøres på interval, TEMPORARY
+        }
+        else {
+            this.keypressCounterText.setText("0");
         }
     }
 
@@ -99,6 +105,8 @@ public class Controller implements Initializable {
 
     public void endGame() { // on button end game
         this.game = null;
+        this.updateStopwatch();
+        this.updateKeypressCounter();
     }
 
     public void nextFile() { // on button next 

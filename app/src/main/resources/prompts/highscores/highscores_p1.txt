@@ -1,6 +1,0 @@
-jon,1,4
-per,3,5
-pål,6,6
-mons,4,3
-jan,5,2
-frida,2,1

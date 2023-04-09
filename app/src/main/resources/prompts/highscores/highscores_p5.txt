@@ -1,0 +1,10 @@
+jon,13,48
+per,33,50
+pål,63,69
+mons,49,38
+jan,57,24
+frida,22,143
+kåre,45,59
+fredrik,40,88
+petter,43,67
+henrik,59,87
