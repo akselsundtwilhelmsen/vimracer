@@ -71,7 +71,9 @@ public class Controller implements Initializable {
         vim.keyPress(event);
         vimText.setText(vim.toString(lineLength));
         this.updateKeypressCounter();
-        textLoader.compareToSolution();
+        if (textLoader.compareToSolution()) {
+            this.gameWon();
+        }
     }
 
     @FXML
@@ -159,9 +161,7 @@ public class Controller implements Initializable {
 
     @FXML
     public void nameInputKeyPressed(KeyEvent event) {
-        System.out.println("in the name box");
         nameInput.keyPress(event);
-        // vimText.setText(vim.toString());
         this.updateNameInput();
     }
 
@@ -173,5 +173,13 @@ public class Controller implements Initializable {
     @FXML
     public void nameFocus() {
         this.nameInputPane.requestFocus();
+    }
+
+    @FXML
+    private void gameWon() {
+        System.out.println(nameInput.toString());
+        System.out.println(game.getKeypressCounter());
+        System.out.println(game.getStopwatch());
+        leaderboard.writeToFile(nameInput.toString(), game.getKeypressCounter(), "0");
     }
 }

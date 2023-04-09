@@ -21,7 +21,6 @@ public class NameInput {
                 name += event.getCode().toString().toLowerCase();
             }
         }
-        System.out.println(name);
     }
 
     public String toString() {
