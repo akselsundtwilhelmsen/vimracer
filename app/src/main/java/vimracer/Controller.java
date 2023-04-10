@@ -177,9 +177,7 @@ public class Controller implements Initializable {
 
     @FXML
     private void gameWon() {
-        System.out.println(nameInput.toString());
-        System.out.println(game.getKeypressCounter());
-        System.out.println(game.getStopwatch());
-        leaderboard.writeToFile(nameInput.toString(), game.getKeypressCounter(), "0");
+        leaderboard.writeToFile(nameInput.toString(), game.getKeypressCounter(), String.valueOf(game.getStopwatchLong()));
+        this.endGame();
     }
 }

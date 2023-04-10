@@ -31,4 +31,7 @@ public class Game {
         return this.keypressCounter.getCount();
     }
 
+    public long getStopwatchLong() {
+        return this.stopwatch.getElapsedTime();
+    }
 }
