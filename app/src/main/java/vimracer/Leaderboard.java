@@ -13,10 +13,12 @@ public class Leaderboard {
     private String path = "src/main/resources/prompts/highscores/";
     private ArrayList<String> lines; // file lines
     private ArrayList<String[]> scores;
+    private TextLoader textLoader;
     private int currentSortingIndex = 2;
     
     public Leaderboard(TextLoader textloader) {
         this.setPath(); // TODO: proper fix
+        this.textLoader = textloader;
         this.readFromFile(textloader.getCurrentFileName());
     }
 
@@ -49,11 +51,18 @@ public class Leaderboard {
     }
 
     public void writeToFile(String name, String keypress, String time) {
+        String fileName = textLoader.getCurrentFileName();
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(path));
-            writer.write(name+","+keypress+","+time);
+            BufferedWriter writer = new BufferedWriter(new FileWriter(path+"highscores_"+fileName));
             for (String[] line : scores) {
-                writer.write(line[0]+","+line[1]+","+line[2]);
+                if (name.trim().equals(line[0].trim())) { // check if name is already on the leaderboard
+                    if (Integer.valueOf(keypress)> Integer.valueOf(line[1]) || Integer.valueOf(time) > Integer.valueOf(line[2])) {
+                        writer.write(name+","+keypress+","+time+"\n");
+                    }
+                }
+                else {
+                    writer.write(line[0]+","+line[1]+","+line[2]+"\n");
+                }
             }
             writer.close();
         }
@@ -99,12 +108,20 @@ public class Leaderboard {
         String outString = "";
         int counter = 0; // to stop the loop before overflowing the textbox
         for (String[] line: scores) {
-            outString += line[0]+"\n⌨"+line[1]+"\n🕒"+line[2]+"\n\n";
+            outString += line[0]+"\n"+line[1]+"\n"+formatTime(line[2])+"\n\n";
             counter += 1;
             if (counter >= 8) {
                 break;
             }
         }
         return outString;
+    }
+
+    public String formatTime(String time) {
+        long elapsedTime = Long.valueOf(time);
+        long milliSec = elapsedTime % 1000;
+        long sec = (elapsedTime / 1000) % 60;
+        long min = (elapsedTime / 1000) / 60;
+        return String.format("%02d:%02d:%03d", min, sec, milliSec);
     }
 }

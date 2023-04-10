@@ -1,10 +1,7 @@
-jon,13,48
-per,33,50
-pål,63,69
-mons,49,38
-jan,57,24
-frida,22,143
-kåre,45,59
-fredrik,40,88
-petter,43,67
-henrik,59,87
+frida,37,16070
+testtest,1,2049
+test,12,4257
+henrik,23,5760
+fredrik,27,7271
+jan,57,24324
+asdf,36,39370
