@@ -23,7 +23,7 @@ public class Vim extends TextWindow {
         super();
         this.cursor = new int[2];
         Arrays.fill(cursor,0);
-        this.mode = 'i';
+        this.mode = 'n';
         this.shiftHeld = false;
 
         this.commands = new VimCommandList(this);
@@ -62,11 +62,8 @@ public class Vim extends TextWindow {
         if (mode == 'i') {
             if (keyString.equals("SPACE")) keyString = " ";
             if (keyString.equals("BACK_SPACE")) backspace();
-            else if (keyString.equals("ENTER")) {
-                insertLine(cursor[1]+1);
-                cursor[1]++;
-                cursor[0] = 0;
-            } else {
+            else if (keyString.equals("ENTER")) enter();
+            else {
                 insertString(keyString,cursor);
             }
             return;
@@ -196,7 +193,7 @@ public class Vim extends TextWindow {
         if (lines.get(cursor[1]).length() == 0) return;
         lines.set(cursor[1], lines.get(cursor[1]).substring(0,cursor[0]) + lines.get(cursor[1]).substring(cursor[0]+1));
         if (! validCursorPos(cursor)) { 
-            cursor[0]--; 
+            cursor[0]--;
         }
     }
 
@@ -204,6 +201,15 @@ public class Vim extends TextWindow {
         if (cursor[0] == 0) return;
         cursor[0]--;
         removeUnderCursor();
+    }
+
+    private void enter() {
+        //add line below cursor, move tekst after cursor to the new line, move cursor to start of new line
+        insertLine(cursor[1]+1);
+        lines.set(cursor[1]+1, lines.get(cursor[1]).substring(cursor[0]));
+        lines.set(cursor[1], lines.get(cursor[1]).substring(0,cursor[0]));
+        cursor[1]++;
+        cursor[0] = 0;
     }
 
     private void insertLine(int lineNumber) {
