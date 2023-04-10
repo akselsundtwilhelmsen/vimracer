@@ -60,12 +60,9 @@ public class Vim extends TextWindow {
 
         
         if (mode == 'i') {
-            if (keyString.equals("1")) keyString = " "; //TODO: get regular enter and space to work and remove these
-            if (keyString.equals("2")) keyString = "ENTER";
-
-            if (keyString == "BACK_SPACE") {
-                backspace();
-            } else if (keyString == "ENTER") { //does not work because enter presses the button
+            if (keyString.equals("SPACE")) keyString = " ";
+            if (keyString.equals("BACK_SPACE")) backspace();
+            else if (keyString.equals("ENTER")) {
                 insertLine(cursor[1]+1);
                 cursor[1]++;
                 cursor[0] = 0;
