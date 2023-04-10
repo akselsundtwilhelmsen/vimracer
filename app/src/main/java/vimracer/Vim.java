@@ -319,7 +319,9 @@ public class Vim extends TextWindow {
         vimtext.add("fem");
         vimtext.add("seks");
         vim.setText(vimtext);
-        // int[] cursor = {0,4};
+        int[] pos1 = {0,4};
+        int[] pos2 = {5,0};
+        vim.removeBetween(pos1, pos2);
         System.out.println(vim.toString(86));
     }
 }
