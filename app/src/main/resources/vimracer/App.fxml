@@ -85,9 +85,9 @@
                   </Text>
                </children>
             </Pane>
-            <Pane fx:id="nameInputPane" layoutX="14.0" layoutY="243.0" onKeyPressed="#enterName" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #329F5B;">
+            <Pane fx:id="nameInputPane" onKeyPressed="#nameInputKeyPressed" onMouseClicked="#nameFocus" layoutX="14.0" layoutY="243.0" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #329F5B;">
                <children>
-                  <Text layoutX="6.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="[name]" textAlignment="CENTER" wrappingWidth="61.30908203125">
+                  <Text fx:id="nameInputText" layoutX="6.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="[name]" textAlignment="CENTER" wrappingWidth="61.30908203125">
                      <font>
                         <Font name="Ubuntu Mono" size="13.0" />
                      </font>

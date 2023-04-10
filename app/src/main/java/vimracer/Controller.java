@@ -24,6 +24,7 @@ public class Controller implements Initializable {
     TextLoader textLoader;
     Leaderboard leaderboard;
     Game game;
+    NameInput nameInput;
 
     @FXML private Text solutionText;
     @FXML private Text vimText;
@@ -32,6 +33,7 @@ public class Controller implements Initializable {
     @FXML public Text stopwatchText;
     @FXML public Text keypressCounterText;
     @FXML public Text leaderboardText;
+    @FXML public Text nameInputText;
 
     final int lineLength = 86;
 
@@ -41,8 +43,10 @@ public class Controller implements Initializable {
         vim = new Vim();
         solution = new TextWindow();
         leaderboard = new Leaderboard(textLoader);
+        nameInput = new NameInput();
+
         this.populateUI();
-        nameInputPane.requestFocus(); // TODO: dette funker ikke her
+        // nameInputPane.requestFocus(); // TODO: dette funker ikke her
 
         final Controller c = this; // Oskar & Mathias hack
         Timeline updateStopwatch = new Timeline(new KeyFrame(Duration.seconds(1/60f), new EventHandler<ActionEvent>() {
@@ -64,11 +68,12 @@ public class Controller implements Initializable {
 
     @FXML
     public void handleOnKeyPressed(KeyEvent event) {
-        // her må det sjekkes om det er klart for å skrives
         vim.keyPress(event);
         vimText.setText(vim.toString(lineLength));
         this.updateKeypressCounter();
-        textLoader.compareToSolution();
+        if (textLoader.compareToSolution()) {
+            this.gameWon();
+        }
     }
 
     @FXML
@@ -155,7 +160,26 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    public void enterName() {
-        System.out.println("in the name box");
+    public void nameInputKeyPressed(KeyEvent event) {
+        nameInput.keyPress(event);
+        this.updateNameInput();
+    }
+
+    @FXML
+    public void updateNameInput() {
+        this.nameInputText.setText(nameInput.toString());
+    }
+
+    @FXML
+    public void nameFocus() {
+        this.nameInputPane.requestFocus();
+    }
+
+    @FXML
+    private void gameWon() {
+        System.out.println(nameInput.toString());
+        System.out.println(game.getKeypressCounter());
+        System.out.println(game.getStopwatch());
+        leaderboard.writeToFile(nameInput.toString(), game.getKeypressCounter(), "0");
     }
 }
