@@ -11,18 +11,26 @@ import java.lang.Math;
 
 public class TextLoader {
     private int currentIndex;
-    private final String promptPath = "app/src/main/resources/prompts/";
+    private String promptPath = "src/main/resources/prompts/";
     private ArrayList<String> lines;
     private ArrayList<String> newLines;
     private ArrayList<String> fileNameArray = new ArrayList<>();
 
     public TextLoader() {
+        this.setPath(); // TODO: proper fix
         this.lines = new ArrayList<>();
         this.newLines = new ArrayList<>();
         this.currentIndex = 0;
         this.listFiles(promptPath); // get files
         Collections.shuffle(this.fileNameArray); // randomize file name order
         this.readFromFile();
+    }
+
+    private void setPath() { // cheesy fix, TODO: fix properly
+        File directory = new File(promptPath);
+        if (!directory.exists()) {
+            this.promptPath = "app/src/main/resources/prompts/";
+        }
     }
 
     public void readFromFile() {
