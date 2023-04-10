@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class Leaderboard {
 
-    private final String path = "src/main/resources/prompts/highscores/";
+    private final String path = "app/src/main/resources/prompts/highscores/";
     private ArrayList<String> lines; // file lines
     private ArrayList<String[]> scores;
     private int currentSortingIndex = 2;

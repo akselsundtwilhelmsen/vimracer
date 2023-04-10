@@ -7,6 +7,11 @@ import java.util.stream.Collectors;
 
 import javafx.scene.input.KeyEvent;
 
+// TODO: må: kjørende program, pekervalidering, fungerend removeBetween(), bedre kommandovalidering
+// TODO: bør: Text-objects (dip, ciw, di[ osv), yank og put, flere bevegelser (lett nå med bra regex))
+
+// TODO utenom prog, tester, dokumentasjon
+
 public class Vim extends TextWindow {
     private int[] cursor;
     private char mode; // must be n(ormal), v(isual), or i(nsert) ((visual) l(ine), (visual) b(lock), or r(eplace)?)

@@ -11,7 +11,7 @@ import java.lang.Math;
 
 public class TextLoader {
     private int currentIndex;
-    private final String promptPath = "src/main/resources/prompts/";
+    private final String promptPath = "app/src/main/resources/prompts/";
     private ArrayList<String> lines;
     private ArrayList<String> newLines;
     private ArrayList<String> fileNameArray = new ArrayList<>();
