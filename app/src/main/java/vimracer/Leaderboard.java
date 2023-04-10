@@ -10,13 +10,21 @@ import java.util.ArrayList;
 
 public class Leaderboard {
 
-    private final String path = "app/src/main/resources/prompts/highscores/";
+    private String path = "src/main/resources/prompts/highscores/";
     private ArrayList<String> lines; // file lines
     private ArrayList<String[]> scores;
     private int currentSortingIndex = 2;
     
     public Leaderboard(TextLoader textloader) {
+        this.setPath(); // TODO: proper fix
         this.readFromFile(textloader.getCurrentFileName());
+    }
+
+    private void setPath() { // cheesy fix, TODO: fix properly
+        File directory = new File(path);
+        if (!directory.exists()) {
+            this.path = "app/src/main/resources/prompts/highscores/";
+        }
     }
 
     public void readFromFile(String fileName) {
