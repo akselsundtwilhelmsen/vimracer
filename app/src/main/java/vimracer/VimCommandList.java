@@ -7,6 +7,8 @@ import java.util.Iterator;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
+import javafx.scene.Cursor;
+
 public class VimCommandList implements Iterator {
 
     private ArrayList<Object> commands;
@@ -14,7 +16,8 @@ public class VimCommandList implements Iterator {
     private int index;
     private Vim vim;
 
-    private final ArrayList<String> MovementKeys = new ArrayList<>(Arrays.asList("0","F","ge","b","h","l","e","w","W","t","f","$","|","gg","{","}","k","j","G"));
+    private final ArrayList<String> VerticalMovementKeys = new ArrayList<>(Arrays.asList("gg","{","}","k","j","G"));
+    private final ArrayList<String> MovementKeys = new ArrayList<>(Arrays.asList("0","F","ge","b","h","l","e","w","W","t","f","$","|"));
     private final ArrayList<String> InsertModeKeys = new ArrayList<>(Arrays.asList("i","I","a","A","o","O"));
     private final ArrayList<String> OperatorKeys = new ArrayList<>(Arrays.asList("d","D","y","Y","c","C",">","<","x","X","J"));
     private final ArrayList<String> Keys;
@@ -36,6 +39,7 @@ public class VimCommandList implements Iterator {
         this.index = -1;
         this.vim = vim;
 
+        this.MovementKeys.addAll(VerticalMovementKeys);
         this.Keys = new ArrayList<>();
         this.Keys.addAll(MovementKeys);
         this.Keys.addAll(InsertModeKeys);
@@ -199,6 +203,23 @@ public class VimCommandList implements Iterator {
                     // newPos[1] = lines.size()-1;
             }
         }
+
+
+        int newLineLength = vim.getLineLength(newPos[1]);
+        if (VerticalMovementKeys.indexOf(key) != -1) {
+            newPos[0] = newPos[2];
+            if (newPos[0] >= newLineLength) {
+                newPos[0] = newLineLength - 1;
+            }
+        } else {
+            if (newPos[0] >= newLineLength) {
+                newPos[0] = newLineLength - 1;
+            }
+            newPos[2] = newPos[0];
+        }
+
+        
+
         commands.add(newPos);
     }
 
@@ -254,8 +275,10 @@ public class VimCommandList implements Iterator {
                 break;
             case "<":
                 commands.add("removeIndent");
+                break;
             case ">":
                 commands.add("addIndent");
+                break;
         }
     }
 }

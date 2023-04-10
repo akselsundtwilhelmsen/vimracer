@@ -7,13 +7,13 @@ import java.util.stream.Collectors;
 
 import javafx.scene.input.KeyEvent;
 
-// TODO: må: kjørende program, pekervalidering, fungerend removeBetween(), bedre kommandovalidering
+// TODO: må: pekervalidering, fungerend removeBetween(), bedre kommandovalidering
 // TODO: bør: Text-objects (dip, ciw, di[ osv), yank og put, flere bevegelser (lett nå med bra regex))
 
 // TODO utenom prog, tester, dokumentasjon
 
 public class Vim extends TextWindow {
-    private int[] cursor;
+    private int[] cursor; //has [col, row, prefcol]
     private char mode; // must be n(ormal), v(isual), or i(nsert) ((visual) l(ine), (visual) b(lock), or r(eplace)?)
     private boolean shiftHeld;
 
@@ -21,7 +21,7 @@ public class Vim extends TextWindow {
 
     public Vim() {
         super();
-        this.cursor = new int[2];
+        this.cursor = new int[3];
         Arrays.fill(cursor,0);
         this.mode = 'n';
         this.shiftHeld = false;
@@ -204,7 +204,7 @@ public class Vim extends TextWindow {
     }
 
     private void enter() {
-        //add line below cursor, move tekst after cursor to the new line, move cursor to start of new line
+        //add line below cursor, move text after cursor to the new line, move cursor to start of new line
         insertLine(cursor[1]+1);
         lines.set(cursor[1]+1, lines.get(cursor[1]).substring(cursor[0]));
         lines.set(cursor[1], lines.get(cursor[1]).substring(0,cursor[0]));
@@ -236,6 +236,10 @@ public class Vim extends TextWindow {
 
     public int[] getCursor() {
         return cursor.clone();
+    }
+
+    public int getLineLength(int lineNumber) {
+        return lines.get(lineNumber).length();
     }
 
     private boolean validCursorPos(int[] cursor) {
