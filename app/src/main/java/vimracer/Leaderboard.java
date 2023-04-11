@@ -51,6 +51,9 @@ public class Leaderboard {
     }
 
     public void writeToFile(String name, String keypress, String time) {
+        if (name.equals("")) { // can't write to an empty
+            return;
+        }
         String fileName = textLoader.getCurrentFileName();
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(path+"highscores_"+fileName));

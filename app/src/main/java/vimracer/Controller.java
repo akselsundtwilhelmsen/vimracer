@@ -96,7 +96,6 @@ public class Controller implements Initializable {
         if (this.game != null) {
             this.game.keypress(); 
             this.keypressCounterText.setText(this.game.getKeypressCounter());
-            this.updateStopwatch(); //dette må kjøres på interval, TEMPORARY
         }
         else {
             this.keypressCounterText.setText("0");
@@ -106,6 +105,8 @@ public class Controller implements Initializable {
     // @FXML
     public void startGame() { // on button start game
         this.game = new Game(this);
+        vim = new Vim(); // TODO: Hvorfor gjør dette at alt slettes når man begynner å skrive? Spør Brage.
+        this.setVimText();
         this.keypressCounterText.setText(this.game.getKeypressCounter());
         this.updateStopwatch();
         vimText.requestFocus();
