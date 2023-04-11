@@ -8,6 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -34,6 +35,7 @@ public class Controller implements Initializable {
     @FXML public Text keypressCounterText;
     @FXML public Text leaderboardText;
     @FXML public Text nameInputText;
+    @FXML public TextFlow textflow;
 
     final int lineLength = 86;
 

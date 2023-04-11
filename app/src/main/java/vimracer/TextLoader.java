@@ -171,6 +171,7 @@ public class TextLoader {
                 }
             }
             newLine = newLine.replaceAll("  ", " "); // avoids double spaces
+            newLine = newLine.trim();
             newLines.add(newLine);
         }
     }
