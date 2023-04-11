@@ -4,9 +4,11 @@ import javafx.scene.input.KeyEvent;
 
 public class NameInput {
     private String name;
+    private Controller controller;
     
-    public NameInput() {
+    public NameInput(Controller controller) {
         name = "";
+        this.controller = controller;
     }
 
     public void keyPress(KeyEvent event) {
@@ -16,6 +18,9 @@ public class NameInput {
                 name = name.substring(0, name.length()-1);
             }
         }
+        else if (keyCode.equals("enter")) {
+            controller.startGame();
+        }
         else {
             if (keyCode.length() == 1 && name.length() < 9) {
                 name += event.getCode().toString().toLowerCase();
@@ -24,6 +29,11 @@ public class NameInput {
     }
 
     public String toString() {
-        return name;
+        if (name.equals("")) {
+            return "[name]";
+        }
+        else {
+            return name;
+        }
     }
 }
