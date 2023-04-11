@@ -45,7 +45,7 @@ public class Controller implements Initializable {
         leaderboard = new Leaderboard(textLoader);
         nameInput = new NameInput(this);
 
-        this.populateUI();
+        populateUI();
         // nameInputPane.requestFocus(); // TODO: dette funker ikke her
 
         final Controller c = this; // Oskar & Mathias hack
@@ -61,18 +61,18 @@ public class Controller implements Initializable {
 
     @FXML
     public void populateUI() {
-        this.updateSolution();
-        this.updateLeaderboard();
-        this.setVimText();
+        updateSolution();
+        updateLeaderboard();
+        setVimText();
     }
 
     @FXML
     public void handleOnKeyPressed(KeyEvent event) {
         vim.keyPress(event);
         vimText.setText(vim.toString(lineLength));
-        this.updateKeypressCounter();
+        updateKeypressCounter();
         if (textLoader.compareToSolution()) {
-            this.gameWon();
+            gameWon();
         }
     }
 
@@ -83,102 +83,102 @@ public class Controller implements Initializable {
 
     // @FXML
     public void updateStopwatch() {
-        if (this.game != null) {
-            this.stopwatchText.setText(game.getStopwatch());
+        if (game != null) {
+            stopwatchText.setText(game.getStopwatch());
         }
         else {
-            this.stopwatchText.setText("00:00:000");
+            stopwatchText.setText("00:00:000");
         }
     }
 
     @FXML
     public void updateKeypressCounter() {
-        if (this.game != null) {
-            this.game.keypress(); 
-            this.keypressCounterText.setText(this.game.getKeypressCounter());
+        if (game != null) {
+            game.keypress(); 
+            keypressCounterText.setText(game.getKeypressCounter());
         }
         else {
-            this.keypressCounterText.setText("0");
+            keypressCounterText.setText("0");
         }
     }
 
     // @FXML
     public void startGame() { // on button start game
-        this.game = new Game(this);
+        game = new Game(this);
         vim = new Vim(); // TODO: Hvorfor gjør dette at alt slettes når man begynner å skrive? Spør Brage.
-        this.setVimText();
-        this.keypressCounterText.setText(this.game.getKeypressCounter());
-        this.updateStopwatch();
+        setVimText();
+        keypressCounterText.setText(game.getKeypressCounter());
+        updateStopwatch();
         vimText.requestFocus();
     }
 
     public void endGame() { // on button end game
-        this.game = null;
-        this.updateStopwatch();
-        this.updateKeypressCounter();
+        game = null;
+        updateStopwatch();
+        updateKeypressCounter();
         nameInputPane.requestFocus();
     }
 
     public void nextFile() { // on button next 
-        this.endGame();
-        this.textLoader.nextFile();
-        this.leaderboard.readFromFile(this.textLoader.getCurrentFileName());
-        this.updateLeaderboard();
-        this.updateSolution();
-        this.setVimText();
+        endGame();
+        textLoader.nextFile();
+        leaderboard.readFromFile(textLoader.getCurrentFileName());
+        updateLeaderboard();
+        updateSolution();
+        setVimText();
     }
 
     public void prevFile() { // on button previous
-        this.endGame();
-        this.textLoader.prevFile();
-        this.leaderboard.readFromFile(this.textLoader.getCurrentFileName());
-        this.updateLeaderboard();
-        this.updateSolution();
-        this.setVimText();
+        endGame();
+        textLoader.prevFile();
+        leaderboard.readFromFile(textLoader.getCurrentFileName());
+        updateLeaderboard();
+        updateSolution();
+        setVimText();
     }
 
     @FXML
     public void setVimText() {
-        this.vim.setText(textLoader.getGarbledText());
-        this.vimText.setText(vim.toString(lineLength));
+        vim.setText(textLoader.getGarbledText());
+        vimText.setText(vim.toString(lineLength));
     }
 
     @FXML
     public void sortLeaderboard() {
-        this.leaderboard.nextSort();
-        this.updateLeaderboard();
+        leaderboard.nextSort();
+        updateLeaderboard();
     }
 
     @FXML
     private void updateSolution() {
-        this.solution.setText(textLoader.getText());
-        this.solutionText.setText(solution.toString(lineLength));
+        solution.setText(textLoader.getText());
+        solutionText.setText(solution.toString(lineLength));
     }
 
     @FXML
     private void updateLeaderboard() {
-        this.leaderboardText.setText(this.leaderboard.toString());
+        leaderboardText.setText(leaderboard.toString());
     }
 
     @FXML
     public void nameInputKeyPressed(KeyEvent event) {
         nameInput.keyPress(event);
-        this.updateNameInput();
+        updateNameInput();
     }
 
     @FXML
     public void updateNameInput() {
-        this.nameInputText.setText(nameInput.toString());
+        nameInputText.setText(nameInput.toString());
     }
 
     @FXML
     public void nameFocus() {
-        this.nameInputPane.requestFocus();
+        nameInputPane.requestFocus();
     }
 
     @FXML
     private void gameWon() {
         leaderboard.writeToFile(nameInput.toString(), game.getKeypressCounter(), String.valueOf(game.getStopwatchLong()));
-        this.endGame();
+        endGame();
     }
 }

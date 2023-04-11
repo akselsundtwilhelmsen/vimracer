@@ -8,11 +8,11 @@ public class Stopwatch {
     }
 
     public long getElapsedTime() {
-        return System.currentTimeMillis() - this.startTime;
+        return System.currentTimeMillis() - startTime;
     }
 
     public String toString() { // 00:00:00
-        long elapsedTime = this.getElapsedTime();
+        long elapsedTime = getElapsedTime();
         long milliSec = elapsedTime % 1000;
         long sec = (elapsedTime / 1000) % 60;
         long min = (elapsedTime / 1000) / 60;
