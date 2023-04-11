@@ -63,7 +63,7 @@ public class Controller implements Initializable {
     public void populateUI() {
         updateSolution();
         updateLeaderboard();
-        setVimText();
+        updateVim();
     }
 
     @FXML
@@ -77,41 +77,16 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    public void handleOnKeyReleased(KeyEvent event) {
-        vim.keyRelease(event);
-    }
-
-    // @FXML
-    public void updateStopwatch() {
-        if (game != null) {
-            stopwatchText.setText(game.getStopwatch());
-        }
-        else {
-            stopwatchText.setText("00:00:000");
-        }
-    }
-
-    @FXML
-    public void updateKeypressCounter() {
-        if (game != null) {
-            game.keypress(); 
-            keypressCounterText.setText(game.getKeypressCounter());
-        }
-        else {
-            keypressCounterText.setText("0");
-        }
-    }
-
-    // @FXML
     public void startGame() { // on button start game
         game = new Game(this);
         vim = new Vim(); // TODO: Hvorfor gjør dette at alt slettes når man begynner å skrive? Spør Brage.
-        setVimText();
+        updateVim();
         keypressCounterText.setText(game.getKeypressCounter());
         updateStopwatch();
         vimText.requestFocus();
     }
 
+    @FXML
     public void endGame() { // on button end game
         game = null;
         updateStopwatch();
@@ -125,7 +100,7 @@ public class Controller implements Initializable {
         leaderboard.readFromFile(textLoader.getCurrentFileName());
         updateLeaderboard();
         updateSolution();
-        setVimText();
+        updateVim();
     }
 
     public void prevFile() { // on button previous
@@ -134,19 +109,19 @@ public class Controller implements Initializable {
         leaderboard.readFromFile(textLoader.getCurrentFileName());
         updateLeaderboard();
         updateSolution();
-        setVimText();
-    }
-
-    @FXML
-    public void setVimText() {
-        vim.setText(textLoader.getGarbledText());
-        vimText.setText(vim.toString(lineLength));
+        updateVim();
     }
 
     @FXML
     public void sortLeaderboard() {
         leaderboard.nextSort();
         updateLeaderboard();
+    }
+
+    @FXML
+    public void updateVim() {
+        vim.setText(textLoader.getScrambledText());
+        vimText.setText(vim.toString(lineLength));
     }
 
     @FXML
@@ -172,7 +147,33 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    public void nameFocus() {
+    public void handleOnKeyReleased(KeyEvent event) {
+        vim.keyRelease(event);
+    }
+
+    @FXML
+    public void updateStopwatch() {
+        if (game != null) {
+            stopwatchText.setText(game.getStopwatch());
+        }
+        else {
+            stopwatchText.setText("00:00:000");
+        }
+    }
+
+    @FXML
+    public void updateKeypressCounter() {
+        if (game != null) {
+            game.keypress(); 
+            keypressCounterText.setText(game.getKeypressCounter());
+        }
+        else {
+            keypressCounterText.setText("0");
+        }
+    }
+
+    @FXML
+    private void nameFocus() {
         nameInputPane.requestFocus();
     }
 

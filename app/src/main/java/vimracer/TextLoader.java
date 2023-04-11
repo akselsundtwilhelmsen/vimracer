@@ -6,12 +6,15 @@ import java.util.Collections;
 import java.util.Random;
 import java.io.File;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.lang.Math;
 
 public class TextLoader {
     private int currentIndex;
     private String promptPath = "src/main/resources/prompts/";
+    private String scramblePath = promptPath + "scrambles/";
     private ArrayList<String> lines;
     private ArrayList<String> newLines;
     private ArrayList<String> fileNameArray = new ArrayList<>();
@@ -23,7 +26,8 @@ public class TextLoader {
         this.currentIndex = 0;
         listFiles(promptPath); // get files
         Collections.shuffle(fileNameArray); // randomize file name order
-        readFromFile();
+        readPrompt();
+        readScramble();
     }
 
     private void setPath() { // cheesy fix, TODO: fix properly
@@ -33,7 +37,7 @@ public class TextLoader {
         }
     }
 
-    public void readFromFile() {
+    public void readPrompt() {
         if (fileNameArray.size() > 0) {
             String fileName = fileNameArray.get(currentIndex);
             try {
@@ -51,13 +55,50 @@ public class TextLoader {
         }
     }
 
+    public void readScramble() {
+        String filePath = scramblePath+"scramble_"+fileNameArray.get(currentIndex);
+        File file = new File(filePath);
+        try {
+            if (!file.createNewFile()) { // creates new file if it doesn't exist
+                BufferedReader reader = new BufferedReader(new FileReader(filePath));
+                newLines = new ArrayList<String>(); // clears current lines
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    newLines.add(line);
+                }
+                reader.close();
+            }
+            else { // create a new scramble if one doesn't exist
+                scrambleCurrentPrompt();
+            }
+        }
+        catch (IOException error) {
+            error.printStackTrace();
+        }
+    }
+
+    public void scrambleCurrentPrompt() {
+        scrambleByWord(100); // TODO: skal denne scramble fra fil eller fra lines??
+        writeScramble();
+    }
+
+    private void writeScramble() {
+        String fileName = getCurrentFileName();
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(scramblePath+"scramble_"+fileName));
+            for (String line : newLines) {
+                    writer.write(line+"\n");
+            }
+            writer.close();
+        }
+        catch (IOException error) {
+            error.printStackTrace();
+        }
+    }
+
     public void listFiles(String promptPath) {
         File directory = new File(promptPath);
         File[] files = directory.listFiles();
-        System.out.println(directory); // TODO: fjern
-        System.out.println(directory.exists());
-        System.out.println(directory.isDirectory());
-        System.out.println(directory.listFiles());
         if (files != null) {
             for (int i = 0; i < files.length; i++) {
                 if (files[i].isFile()) {
@@ -74,7 +115,8 @@ public class TextLoader {
         else {
             currentIndex = 0;
         }
-        readFromFile();
+        readPrompt();
+        readScramble();
     }
 
     public void prevFile() {
@@ -84,15 +126,16 @@ public class TextLoader {
         else {
             currentIndex = fileNameArray.size()-1;
         }
-        readFromFile();
+        readPrompt();
+        readScramble();
     }
 
     public String getCurrentFileName() {
         return fileNameArray.get(currentIndex);
     }
 
-    public void garbleByWord(int intensityPercentage) {
-        //intensityPercentage is the percentage of words affected by the garbler
+    private void scrambleByWord(int intensityPercentage) {
+        //intensityPercentage is the percentage of words affected by the scrambler
         newLines = new ArrayList<>();
         for (String line : lines) {
             String[] wordArray = line.split(" ");
@@ -117,7 +160,7 @@ public class TextLoader {
                             alteredWord = change(word);
                             break;
                         case 3:
-                            alteredWord = capitalize(word);
+                            alteredWord = removeLetters(word);
                             break;
                     }
                     newLine += alteredWord + " ";
@@ -126,7 +169,7 @@ public class TextLoader {
                     newLine += word + " ";
                 }
             }
-            newLine = newLine.replaceAll("  ", " "); //avoid double spaces
+            newLine = newLine.replaceAll("  ", " "); // avoids double spaces
             newLines.add(newLine);
         }
     }
@@ -140,29 +183,33 @@ public class TextLoader {
     }
 
     public String change(String word) {
+        String possibleCharacters = "qwertyuiopasdfghjklzxcvbnm"; // TODO: finish this
         return "changed";
     }
 
-    public String capitalize(String word) {
-        return word.toUpperCase();
+    public String removeLetters(String word) {
+        String outString = "";
+        Random random = new Random();
+        for (int i = 0; i < word.length(); i++) {
+            int randint = random.nextInt(2);
+            if (randint == 1) {
+                outString += word.substring(i, i+1);
+            }
+        }
+        return outString;
     }
 
     public ArrayList<String> getText() {
         return lines;
     }
 
-    public ArrayList<String> getGarbledText() {
-        garbleByWord(100);
+    public ArrayList<String> getScrambledText() {
         return newLines;
     }
 
     public boolean compareToSolution() { // might require a faster implementation
         int loopLength = Math.min(lines.size(), newLines.size());
         for (int i=0; i < loopLength; i++) {
-            // System.out.println(lines.get(i)+";");
-            // System.out.println(newLines.get(i).trim()+";");
-            // System.out.println(lines.get(i).equals(newLines.get(i)));
-            // System.out.println("---------------------------");
             if (!lines.get(i).trim().equals(newLines.get(i).trim())) {
                 return false;
             }
