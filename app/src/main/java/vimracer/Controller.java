@@ -70,7 +70,7 @@ public class Controller implements Initializable {
     @FXML
     public void handleOnKeyPressed(KeyEvent event) {
         vim.keyPress(event);
-        vimText.setText(vim.toString(lineLength));
+        vimText.setText(vim.toString(lineLength)); // herrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
         updateKeypressCounter();
         if (textLoader.compareToSolution()) {
             gameWon();
@@ -122,13 +122,14 @@ public class Controller implements Initializable {
     @FXML
     public void setVimText() {
         vim.setText(textLoader.getScrambledText());
-        vimText.setText(vim.toString(lineLength));
+        vimText.setText(vim.toString(lineLength)); // herrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+        
     }
 
     @FXML
     private void updateSolution() {
         solution.setText(textLoader.getText());
-        solutionText.setText(solution.toString(lineLength));
+        solutionText.setText(solution.toString(lineLength)); // herrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr (kanskje)
     }
 
     @FXML
