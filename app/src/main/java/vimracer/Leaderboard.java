@@ -33,7 +33,7 @@ public class Leaderboard {
         String filePath = path+"highscores_"+fileName;
         File file = new File(filePath);
         try {
-            if (!file.createNewFile()) {
+            if (!file.createNewFile()) { // creates new file if it doesn't exist
                 BufferedReader reader = new BufferedReader(new FileReader(filePath));
                 lines = new ArrayList<String>(); // clears current lines
                 String line;
@@ -51,9 +51,8 @@ public class Leaderboard {
     }
 
     public void writeToFile(String name, String keypress, String time) {
-        if (name.equals("")) { // can't write to an empty
-            return;
-        }
+        if (name.equals("")) return; // shouldn't write with no name
+
         String fileName = textLoader.getCurrentFileName();
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(path+"highscores_"+fileName));
