@@ -17,28 +17,28 @@ public class TextLoader {
     private ArrayList<String> fileNameArray = new ArrayList<>();
 
     public TextLoader() {
-        this.setPath(); // TODO: proper fix
+        setPath(); // TODO: proper fix
         this.lines = new ArrayList<>();
         this.newLines = new ArrayList<>();
         this.currentIndex = 0;
-        this.listFiles(promptPath); // get files
-        Collections.shuffle(this.fileNameArray); // randomize file name order
-        this.readFromFile();
+        listFiles(promptPath); // get files
+        Collections.shuffle(fileNameArray); // randomize file name order
+        readFromFile();
     }
 
     private void setPath() { // cheesy fix, TODO: fix properly
         File directory = new File(promptPath);
         if (!directory.exists()) {
-            this.promptPath = "app/src/main/resources/prompts/";
+            promptPath = "app/src/main/resources/prompts/";
         }
     }
 
     public void readFromFile() {
         if (fileNameArray.size() > 0) {
-            String fileName = this.fileNameArray.get(this.currentIndex);
+            String fileName = fileNameArray.get(currentIndex);
             try {
                 BufferedReader reader = new BufferedReader(new FileReader(promptPath+fileName));
-                this.lines = new ArrayList<String>(); // clears current lines
+                lines = new ArrayList<String>(); // clears current lines
                 String line;
                 while ((line = reader.readLine()) != null) {
                     lines.add(line);
@@ -61,20 +61,20 @@ public class TextLoader {
         if (files != null) {
             for (int i = 0; i < files.length; i++) {
                 if (files[i].isFile()) {
-                    this.fileNameArray.add(files[i].getName());
+                    fileNameArray.add(files[i].getName());
                 }
             }
         }
     }
 
     public void nextFile() {
-        if (currentIndex < this.fileNameArray.size()-1) {
+        if (currentIndex < fileNameArray.size()-1) {
             currentIndex++;
         }
         else {
             currentIndex = 0;
         }
-        this.readFromFile();
+        readFromFile();
     }
 
     public void prevFile() {
@@ -82,19 +82,19 @@ public class TextLoader {
             currentIndex--;
         }
         else {
-            currentIndex = this.fileNameArray.size()-1;
+            currentIndex = fileNameArray.size()-1;
         }
-        this.readFromFile();
+        readFromFile();
     }
 
     public String getCurrentFileName() {
-        return this.fileNameArray.get(currentIndex);
+        return fileNameArray.get(currentIndex);
     }
 
     public void garbleByWord(int intensityPercentage) {
         //intensityPercentage is the percentage of words affected by the garbler
         newLines = new ArrayList<>();
-        for (String line : this.lines) {
+        for (String line : lines) {
             String[] wordArray = line.split(" ");
             String newLine = "";
 
@@ -108,16 +108,16 @@ public class TextLoader {
                     String alteredWord = "";
                     switch (random.nextInt(4)) {
                         case 0:
-                            alteredWord = this.delete(word);
+                            alteredWord = delete(word);
                             break;
                         case 1:
-                            alteredWord = this.insert(word);
+                            alteredWord = insert(word);
                             break;
                         case 2:
-                            alteredWord = this.change(word);
+                            alteredWord = change(word);
                             break;
                         case 3:
-                            alteredWord = this.capitalize(word);
+                            alteredWord = capitalize(word);
                             break;
                     }
                     newLine += alteredWord + " ";
@@ -148,12 +148,12 @@ public class TextLoader {
     }
 
     public ArrayList<String> getText() {
-        return this.lines;
+        return lines;
     }
 
     public ArrayList<String> getGarbledText() {
-        this.garbleByWord(100);
-        return this.newLines;
+        garbleByWord(100);
+        return newLines;
     }
 
     public boolean compareToSolution() { // might require a faster implementation

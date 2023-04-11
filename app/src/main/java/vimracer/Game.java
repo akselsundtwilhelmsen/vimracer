@@ -7,12 +7,12 @@ public class Game {
 
     public Game(Controller controller) {
         this.controller = controller;
-        this.startGame();
+        startGame();
     }
     
     public void startGame() {
-        this.stopwatch = new Stopwatch();
-        this.keypressCounter = new KeypressCounter();
+        stopwatch = new Stopwatch();
+        keypressCounter = new KeypressCounter();
     }
 
     public String[] endGame() {
@@ -20,18 +20,18 @@ public class Game {
     }
 
     public void keypress() {
-        this.keypressCounter.keypress();
+        keypressCounter.keypress();
     }
 
     public String getStopwatch() {
-        return this.stopwatch.toString();
+        return stopwatch.toString();
     }
 
     public String getKeypressCounter() {
-        return this.keypressCounter.getCount();
+        return keypressCounter.getCount();
     }
 
     public long getStopwatchLong() {
-        return this.stopwatch.getElapsedTime();
+        return stopwatch.getElapsedTime();
     }
 }

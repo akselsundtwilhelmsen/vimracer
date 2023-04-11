@@ -17,32 +17,32 @@ public class Leaderboard {
     private int currentSortingIndex = 2;
     
     public Leaderboard(TextLoader textloader) {
-        this.setPath(); // TODO: proper fix
+        setPath(); // TODO: proper fix
         this.textLoader = textloader;
-        this.readFromFile(textloader.getCurrentFileName());
+        readFromFile(textloader.getCurrentFileName());
     }
 
     private void setPath() { // cheesy fix, TODO: fix properly
         File directory = new File(path);
         if (!directory.exists()) {
-            this.path = "app/src/main/resources/prompts/highscores/";
+            path = "app/src/main/resources/prompts/highscores/";
         }
     }
 
     public void readFromFile(String fileName) {
-        String filePath = this.path+"highscores_"+fileName;
+        String filePath = path+"highscores_"+fileName;
         File file = new File(filePath);
         try {
             if (!file.createNewFile()) {
                 BufferedReader reader = new BufferedReader(new FileReader(filePath));
-                this.lines = new ArrayList<String>(); // clears current lines
+                lines = new ArrayList<String>(); // clears current lines
                 String line;
                 while ((line = reader.readLine()) != null) {
                     lines.add(line);
                 }
                 reader.close();
 
-                this.fileToArray();
+                fileToArray();
             }
         }
         catch (IOException error) {
@@ -80,16 +80,16 @@ public class Leaderboard {
             // scores.put(lines.get(i), lines.get(i+1));
             scores.add(lines.get(i).split(","));
         }
-        this.sortByIndex(2); // starts with being sorted by time
+        sortByIndex(2); // starts with being sorted by time
     }
 
     public void nextSort() {
         if (currentSortingIndex == 1) {
-            this.sortByIndex(2);
+            sortByIndex(2);
             currentSortingIndex = 2;
         }
         else {
-            this.sortByIndex(1);
+            sortByIndex(1);
             currentSortingIndex = 1;
         }
     }
