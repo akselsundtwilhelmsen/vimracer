@@ -74,6 +74,8 @@ public class Vim extends TextWindow {
         if (commands.isCommandListExecutable()) {
             executeCommandList();
         }
+
+        System.err.println(cursor[1]);
     }
 
     //TODO: the command list can fill over multiple keypresses (e.g. d-i-w)
@@ -177,17 +179,6 @@ public class Vim extends TextWindow {
         }
     }
 
-    private void addIndent(int lineNumber) {
-        // insertString("    ", (int[]) Arrays.asList(0,lineNumber));
-    }
-
-    private void removeIndent(int lineNumber) {
-        if (lines.get(lineNumber).startsWith("    ")) {
-            // removeBetween(cursor, cursor);
-        } else if (lines.get(lineNumber).startsWith("\t")) {
-            //remove
-        }
-    }
 
     private void removeUnderCursor() {
         if (lines.get(cursor[1]).length() == 0) return;
@@ -214,20 +205,32 @@ public class Vim extends TextWindow {
     }
 
     private void insertLine(int lineNumber) {
-        if (0 > lineNumber || lineNumber > lines.size()) throw new IllegalArgumentException();
-        if (lineNumber == lines.size()) lines.add("");
+        if (0 > lineNumber || lineNumber > size()) throw new IllegalArgumentException();
+        if (lineNumber == size()) lines.add("");
         lines.add(lineNumber, "");
     }
 
     private void removeLine(int lineNumber) {
-        if (0 > lineNumber || lineNumber > lines.size()-1) throw new IllegalArgumentException();
+        if (0 > lineNumber || lineNumber > size()-1) throw new IllegalArgumentException();
         lines.remove(lineNumber);
     }
 
     private void joinLines(int lineNumber1, int lineNumber2) {
-        if (lineNumber1 >= lines.size() && lineNumber2 >= lines.size()) throw new IllegalArgumentException();
+        if (lineNumber1 >= size() && lineNumber2 >= lines.size()) throw new IllegalArgumentException();
         lines.set(lineNumber1, lines.get(lineNumber1) + lines.get(lineNumber2));
         removeLine(lineNumber2);
+    }
+
+    private void addIndent(int lineNumber) {
+        // insertString("    ", (int[]) Arrays.asList(0,lineNumber));
+    }
+
+    private void removeIndent(int lineNumber) {
+        if (lines.get(lineNumber).startsWith("    ")) {
+            // removeBetween(cursor, cursor);
+        } else if (lines.get(lineNumber).startsWith("\t")) {
+            //remove
+        }
     }
 
     public void setMode(char mode) {
@@ -243,9 +246,13 @@ public class Vim extends TextWindow {
         return lines.get(lineNumber).length();
     }
 
+    public int size() {
+        return lines.size();
+    }
+
     private boolean validCursorPos(int[] cursor) {
         if (cursor.length != 2) return false;
-        if (0 > cursor[1] || cursor[1] >= lines.size()) return false;
+        if (0 > cursor[1] || cursor[1] >= size()) return false;
         int currentLength = lines.get(cursor[1]).length();
         if (cursor[0] < 0) return false;
         // if (mode == 'n' && currentLength != 0 && currentLength <= cursor[0]) return false;

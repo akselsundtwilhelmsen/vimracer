@@ -23,7 +23,7 @@ public class VimCommandList implements Iterator {
     private final ArrayList<String> Keys;
 
     private final ArrayList<String> OperatorFollowKeys = new ArrayList<>(Arrays.asList("i","a"));
-    private final ArrayList<String> OperatorFollowFollowKeys = new ArrayList<>(Arrays.asList("w","p",""));
+    private final ArrayList<String> TextObjectFollowKeys = new ArrayList<>(Arrays.asList("w","p"));
 
     private final ArrayList<String> MovementOperationCommands = new ArrayList<>(Arrays.asList("deleteMotion","change","addIndent","removeIndent"));
     private final ArrayList<String> StationaryOperationCommnads = new ArrayList<>(Arrays.asList("joinLines"));
@@ -160,7 +160,7 @@ public class VimCommandList implements Iterator {
                 case "ge":
                     break;
                 case "b":
-                    newPos = vim.prevInstanceOf(WORDBeginning, prevPos, false);
+                    newPos = vim.prevInstanceOf(WORDBeginning, prevPos, true);
                     break;
                 case "h":
                     newPos[0] = prevPos[0]-1;
@@ -204,6 +204,11 @@ public class VimCommandList implements Iterator {
         }
 
 
+        //cursorvalidation
+        newPos[0] = Math.max(0,newPos[0]);
+        newPos[1] = Math.max(0,Math.min(vim.size()-1,newPos[1]));
+
+        //move to / set prefferd col, and force cursor within linelength
         int newLineLength = vim.getLineLength(newPos[1]);
         if (VerticalMovementKeys.indexOf(key) != -1) {
             newPos[0] = newPos[2];
@@ -215,9 +220,8 @@ public class VimCommandList implements Iterator {
                 newPos[0] = newLineLength - 1;
             }
             newPos[2] = newPos[0];
-        }
+        } 
 
-        
 
         commands.add(newPos);
     }
