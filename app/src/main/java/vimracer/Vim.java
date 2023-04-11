@@ -201,6 +201,7 @@ public class Vim extends TextWindow {
         if (cursor[0] == 0) return;
         cursor[0]--;
         removeUnderCursor();
+        cursor[0]++;
     }
 
     private void enter() {
