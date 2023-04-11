@@ -158,7 +158,7 @@ public class TextLoader {
                             alteredWord = insert(word);
                             break;
                         case 2:
-                            alteredWord = change(word);
+                            alteredWord = changeLetters(word);
                             break;
                         case 3:
                             alteredWord = removeLetters(word);
@@ -184,7 +184,7 @@ public class TextLoader {
         return "inserted" + " " + word;
     }
 
-    public String change(String word) {
+    public String changeLetters(String word) {
         String possibleCharacters = "qwertyuiopasdfghjklzxcvbnm"; // TODO: finish this
         return "changed";
     }

@@ -4,4 +4,3 @@ henrik,23,5760
 fredrik,27,7271
 frida,37,16070
 jan,57,24324
-asdf,36,39370

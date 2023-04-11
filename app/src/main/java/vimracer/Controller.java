@@ -35,7 +35,6 @@ public class Controller implements Initializable {
     @FXML public Text keypressCounterText;
     @FXML public Text leaderboardText;
     @FXML public Text nameInputText;
-    @FXML public TextFlow textflow;
 
     final int lineLength = 86;
 
@@ -65,7 +64,7 @@ public class Controller implements Initializable {
     public void populateUI() {
         updateSolution();
         updateLeaderboard();
-        updateVim();
+        setVimText();
     }
 
     @FXML
@@ -82,7 +81,7 @@ public class Controller implements Initializable {
     public void startGame() { // on button start game
         game = new Game(this);
         vim = new Vim(); // TODO: Hvorfor gjør dette at alt slettes når man begynner å skrive? Spør Brage.
-        updateVim();
+        setVimText();
         keypressCounterText.setText(game.getKeypressCounter());
         updateStopwatch();
         vimText.requestFocus();
@@ -102,7 +101,7 @@ public class Controller implements Initializable {
         leaderboard.readFromFile(textLoader.getCurrentFileName());
         updateLeaderboard();
         updateSolution();
-        updateVim();
+        setVimText();
     }
 
     public void prevFile() { // on button previous
@@ -111,7 +110,7 @@ public class Controller implements Initializable {
         leaderboard.readFromFile(textLoader.getCurrentFileName());
         updateLeaderboard();
         updateSolution();
-        updateVim();
+        setVimText();
     }
 
     @FXML
@@ -121,7 +120,7 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    public void updateVim() {
+    public void setVimText() {
         vim.setText(textLoader.getScrambledText());
         vimText.setText(vim.toString(lineLength));
     }
@@ -181,6 +180,8 @@ public class Controller implements Initializable {
 
     @FXML
     private void gameWon() {
+        String gameWonString = "Correct"; // TODO: gjør skikkelig
+        vimText.setText(gameWonString);
         leaderboard.writeToFile(nameInput.toString(), game.getKeypressCounter(), String.valueOf(game.getStopwatchLong()));
         endGame();
     }
