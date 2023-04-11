@@ -50,7 +50,7 @@ public class VimCommandList implements Iterator {
         //generate legal String-command TODO: numbers
         keyPresses = keyPresses + keyPress;
 
-        System.out.format(", keypress: %s",keyPresses);
+        System.out.format("\nkeypress: %s",keyPresses);
         
         //covert String-command normal command and add to command list
         if (MovementKeys.contains(keyPresses)) {
@@ -59,12 +59,11 @@ public class VimCommandList implements Iterator {
             generateInsertCommand(keyPresses);
         } else if (OperatorKeys.contains(keyPresses)) {
             generateOperationCommand(keyPresses);
+        } else if (Keys.stream()
+            .anyMatch(s -> (s.startsWith(keyPresses)))) {
+                return;
         }
-
-        if (Keys.stream()
-            .anyMatch(s -> !(keyPresses.startsWith(s)) || keyPresses.equals(s))) {
-                keyPresses = "";
-        }
+        keyPresses = "";
     }
 
     public boolean isCommandListExecutable() {

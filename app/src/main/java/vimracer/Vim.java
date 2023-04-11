@@ -143,7 +143,7 @@ public class Vim extends TextWindow {
             }
         }
         commands.clear();
-        System.out.format("\nPosition: %d %d",cursor[0],cursor[1]);
+        // System.out.format("\nPosition: %d %d",cursor[0],cursor[1]);
     }
 
     public void keyRelease(KeyEvent event) {
