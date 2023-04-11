@@ -205,7 +205,7 @@ public class VimCommandList implements Iterator {
 
         if (!unsafe) {
             //vertical cursorvalidation
-            newPos[0] = Math.max(0,newPos[0]);
+            newPos[1] = Math.max(0,Math.min(vim.size()-1,newPos[1]));
 
             //move to / set prefferd col, and horizontal cursorvalidation
             int newLineLength = vim.getLineLength(newPos[1]);
@@ -221,7 +221,7 @@ public class VimCommandList implements Iterator {
                 }
                 newPos[2] = newPos[0];
             } 
-            newPos[1] = Math.max(0,Math.min(vim.size()-1,newPos[1]));
+            newPos[0] = Math.max(0,newPos[0]);
         }
 
         System.out.format(", movement: %d,%d",newPos[0],newPos[1]);

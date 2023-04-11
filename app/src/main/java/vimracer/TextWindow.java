@@ -3,6 +3,8 @@ package vimracer;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
+import javafx.scene.shape.HLineTo;
+
 
 public class TextWindow {
     ArrayList<String> lines;
@@ -51,7 +53,11 @@ public class TextWindow {
                     if (line == "") {
                         line = "█";
                     } else {
-                        line = line.substring(0, highlightPos[0]) + "█" + line.substring(highlightPos[0]+1);
+                        String newLine = line.substring(0, highlightPos[0]) + "█";
+                        if (line.length() > highlightPos[0]+1) {
+                            newLine = newLine + line.substring(highlightPos[0]+1);
+                        }
+                        line = newLine;
                     }
                 }
             }
