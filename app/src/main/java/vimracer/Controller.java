@@ -43,7 +43,7 @@ public class Controller implements Initializable {
         vim = new Vim();
         solution = new TextWindow();
         leaderboard = new Leaderboard(textLoader);
-        nameInput = new NameInput();
+        nameInput = new NameInput(this);
 
         this.populateUI();
         // nameInputPane.requestFocus(); // TODO: dette funker ikke her
