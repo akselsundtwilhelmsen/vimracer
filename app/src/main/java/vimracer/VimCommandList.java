@@ -50,7 +50,7 @@ public class VimCommandList implements Iterator {
         //generate legal String-command TODO: numbers
         keyPresses = keyPresses + keyPress;
 
-        System.out.format("\nkeypress: %s",keyPresses);
+        System.out.format("keypress: %s",keyPresses);
         
         //covert String-command normal command and add to command list
         if (MovementKeys.contains(keyPresses)) {
@@ -142,7 +142,7 @@ public class VimCommandList implements Iterator {
             .orElse("");
     }
 
-    private void generateMovement(String key) {
+    private void generateMovement(String key, boolean unsafe) {
         int length = getLastNumber();
         int[] newPos = getLastMovement().clone();
         int[] prevPos = newPos.clone();
@@ -182,7 +182,8 @@ public class VimCommandList implements Iterator {
                 case "f":
                     break;
                 case "$":
-                    // newPos[0] = lines.get(newPos[1]).length()-1;
+                    newPos[0] = vim.getLineLength(newPos[1])-1;
+                    newPos[2] = 2147483647;
                     key = "j";
                     break;
                 case "gg":
@@ -199,32 +200,39 @@ public class VimCommandList implements Iterator {
                     newPos[1] = prevPos[1]+1;
                     break;
                 case "G":
-                    // newPos[1] = lines.size()-1;
+                    newPos[1] = vim.size()-1;
             }
         }
 
+        if (!unsafe) {
+            //cursorvalidation
+            newPos[0] = Math.max(0,newPos[0]);
+            newPos[1] = Math.max(0,Math.min(vim.size()-1,newPos[1]));
 
-        //cursorvalidation
-        newPos[0] = Math.max(0,newPos[0]);
-        newPos[1] = Math.max(0,Math.min(vim.size()-1,newPos[1]));
+            //move to / set prefferd col, and force cursor within linelength
+            int newLineLength = vim.getLineLength(newPos[1]);
+            if (VerticalMovementKeys.indexOf(key) != -1) {
+                newPos[0] = newPos[2];
+                if (newPos[0] >= newLineLength) {
+                    newPos[0] = newLineLength - 2;
+                }
+            } else {
+                if (newPos[0] >= newLineLength) {
+                    newPos[0] = newLineLength - 2;
+                }
+                newPos[2] = newPos[0];
+            } 
+        }
 
-        //move to / set prefferd col, and force cursor within linelength
-        int newLineLength = vim.getLineLength(newPos[1]);
-        if (VerticalMovementKeys.indexOf(key) != -1) {
-            newPos[0] = newPos[2];
-            if (newPos[0] >= newLineLength) {
-                newPos[0] = newLineLength - 1;
-            }
-        } else {
-            if (newPos[0] >= newLineLength) {
-                newPos[0] = newLineLength - 1;
-            }
-            newPos[2] = newPos[0];
-        } 
-
-
+        System.out.format(", movement: %d,%d",newPos[0],newPos[1]);
         commands.add(newPos);
     }
+
+    private void generateMovement(String key) {
+        generateMovement(key, false);
+    }
+
+
 
     private void generateInsertCommand(String key) {
         switch (key) {
@@ -238,10 +246,10 @@ public class VimCommandList implements Iterator {
                 break;
             case "A":
                 generateMovement("$");
-                generateMovement("l");
+                generateMovement("l", true);
                 break;
             case "o":
-                generateMovement("j");
+                generateMovement("j", true);
                 commands.add("insertLine");
                 break;
             case "O":

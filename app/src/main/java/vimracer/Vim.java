@@ -36,6 +36,7 @@ public class Vim extends TextWindow {
     // når denne listen er utførbar vil den bli utført
 
     public void keyPress(KeyEvent event) {
+        System.out.format("\ncursor: %d,%d",cursor[0],cursor[1]);
         String keyString = event.getCode().toString();
 
         // behandler input, TODO: bør kanskje finne ut om dette kan gjøres automatisk
@@ -52,6 +53,7 @@ public class Vim extends TextWindow {
 
         if (keyString.startsWith("DIGIT"))  {
             keyString = keyString.substring(5);
+            if (keyString.equals("4")) keyString = "$"; //midlertidig
         }
 
         if (!shiftHeld && keyString.length() == 1) {
@@ -74,13 +76,8 @@ public class Vim extends TextWindow {
         if (commands.isCommandListExecutable()) {
             executeCommandList();
         }
-
-        System.err.println(cursor[1]);
     }
 
-    //TODO: the command list can fill over multiple keypresses (e.g. d-i-w)
-    //TODO: it must dedect if it's executable (execute and clear), start of a legal command (continue), or illegal command (clear)
-    //temporary soulution is to just execute and clear it
     private void executeCommandList() { 
         int index = 0;
         int[] movement;
