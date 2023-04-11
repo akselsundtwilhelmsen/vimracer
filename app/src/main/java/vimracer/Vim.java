@@ -36,7 +36,6 @@ public class Vim extends TextWindow {
     // når denne listen er utførbar vil den bli utført
 
     public void keyPress(KeyEvent event) {
-        System.out.format("\ncursor: %d,%d",cursor[0],cursor[1]);
         String keyString = event.getCode().toString();
 
         // behandler input, TODO: bør kanskje finne ut om dette kan gjøres automatisk
@@ -142,7 +141,6 @@ public class Vim extends TextWindow {
             }
         }
         commands.clear();
-        // System.out.format("\nPosition: %d %d",cursor[0],cursor[1]);
     }
 
     public void keyRelease(KeyEvent event) {
