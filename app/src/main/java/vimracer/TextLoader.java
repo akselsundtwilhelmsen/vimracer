@@ -34,6 +34,7 @@ public class TextLoader {
         File directory = new File(promptPath);
         if (!directory.exists()) {
             promptPath = "app/src/main/resources/prompts/";
+            scramblePath = promptPath+"scrambles/";
         }
     }
 

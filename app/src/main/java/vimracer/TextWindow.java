@@ -46,7 +46,7 @@ public class TextWindow {
                 paddingStringOverflow += " ";
             }
 
-            if (highlightPos != null) {
+            if (highlightPos != null) { // TODO: gjør skikkelig
                 if (highlightPos[1] == lineNumber-1) {
                     if (line == "") {
                         line = "█";
