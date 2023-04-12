@@ -13,14 +13,13 @@ import java.lang.Math;
 
 public class TextLoader {
     private int currentIndex;
-    private String promptPath = "src/main/resources/prompts/";
+    private String promptPath = "app/src/main/resources/prompts/";
     private String scramblePath = promptPath + "scrambles/";
     private ArrayList<String> lines;
     private ArrayList<String> newLines;
     private ArrayList<String> fileNameArray = new ArrayList<>();
 
     public TextLoader() {
-        setPath(); // TODO: proper fix
         this.lines = new ArrayList<>();
         this.newLines = new ArrayList<>();
         this.currentIndex = 0;
@@ -28,14 +27,6 @@ public class TextLoader {
         Collections.shuffle(fileNameArray); // randomize file name order
         readPrompt();
         readScramble();
-    }
-
-    private void setPath() { // cheesy fix, TODO: fix properly
-        File directory = new File(promptPath);
-        if (!directory.exists()) {
-            promptPath = "app/src/main/resources/prompts/";
-            scramblePath = promptPath+"scrambles/";
-        }
     }
 
     public void readPrompt() {
