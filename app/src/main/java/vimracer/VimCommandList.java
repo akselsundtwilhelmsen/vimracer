@@ -54,7 +54,9 @@ public class VimCommandList implements Iterator {
         System.out.format("\nkeypress: %s",keyPresses);
         
         //covert String-command normal command and add to command list
-        if (MovementKeys.contains(keyPresses)) {
+        if (Character.isDigit(keyPress.charAt(0))){
+            generateNumber(Character.getNumericValue(keyPress.charAt(0)));
+        } else if (MovementKeys.contains(keyPresses)) {
             generateMovement(keyPresses);
         } else if (InsertModeKeys.contains(keyPresses)) {
             generateInsertCommand(keyPresses);
@@ -80,6 +82,9 @@ public class VimCommandList implements Iterator {
                         return false;
                     }
                 }
+            }
+            if (command instanceof Integer) {
+                if (size() <= index+1) return false;
             }
             index++;
         }
@@ -112,7 +117,7 @@ public class VimCommandList implements Iterator {
         return commands.size();
     }
 
-    private int getLastNumber() {
+    private int useLastNumber() {
         if (commands.size() == 0) {
             return 1;
         }
@@ -133,19 +138,37 @@ public class VimCommandList implements Iterator {
             .get();
     }
 
-    //last command in command list
-    private String getLastCommand() {
-        return commands.stream()
-            .sorted(Collections.reverseOrder())
-            .filter(o -> o instanceof String)
-            .map(o -> (String) o)
-            .findFirst()
-            .orElse("");
+    // //last command in command list
+    // private String getLastCommand() {
+    //     return commands.stream()
+    //         .sorted(Collections.reverseOrder())
+    //         .filter(o -> o instanceof String)
+    //         .map(o -> (String) o)
+    //         .findFirst()
+    //         .orElse("");
+    // }
+
+    private void generateNumber(Integer number) {
+        if (size() > 0) {
+            Object lastCommand = commands.get(size()-1);
+            if (lastCommand instanceof Integer) {
+                commands.set(size()-1, (Integer) lastCommand * 10 + number);
+                return;
+            }
+        }
+        commands.add(number);
     }
 
     private void generateMovement(String key, boolean unsafe) {
-        int length = getLastNumber();
         int[] newPos = getLastMovement().clone();
+        int length = 1;
+        if (size() > 0) {
+            Object lastCommand = commands.get(size()-1);
+            if (lastCommand instanceof Integer) {
+                length = (int) lastCommand;
+                commands.remove(size()-1);
+            }
+        }
         for (int i = 0; i < length; i++) {
             switch (key) {
                 case "|":
@@ -188,7 +211,7 @@ public class VimCommandList implements Iterator {
                 case "$":
                     newPos[0] = vim.getLineLength(newPos[1])-1;
                     newPos[2] = 2147483647;
-                    key = "j";
+                    // key = "j";
                     break;
                 case "gg":
                     newPos[1] = 0;
@@ -277,6 +300,7 @@ public class VimCommandList implements Iterator {
             case "C": //TODO: hvorfor funker ikke+
                 commands.add("change");
                 generateMovement("$");
+                generateMovement("l",true);
                 break;
             case "x":
                 commands.add("deleteMotion");
@@ -297,5 +321,22 @@ public class VimCommandList implements Iterator {
                 commands.add("addIndent");
                 break;
         }
+    }
+
+    public String toString() {
+        String outString = "[";
+        for (Object command : commands) {
+            if (command instanceof String) {
+                outString = outString + (String) command;
+            } else if (command instanceof Integer) {
+                outString = outString + ((Integer) command);
+            } else if (command instanceof int[]) {
+                int[] movement = (int[]) command;
+                outString = outString + String.format("[%d, %d]", movement[0], movement[1]);
+                if (movement[3] == 1) outString = outString + "l";
+            }
+            outString = outString + ", ";
+        }
+        return outString.substring(0,outString.length()-2) + "]";
     }
 }

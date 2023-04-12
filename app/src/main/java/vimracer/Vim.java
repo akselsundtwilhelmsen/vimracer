@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import javafx.scene.input.KeyEvent;
 
-// TODO: må: pekervalidering, fungerend removeBetween(), bedre kommandovalidering
+// TODO: må:  bedre kommandovalidering, tall!
 // TODO: bør: Text-objects (dip, ciw, di[ osv), yank og put, flere bevegelser (lett nå med bra regex))
 
 // TODO utenom prog, tester, dokumentasjon
@@ -79,11 +79,13 @@ public class Vim extends TextWindow {
     }
 
     private void executeCommandList() { 
+        System.out.format("\ncommandlist = " + commands.toString());
         int index = 0;
         int[] movement;
         Object command;
         while (commands.hasNext()) {
             command = commands.next();
+            if (command instanceof Integer) continue;
             if (command instanceof int[]) {
                 cursor = forceValidPos((int[]) command);
                 continue;
@@ -103,8 +105,6 @@ public class Vim extends TextWindow {
                         commands.remove(index + 1);
                         cursor = forceValidPos(cursor);
                     }
-
-                    System.out.format(", position: %d %d", cursor[0],cursor[1]);
                     break;
                 case "joinLines":
                     cursor[0] = lines.get(cursor[1]).length();
