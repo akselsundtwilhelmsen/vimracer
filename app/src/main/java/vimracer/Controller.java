@@ -74,7 +74,6 @@ public class Controller implements Initializable {
     @FXML
     public void startGame() { // on button start game
         game = new Game(this);
-        vim = new Vim();
         setVimText();
         keypressCounterText.setText(game.getKeypressCounter());
         updateStopwatch();
@@ -95,7 +94,6 @@ public class Controller implements Initializable {
         leaderboard.readFromFile(textLoader.getCurrentFileName());
         updateLeaderboard();
         updateSolution();
-        vim = new Vim(); // resets the cursor 
         setVimText();
     }
 
@@ -105,7 +103,6 @@ public class Controller implements Initializable {
         leaderboard.readFromFile(textLoader.getCurrentFileName());
         updateLeaderboard();
         updateSolution();
-        vim = new Vim(); // resets the cursor 
         setVimText();
     }
 
@@ -117,10 +114,10 @@ public class Controller implements Initializable {
 
     @FXML
     public void setVimText() {
+        vim = new Vim(); // resets the cursor 
         vim.setText(textLoader.getScrambledText());
-        // vimText.setText(vim.toArray(lineLength).toString()); // herrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
         populateTextFlow(vimText, lineLength);
-        System.err.println("setvimtext");
+        // System.out.println(vim.getArray());
     }
 
     @FXML
@@ -235,7 +232,9 @@ public class Controller implements Initializable {
 
     @FXML
     public void nameInputKeyPressed(KeyEvent event) {
-        nameInput.keyPress(event);
+        if (game == null) {
+            nameInput.keyPress(event);
+        }
         updateNameInput();
     }
 
@@ -278,7 +277,8 @@ public class Controller implements Initializable {
     @FXML
     private void gameWon() {
         String gameWonString = "Correct!"; // TODO: gjør skikkelig
-        // vimText.setText(gameWonString); // TODO: FIXFIXFIX
+        vim.setText(gameWonString);
+        populateTextFlow(vimText, lineLength);
         leaderboard.writeToFile(nameInput.toString(), game.getKeypressCounter(), String.valueOf(game.getStopwatchLong()));
         endGame();
     }

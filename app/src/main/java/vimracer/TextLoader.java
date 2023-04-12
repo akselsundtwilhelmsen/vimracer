@@ -197,6 +197,7 @@ public class TextLoader {
     }
 
     public ArrayList<String> getScrambledText() {
+        readScramble();
         return newLines;
     }
 
