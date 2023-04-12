@@ -48,26 +48,35 @@ public class Leaderboard {
         String fileName = textLoader.getCurrentFileName();
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(path+"highscores_"+fileName));
+            String[] oldLine = {"", "", ""};
             boolean alreadyWritten = false;
             for (String[] line : scores) {
                 if (name.trim().equals(line[0].trim())) { // check if name is already on the leaderboard
                     alreadyWritten = true;
-                    if (Integer.valueOf(keypress) < Integer.valueOf(line[1]) || Integer.valueOf(time) < Integer.valueOf(line[2])) {
-                        writer.write(name+","+keypress+","+time+"\n");
-                        String[] entry = {name, keypress, time};
-                        scores.remove(line);
-                        scores.add(entry);
-                    }
+                    oldLine = line;
                 }
                 else {
                     writer.write(line[0]+","+line[1]+","+line[2]+"\n");
                 }
             }
-            if (!alreadyWritten) {
-                writer.write(name+","+keypress+","+time);
+
+            if (alreadyWritten) {
+                if (Integer.valueOf(keypress) < Integer.valueOf(oldLine[1]) || Integer.valueOf(time) < Integer.valueOf(oldLine[2])) {
+                    writer.write(name+","+keypress+","+time+"\n");
+                    String[] entry = {name, keypress, time};
+                    scores.remove(oldLine);
+                    scores.add(entry);
+                    System.out.println("FIRST");;
+                }
+                System.out.println("SECOND");
+            }
+            else {
+                writer.write(name+","+keypress+","+time+"\n");
                 String[] entry = {name, keypress, time};
                 scores.add(entry);
+                System.out.println("THIRD");
             }
+
             writer.close();
         }
         catch (IOException error) {
