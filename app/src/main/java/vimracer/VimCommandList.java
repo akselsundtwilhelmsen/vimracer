@@ -237,6 +237,7 @@ public class VimCommandList implements Iterator {
 
 
     private void generateInsertCommand(String key) {
+        commands.add("insert");
         switch (key) {
             case "i":
                 break;
@@ -258,7 +259,6 @@ public class VimCommandList implements Iterator {
                 commands.add("insertLine");
                 break;
         }
-        commands.add("insert");
     }
 
     private void generateOperationCommand(String key) {

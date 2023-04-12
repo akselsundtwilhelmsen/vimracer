@@ -99,7 +99,12 @@ public class Vim extends TextWindow {
                 case "deleteMotion":
                     movement = (int[]) commands.get(index+1);
                     removeBetween(cursor, movement);
-                    if (! smallerPosition(cursor, movement)) commands.remove(index + 1);
+                    if (smallerPosition(cursor, movement)) {
+                        commands.remove(index + 1);
+                        cursor = forceValidPos(cursor);
+                    }
+
+                    System.out.format(", position: %d %d", cursor[0],cursor[1]);
                     break;
                 case "joinLines":
                     cursor[0] = lines.get(cursor[1]).length();
@@ -108,7 +113,7 @@ public class Vim extends TextWindow {
                 case "change":
                     movement = (int[]) commands.get(index+1);
                     removeBetween(cursor, movement);
-                    if (! smallerPosition(cursor, movement)) commands.remove(index + 1);
+                    if (smallerPosition(cursor, movement)) commands.remove(index + 1);
                     setMode('i');
                     break;                                                                                                            
                 case "addIndent":
@@ -159,7 +164,7 @@ public class Vim extends TextWindow {
     private void removeBetween(int[] pos1, int[] pos2) {
         boolean linewise = pos2[3] == 1;
 
-        if (smallerPosition(pos1, pos2)) {
+        if (smallerPosition(pos2, pos1)) {
             int[] temp = pos1;
             pos1 = pos2;
             pos2 = temp;
@@ -171,16 +176,17 @@ public class Vim extends TextWindow {
                 removeLine(pos1[1]);
             }
         } else {
+            //remove line after pos1 and before pos2
             if (pos1[1] == pos2[1]) {
                 lines.set(pos1[1], lines.get(pos1[1]).substring(0,pos1[0]) + lines.get(pos1[1]).substring(pos2[0]));
             } else {
-                lines.set(pos1[1], lines.get(pos1[1]).substring(pos1[0]));
-                lines.set(pos2[1], lines.get(pos2[1]).substring(0, pos2[0]));
-            }
+                lines.set(pos1[1], lines.get(pos1[1]).substring(0, pos1[0]));
+                lines.set(pos2[1], lines.get(pos2[1]).substring(pos2[0]));
 
-            //Remove all lines between pos1 and pos2
-            for (int i = pos1[1]+1; i < pos2[1]; i++) {
-                removeLine(pos1[1]);
+                //Remove all lines between pos1 and pos2
+                for (int i = pos1[1]+1; i < pos2[1]; i++) {
+                    removeLine(pos1[1]);
+                }
             }
         }
     }
@@ -261,7 +267,7 @@ public class Vim extends TextWindow {
     }
 
     private boolean smallerPosition(int[] smaller, int[] bigger) {
-        return (smaller[1] > bigger[1] || (smaller[1] == bigger[1] && smaller[0] > bigger[0]));
+        return (smaller[1] < bigger[1] || (smaller[1] == bigger[1] && smaller[0] < bigger[0]));
     }
 
     public int[] nextInstanceOf(Pattern regex, int[] from, boolean endOfRegex) {
@@ -341,7 +347,6 @@ public class Vim extends TextWindow {
     //     vim.setText(vimtext);
     //     int[] pos1 = {0,4};
     //     int[] pos2 = {5,0};
-    //     vim.removeBetween(pos1, pos2);
-    //     System.out.println(vim.toString(86));
+    //     System.out.println(vim.smallerPosition(pos1, pos2));
     // }
 }
