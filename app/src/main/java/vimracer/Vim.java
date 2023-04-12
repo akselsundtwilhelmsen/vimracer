@@ -73,13 +73,13 @@ public class Vim extends TextWindow {
 
         commands.buildCommandList(keyString);
 
+        System.out.format("\ncommandlist = " + commands.toString());
         if (commands.isCommandListExecutable()) {
             executeCommandList();
         }
     }
 
     private void executeCommandList() { 
-        System.out.format("\ncommandlist = " + commands.toString());
         int index = 0;
         int[] movement;
         Object command;

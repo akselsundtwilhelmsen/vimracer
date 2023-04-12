@@ -34,6 +34,9 @@ public class VimCommandList implements Iterator {
     static final Pattern wordEnd = Pattern.compile("([^\\w\\s][\\w\\s])|(\\w\\W)|[^\\s]$");
     static final Pattern WORDEnd = Pattern.compile("(.\\s)|[^\\s]$");
 
+    //other constants
+    static final int MAX_NUMBER = 1000000;
+
     public VimCommandList(Vim vim) {
         this.commands = new ArrayList<>();
         this.keyPresses = "";
@@ -152,7 +155,7 @@ public class VimCommandList implements Iterator {
         if (size() > 0) {
             Object lastCommand = commands.get(size()-1);
             if (lastCommand instanceof Integer) {
-                commands.set(size()-1, (Integer) lastCommand * 10 + number);
+                commands.set(size()-1, Math.min(MAX_NUMBER, (Integer) lastCommand * 10 + number));
                 return;
             }
         }
