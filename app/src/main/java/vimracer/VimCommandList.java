@@ -50,7 +50,7 @@ public class VimCommandList implements Iterator {
         //generate legal String-command TODO: numbers
         keyPresses = keyPresses + keyPress;
 
-        System.out.format("\nkeypress: %s",keyPresses);
+        System.out.format("keypress: %s",keyPresses);
         
         //covert String-command normal command and add to command list
         if (MovementKeys.contains(keyPresses)) {
@@ -203,25 +203,22 @@ public class VimCommandList implements Iterator {
             }
         }
 
+        //cursorvalidation and setteing pref
         if (!unsafe) {
-            //vertical cursorvalidation
-            newPos[1] = Math.max(0,Math.min(vim.size()-1,newPos[1]));
-
-            //move to / set prefferd col, and horizontal cursorvalidation
-            int newLineLength = vim.getLineLength(newPos[1]);
-            System.out.format(" %d",newLineLength);
             if (VerticalMovementKeys.indexOf(key) != -1) {
                 newPos[0] = newPos[2];
-                if (newPos[0] >= newLineLength) {
-                    newPos[0] = newLineLength - 1;
-                }
+                newPos = vim.forceValidPos(newPos);
             } else {
-                if (newPos[0] >= newLineLength) {
-                    newPos[0] = newLineLength - 1;
-                }
+                newPos = vim.forceValidPos(newPos);
                 newPos[2] = newPos[0];
             } 
-            newPos[0] = Math.max(0,newPos[0]);
+        }
+
+        //is linewise
+        if (VerticalMovementKeys.indexOf(key) != -1) {
+            newPos[3] = 1;
+        } else {
+            newPos[3] = 0;
         }
 
         System.out.format(", movement: %d,%d",newPos[0],newPos[1]);

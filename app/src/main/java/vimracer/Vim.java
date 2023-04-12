@@ -13,7 +13,7 @@ import javafx.scene.input.KeyEvent;
 // TODO utenom prog, tester, dokumentasjon
 
 public class Vim extends TextWindow {
-    private int[] cursor; //has [col, row, prefcol]
+    private int[] cursor; //has [col, row, prefcol, linewise(1) or not(0)]
     private char mode; // must be n(ormal), v(isual), or i(nsert) ((visual) l(ine), (visual) b(lock), or r(eplace)?)
     private boolean shiftHeld;
 
@@ -21,7 +21,7 @@ public class Vim extends TextWindow {
 
     public Vim() {
         super();
-        this.cursor = new int[3];
+        this.cursor = new int[4]; 
         Arrays.fill(cursor,0);
         this.mode = 'n';
         this.shiftHeld = false;
@@ -46,7 +46,7 @@ public class Vim extends TextWindow {
 
         if (keyString.equals("ESCAPE")) {
             mode = 'n';
-            if (!validCursorPos(cursor)) cursor[0]--;
+            cursor = forceValidPos(cursor);
             return;
         }
 
@@ -156,21 +156,31 @@ public class Vim extends TextWindow {
     }
 
     private void removeBetween(int[] pos1, int[] pos2) {
+        boolean linewise = pos2[3] == 1;
+
         if (smallerPosition(pos1, pos2)) {
             int[] temp = pos1;
             pos1 = pos2;
             pos2 = temp;
         }
 
-        //fjerner mellom posisjoner på samme linje on the same line
-        if (pos1[1] == pos2[1]) {
-            lines.set(pos1[1], lines.get(pos1[1]).substring(0,pos1[0]) + lines.get(pos1[1]).substring(pos2[0]));
-            return;
-        }
+        if (linewise) {
+            //Remove all lines between and including pos1 and pos2
+            for (int i = pos1[1]; i <= pos2[1]; i++) {
+                removeLine(pos1[1]);
+            }
+        } else {
+            if (pos1[1] == pos2[1]) {
+                lines.set(pos1[1], lines.get(pos1[1]).substring(0,pos1[0]) + lines.get(pos1[1]).substring(pos2[0]));
+            } else {
+                lines.set(pos1[1], lines.get(pos1[1]).substring(pos1[0]));
+                lines.set(pos2[1], lines.get(pos2[1]).substring(0, pos2[0]));
+            }
 
-        //Remove all lines between and including pos1 and pos2
-        for (int i = 0; i < pos2[1]-pos1[1]+1; i++) {
-            removeLine(pos1[1]);
+            //Remove all lines between pos1 and pos2
+            // for (int i = pos1[1]+1; i < pos2[1]; i++) {
+            //     removeLine(pos1[1]);
+            // }
         }
     }
 
@@ -178,16 +188,13 @@ public class Vim extends TextWindow {
     private void removeUnderCursor() {
         if (lines.get(cursor[1]).length() == 0) return;
         lines.set(cursor[1], lines.get(cursor[1]).substring(0,cursor[0]) + lines.get(cursor[1]).substring(cursor[0]+1));
-        if (! validCursorPos(cursor)) { 
-            cursor[0]--;
-        }
+        cursor = forceValidPos(cursor);
     }
 
     private void backspace() {
         if (cursor[0] == 0) return;
         cursor[0]--;
         removeUnderCursor();
-        cursor[0]++;
     }
 
     private void enter() {
@@ -245,14 +252,11 @@ public class Vim extends TextWindow {
         return lines.size();
     }
 
-    private boolean validCursorPos(int[] cursor) {
-        if (cursor.length != 2) return false;
-        if (0 > cursor[1] || cursor[1] >= size()) return false;
-        int currentLength = lines.get(cursor[1]).length();
-        if (cursor[0] < 0) return false;
-        // if (mode == 'n' && currentLength != 0 && currentLength <= cursor[0]) return false;
-        // if (currentLength < cursor[0]) return false;
-        return true;
+    public int[] forceValidPos(int[] pos) {
+        pos[1] = Math.max(0, Math.min(size()-1, pos[1]));
+        int insertModeAppend = (mode == 'i') ? 1 : 0;
+        pos[0] = Math.max(0, Math.min(getLineLength(pos[1]) - 1 + insertModeAppend, pos[0]));
+        return pos;
     }
 
     private boolean smallerPosition(int[] smaller, int[] bigger) {
@@ -323,20 +327,20 @@ public class Vim extends TextWindow {
         return toString(lineLength, cursor);
     }
 
-    public static void main(String[] args) {
-        Vim vim = new Vim();
-        ArrayList<String> vimtext = new ArrayList<>();
-        vimtext.add("null linjer");
-        vimtext.add("en ener");
-        vimtext.add("to");
-        vimtext.add("tre");
-        vimtext.add("");
-        vimtext.add("fem");
-        vimtext.add("seks");
-        vim.setText(vimtext);
-        int[] pos1 = {0,4};
-        int[] pos2 = {5,0};
-        vim.removeBetween(pos1, pos2);
-        System.out.println(vim.toString(86));
-    }
+    // public static void main(String[] args) {
+    //     Vim vim = new Vim();
+    //     ArrayList<String> vimtext = new ArrayList<>();
+    //     vimtext.add("null linjer");
+    //     vimtext.add("en ener");
+    //     vimtext.add("to");
+    //     vimtext.add("tre");
+    //     vimtext.add("");
+    //     vimtext.add("fem");
+    //     vimtext.add("seks");
+    //     vim.setText(vimtext);
+    //     int[] pos1 = {0,4};
+    //     int[] pos2 = {5,0};
+    //     vim.removeBetween(pos1, pos2);
+    //     System.out.println(vim.toString(86));
+    // }
 }
