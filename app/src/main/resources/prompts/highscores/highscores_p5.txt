@@ -1,6 +1,3 @@
-testtest,1,2049
-test,12,4257
-henrik,23,5760
-fredrik,27,7271
-frida,37,16070
-jan,57,24324
+man,5,1435
+test,5,1897
+dude,5,3782

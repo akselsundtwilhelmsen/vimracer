@@ -83,6 +83,7 @@ public class Controller implements Initializable {
     @FXML
     public void endGame() { // on button end game
         game = null;
+        // setVimText();
         updateStopwatch();
         updateKeypressCounter();
         nameInputPane.requestFocus();
@@ -108,7 +109,13 @@ public class Controller implements Initializable {
 
     @FXML
     public void sortLeaderboard() {
-        leaderboard.nextSort();
+        leaderboard.sort(true);
+        updateLeaderboard();
+    }
+
+    @FXML
+    public void sortLeaderboard(boolean next) {
+        leaderboard.sort(next);
         updateLeaderboard();
     }
 
@@ -117,7 +124,6 @@ public class Controller implements Initializable {
         vim = new Vim(); // resets the cursor 
         vim.setText(textLoader.getScrambledText());
         populateTextFlow(vimText, lineLength);
-        // System.out.println(vim.getArray());
     }
 
     @FXML
@@ -271,15 +277,24 @@ public class Controller implements Initializable {
 
     @FXML
     private void nameFocus() {
-        nameInputPane.requestFocus();
+        if (game == null) {
+            nameInputPane.requestFocus();
+        }
     }
 
     @FXML
     private void gameWon() {
-        String gameWonString = "Correct!"; // TODO: gjør skikkelig
-        vim.setText(gameWonString);
+        ArrayList<String> gameWonArray = new ArrayList<>();
+        gameWonArray.add(nameInput.toString());
+        gameWonArray.add(game.getKeypressCounter());
+        gameWonArray.add(game.getStopwatch());
+        vim = new Vim();
+        vim.setText(gameWonArray);
         populateTextFlow(vimText, lineLength);
+
         leaderboard.writeToFile(nameInput.toString(), game.getKeypressCounter(), String.valueOf(game.getStopwatchLong()));
+        sortLeaderboard(false);
+        updateLeaderboard();
         endGame();
     }
 }

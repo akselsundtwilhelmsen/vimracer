@@ -48,15 +48,25 @@ public class Leaderboard {
         String fileName = textLoader.getCurrentFileName();
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(path+"highscores_"+fileName));
+            boolean alreadyWritten = false;
             for (String[] line : scores) {
                 if (name.trim().equals(line[0].trim())) { // check if name is already on the leaderboard
-                    if (Integer.valueOf(keypress)> Integer.valueOf(line[1]) || Integer.valueOf(time) > Integer.valueOf(line[2])) {
+                    alreadyWritten = true;
+                    if (Integer.valueOf(keypress) < Integer.valueOf(line[1]) || Integer.valueOf(time) < Integer.valueOf(line[2])) {
                         writer.write(name+","+keypress+","+time+"\n");
+                        String[] entry = {name, keypress, time};
+                        scores.remove(line);
+                        scores.add(entry);
                     }
                 }
                 else {
                     writer.write(line[0]+","+line[1]+","+line[2]+"\n");
                 }
+            }
+            if (!alreadyWritten) {
+                writer.write(name+","+keypress+","+time);
+                String[] entry = {name, keypress, time};
+                scores.add(entry);
             }
             writer.close();
         }
@@ -74,15 +84,16 @@ public class Leaderboard {
         sortByIndex(2); // starts with being sorted by time
     }
 
-    public void nextSort() {
-        if (currentSortingIndex == 1) {
-            sortByIndex(2);
-            currentSortingIndex = 2;
+    public void sort(boolean next) {
+        if (next) {
+            if (currentSortingIndex == 1) {
+                currentSortingIndex = 2;
+            }
+            else {
+                currentSortingIndex = 1;
+            }
         }
-        else {
-            sortByIndex(1);
-            currentSortingIndex = 1;
-        }
+        sortByIndex(currentSortingIndex);
     }
 
     private void sortByIndex(int index) { // insertion sort
@@ -108,6 +119,7 @@ public class Leaderboard {
                 break;
             }
         }
+        System.out.println(outString);
         return outString;
     }
 

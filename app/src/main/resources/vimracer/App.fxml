@@ -32,11 +32,6 @@
       </AnchorPane>
       <AnchorPane fx:id="sidebar" prefHeight="354.0" prefWidth="100" style="-fx-background-color: #E5C2C0;">
          <children>
-            <ImageView fitHeight="74.0" fitWidth="73.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../paprika.png" />
-               </image>
-            </ImageView>
             <Pane layoutX="14.0" layoutY="105.0" onMouseClicked="#startGame" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #0C8346;">
                <children>
                   <Text layoutX="1.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="New Game" textAlignment="CENTER" wrappingWidth="71.18896484375">
@@ -67,7 +62,7 @@
                      </font></Text>
                </children>
             </Pane>
-            <Pane layoutX="14.0" layoutY="752.0" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #000000;">
+            <Pane layoutX="14.0" layoutY="762.0" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #000000;">
                <children>
                   <Text fx:id="stopwatchText" fill="RED" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="00:00:000" textAlignment="CENTER" underline="true" wrappingWidth="73.0">
                      <font>
@@ -76,7 +71,7 @@
                   </Text>
                </children>
             </Pane>
-            <Pane layoutX="14.0" layoutY="728.0" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #000000;">
+            <Pane layoutX="14.0" layoutY="738.0" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #000000;">
                <children>
                   <Text fx:id="keypressCounterText" fill="RED" layoutY="16.0" strokeType="OUTSIDE" strokeWidth="0.0" text="0" textAlignment="CENTER" underline="true" wrappingWidth="73.0">
                      <font>
@@ -85,7 +80,7 @@
                   </Text>
                </children>
             </Pane>
-            <Pane fx:id="nameInputPane" onKeyPressed="#nameInputKeyPressed" onMouseClicked="#nameFocus" layoutX="14.0" layoutY="243.0" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #329F5B;">
+            <Pane fx:id="nameInputPane" layoutX="14.0" layoutY="232.0" onKeyPressed="#nameInputKeyPressed" onMouseClicked="#nameFocus" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #329F5B;">
                <children>
                   <Text fx:id="nameInputText" layoutX="6.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="[name]" textAlignment="CENTER" wrappingWidth="61.30908203125">
                      <font>
@@ -94,7 +89,7 @@
                   </Text>
                </children>
             </Pane>
-            <Pane layoutX="14.0" layoutY="267.0" prefHeight="397.0" prefWidth="73.0" style="-fx-background-color: #4EBC72;">
+            <Pane layoutX="14.0" layoutY="256.0" prefHeight="409.0" prefWidth="73.0" style="-fx-background-color: #4EBC72;">
                <children>
                   <Text fx:id="leaderboardText" layoutX="6.0" layoutY="18.0" strokeType="OUTSIDE" strokeWidth="0.0" text="[leaderboard]" textAlignment="LEFT" wrappingWidth="61.30908203125">
                      <font>
@@ -103,7 +98,7 @@
                   </Text>
                </children>
             </Pane>
-            <Pane layoutX="14.0" layoutY="664.0" onMouseClicked="#sortLeaderboard" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #50e080;">
+            <Pane layoutX="14.0" layoutY="665.0" onMouseClicked="#sortLeaderboard" prefHeight="24.0" prefWidth="73.0" style="-fx-background-color: #50e080;">
                <children>
                   <Text layoutX="6.0" layoutY="17.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sort" textAlignment="CENTER" wrappingWidth="61.30908203125">
                      <font>
@@ -112,6 +107,11 @@
                   </Text>
                </children>
             </Pane>
+            <ImageView fitHeight="74.0" fitWidth="73.0" layoutX="14.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../paprika.png" />
+               </image>
+            </ImageView>
          </children>
       </AnchorPane>
    </children>

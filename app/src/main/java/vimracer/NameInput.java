@@ -21,6 +21,12 @@ public class NameInput {
         else if (keyCode.equals("enter")) {
             controller.startGame();
         }
+        else if (keyCode.equals("right")) {
+            controller.nextFile();
+        }
+        else if (keyCode.equals("left")) {
+            controller.prevFile();
+        }
         else {
             if (keyCode.length() == 1 && name.length() < 9) {
                 name += event.getCode().toString().toLowerCase();
