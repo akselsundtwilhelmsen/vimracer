@@ -17,7 +17,7 @@ public class VimCommandList implements Iterator {
     private Vim vim;
 
     private final ArrayList<String> VerticalMovementKeys = new ArrayList<>(Arrays.asList("gg","{","}","k","j","G"));
-    private final ArrayList<String> MovementKeys = new ArrayList<>(Arrays.asList("0","F","ge","b","h","l","e","w","W","t","f","$","|"));
+    private final ArrayList<String> MovementKeys = new ArrayList<>(Arrays.asList("0","F","ge","b","h","l","e","E","w","W","t","f","$","|"));
     private final ArrayList<String> InsertModeKeys = new ArrayList<>(Arrays.asList("i","I","a","A","o","O"));
     private final ArrayList<String> OperatorKeys = new ArrayList<>(Arrays.asList("d","D","y","Y","c","C",">","<","x","X","J"));
     private final ArrayList<String> Keys;
@@ -32,6 +32,7 @@ public class VimCommandList implements Iterator {
     static final Pattern wordBeginning = Pattern.compile("([\\w\\s][^\\w\\s])|(\\W\\w)");
     static final Pattern WORDBeginning = Pattern.compile("(\\s.)");
     static final Pattern wordEnd = Pattern.compile("([^\\w\\s][\\w\\s])|(\\w\\W)|[^\\s]$");
+    static final Pattern WORDEnd = Pattern.compile("(.\\s)|[^\\s]$");
 
     public VimCommandList(Vim vim) {
         this.commands = new ArrayList<>();
@@ -50,7 +51,7 @@ public class VimCommandList implements Iterator {
         //generate legal String-command TODO: numbers
         keyPresses = keyPresses + keyPress;
 
-        System.out.format("keypress: %s",keyPresses);
+        System.out.format("\nkeypress: %s",keyPresses);
         
         //covert String-command normal command and add to command list
         if (MovementKeys.contains(keyPresses)) {
@@ -157,9 +158,10 @@ public class VimCommandList implements Iterator {
                 case "F":
                     break;
                 case "ge":
+                    newPos = vim.prevInstanceOf(wordEnd, newPos, false);
                     break;
                 case "b":
-                    newPos = vim.prevInstanceOf(WORDBeginning, newPos, true);
+                    newPos = vim.prevInstanceOf(wordBeginning, newPos, true);
                     break;
                 case "h":
                     newPos[0]--;
@@ -169,6 +171,9 @@ public class VimCommandList implements Iterator {
                     break;
                 case "e":
                     newPos = vim.nextInstanceOf(wordEnd,newPos,false);
+                    break;
+                case "E":
+                    newPos = vim.nextInstanceOf(WORDEnd,newPos,false);
                     break;
                 case "w":
                     newPos = vim.nextInstanceOf(wordBeginning,newPos,true);
@@ -268,6 +273,10 @@ public class VimCommandList implements Iterator {
                 break;
             case "c":
                 commands.add("change");
+                break;
+            case "C": //TODO: hvorfor funker ikke+
+                commands.add("change");
+                generateMovement("$");
                 break;
             case "x":
                 commands.add("deleteMotion");

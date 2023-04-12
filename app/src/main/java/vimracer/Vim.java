@@ -49,6 +49,8 @@ public class Vim extends TextWindow {
             cursor = forceValidPos(cursor);
             return;
         }
+        
+        if (keyString.equals("SPACE")) keyString = " ";
 
         if (keyString.startsWith("DIGIT"))  {
             keyString = keyString.substring(5);
@@ -61,7 +63,6 @@ public class Vim extends TextWindow {
 
         
         if (mode == 'i') {
-            if (keyString.equals("SPACE")) keyString = " ";
             if (keyString.equals("BACK_SPACE")) backspace();
             else if (keyString.equals("ENTER")) enter();
             else {
@@ -84,7 +85,7 @@ public class Vim extends TextWindow {
         while (commands.hasNext()) {
             command = commands.next();
             if (command instanceof int[]) {
-                cursor = (int[]) command;
+                cursor = forceValidPos((int[]) command);
                 continue;
             }
             switch ((String) command) {
@@ -178,9 +179,9 @@ public class Vim extends TextWindow {
             }
 
             //Remove all lines between pos1 and pos2
-            // for (int i = pos1[1]+1; i < pos2[1]; i++) {
-            //     removeLine(pos1[1]);
-            // }
+            for (int i = pos1[1]+1; i < pos2[1]; i++) {
+                removeLine(pos1[1]);
+            }
         }
     }
 
