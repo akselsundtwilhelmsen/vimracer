@@ -3,8 +3,6 @@ package vimracer;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-import javafx.scene.shape.HLineTo;
-
 
 public class TextWindow {
     ArrayList<String> lines;
@@ -27,7 +25,7 @@ public class TextWindow {
         return lines.stream().collect(Collectors.joining("\n"));
     }
 
-    public String toString(int maxLineLength, int[] highlightPos) { // with line numbers
+    public String toString(int maxLineLength, int[] highlightPos) { // TODO: deprecated
         final int padding = 2;
         maxLineLength -= padding + 2; // to account for line number and padding
 
@@ -83,47 +81,8 @@ public class TextWindow {
         return outString;
     }
 
-    public ArrayList<String> toArray(int maxLineLength) { // with line numbers
-        final int padding = 2;
-        maxLineLength -= padding + 2; // to account for line number and padding
-
-        ArrayList<String> outArray = new ArrayList<String>();
-        int lineNumber = 0;
-
-        for (String line : lines) {
-            lineNumber++;
-
-            int currentPadding = padding - ("" + lineNumber).length(); // amount of padding needed for the current line
-            String paddingString = "";
-            for (int i=0; i < currentPadding; i++) {
-                paddingString += " ";
-            }
-
-            String paddingStringOverflow = " "; // amount of padding needed after line overflow
-            for (int i=0; i < padding; i++) {
-                paddingStringOverflow += " ";
-            }
-
-            if (line.length() < maxLineLength) {
-                outArray.add(paddingString + lineNumber + " " + line + "\n");
-            }
-            else {
-                outArray.add(paddingString + lineNumber + " " + line.substring(0, maxLineLength) + "\n");
-                int counter = 1;
-                while (true) {
-                    counter += 1;
-                    if (line.length() > maxLineLength*counter) {
-                        outArray.add(paddingStringOverflow + line.substring((counter-1)*maxLineLength, counter*maxLineLength) + "\n");
-                    }
-                    else {
-                        outArray.add(paddingStringOverflow + line.substring((counter-1)*maxLineLength) + "\n");
-                        break;
-                    }
-                }
-            }
-        }
-        System.out.println(outArray);
-        return outArray;
+    public ArrayList<String> getArray() {
+        return lines;
     }
 
     public String toString(int maxLineLength) { 

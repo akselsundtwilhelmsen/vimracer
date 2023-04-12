@@ -1,12 +1,16 @@
 package vimracer;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 
@@ -28,7 +32,7 @@ public class Controller implements Initializable {
     NameInput nameInput;
 
     @FXML private Text solutionText;
-    @FXML private Text vimText;
+    @FXML private TextFlow vimText;
     @FXML private Pane vimPane;
     @FXML private Pane nameInputPane;
     @FXML public Text stopwatchText;
@@ -68,19 +72,9 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    public void handleOnKeyPressed(KeyEvent event) {
-        vim.keyPress(event);
-        vimText.setText(vim.toString(lineLength)); // herrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
-        updateKeypressCounter();
-        if (textLoader.compareToSolution()) {
-            gameWon();
-        }
-    }
-
-    @FXML
     public void startGame() { // on button start game
         game = new Game(this);
-        vim = new Vim(); // TODO: Hvorfor gjør dette at alt slettes når man begynner å skrive? Spør Brage.
+        vim = new Vim();
         setVimText();
         keypressCounterText.setText(game.getKeypressCounter());
         updateStopwatch();
@@ -101,6 +95,7 @@ public class Controller implements Initializable {
         leaderboard.readFromFile(textLoader.getCurrentFileName());
         updateLeaderboard();
         updateSolution();
+        vim = new Vim(); // resets the cursor 
         setVimText();
     }
 
@@ -110,6 +105,7 @@ public class Controller implements Initializable {
         leaderboard.readFromFile(textLoader.getCurrentFileName());
         updateLeaderboard();
         updateSolution();
+        vim = new Vim(); // resets the cursor 
         setVimText();
     }
 
@@ -122,14 +118,114 @@ public class Controller implements Initializable {
     @FXML
     public void setVimText() {
         vim.setText(textLoader.getScrambledText());
-        vimText.setText(vim.toString(lineLength)); // herrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
-        
+        // vimText.setText(vim.toArray(lineLength).toString()); // herrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr
+        populateTextFlow(vimText, lineLength);
+        System.err.println("setvimtext");
+    }
+
+    @FXML
+    public void handleOnKeyPressed(KeyEvent event) { // on keypress
+        vim.keyPress(event);
+        populateTextFlow(vimText, lineLength);
+
+        updateKeypressCounter();
+        if (textLoader.compareToSolution()) {
+            gameWon();
+        }
+
+    }
+
+    @FXML
+    private void populateTextFlow(TextFlow textFlow, int maxLineLength) {
+        textFlow.getChildren().clear();
+        final int padding = 2;
+        maxLineLength -= padding + 2; // to account for line number and padding
+
+        String paddingStringOverflow = " "; // amount of padding needed after line overflow
+        for (int i=0; i < padding; i++) {
+            paddingStringOverflow += " ";
+        }
+
+        int[] cursor = vim.getCursor();
+        final int offset = 3; // for the cursor to account for line number and padding
+        ArrayList<String> lines = vim.getArray();
+
+        Integer lineNumber = 0;
+        for (String line : lines) {
+            lineNumber++;
+
+            int currentPadding = padding - ("" + lineNumber).length(); // amount of padding needed for the current line
+            String paddingString = "";
+            for (int i=0; i < currentPadding; i++) {
+                paddingString += " ";
+            }
+
+            String outString = "";
+            if (line.length() < maxLineLength) {
+                // når linjen er mindre enn linelength!!
+                outString += paddingString + lineNumber + " " + line + "\n";
+            }
+            else {
+                // når linjen er lenger enn linelength!!
+                outString += paddingString + lineNumber + " " + line.substring(0, maxLineLength) + "\n";
+                int counter = 1;
+                while (true) {
+                    counter += 1;
+                    if (line.length() > maxLineLength*counter) {
+                        outString += paddingStringOverflow + line.substring((counter-1)*maxLineLength, counter*maxLineLength) + "\n";
+                    }
+                    else {
+                        outString += paddingStringOverflow + line.substring((counter-1)*maxLineLength) + "\n";
+                        break;
+                    }
+                }
+            }
+            if (lineNumber.equals(cursor[1]+1)) {
+                int overflowPaddingOffset = 0; // to account for the leading spaces after a linebreak
+                if (cursor[0] >= maxLineLength) {
+                    overflowPaddingOffset = 4;
+                }
+
+                // before cursor
+                Text beforeCursor = new Text(outString.substring(0, cursor[0]+offset+overflowPaddingOffset));
+                beforeCursor.setFill(Color.WHITE);
+                beforeCursor.setFont(Font.font("Ubuntu mono", FontWeight.NORMAL, 13.0));
+                vimText.getChildren().add(beforeCursor);
+
+                // on cursor
+                String cursorCharacter = outString.substring(cursor[0]+offset+overflowPaddingOffset, cursor[0]+1+offset+overflowPaddingOffset); // to check if it's a space (or newline)
+                Text onCursor;
+                if (cursorCharacter.equals(" ") || cursorCharacter.equals(null)) { // to make the cursor visible when on a space
+                    onCursor = new Text("_");
+                }
+                else {
+                    onCursor = new Text(outString.substring(cursor[0]+offset+overflowPaddingOffset, cursor[0]+1+offset+overflowPaddingOffset));
+                }
+                onCursor.setFill(Color.RED);
+                onCursor.setFont(Font.font("Ubuntu mono", FontWeight.NORMAL, 13.0));
+                vimText.getChildren().add(onCursor);
+
+                // after cursor
+                Text afterCursor = new Text(outString.substring(cursor[0]+1+offset+overflowPaddingOffset));
+                afterCursor.setFill(Color.WHITE);
+                afterCursor.setFont(Font.font("Ubuntu mono", FontWeight.NORMAL, 13.0));
+                vimText.getChildren().add(afterCursor);
+
+            }
+            else {
+                Text lineText = new Text(outString);
+                lineText.setFill(Color.WHITE);
+                lineText.setFont(Font.font("Ubuntu mono", FontWeight.NORMAL, 13.0));
+                vimText.getChildren().add(lineText);
+            }
+        }
+        textFlow.requestLayout();
     }
 
     @FXML
     private void updateSolution() {
         solution.setText(textLoader.getText());
-        solutionText.setText(solution.toString(lineLength)); // herrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr (kanskje)
+        solutionText.setText(solution.toString(lineLength));
     }
 
     @FXML
@@ -181,8 +277,8 @@ public class Controller implements Initializable {
 
     @FXML
     private void gameWon() {
-        String gameWonString = "Correct"; // TODO: gjør skikkelig
-        vimText.setText(gameWonString);
+        String gameWonString = "Correct!"; // TODO: gjør skikkelig
+        // vimText.setText(gameWonString); // TODO: FIXFIXFIX
         leaderboard.writeToFile(nameInput.toString(), game.getKeypressCounter(), String.valueOf(game.getStopwatchLong()));
         endGame();
     }

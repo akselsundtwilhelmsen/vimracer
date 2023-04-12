@@ -14,20 +14,19 @@
       <AnchorPane fx:id="textPane" HBox.hgrow="ALWAYS">
       <Pane prefWidth="600" style="-fx-background-color: #FFFFFF;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Text fx:id="solutionText" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" 1" wrappingWidth="560">
-               <font>
-                  <Font name="Ubuntu Mono" size="13.0" />
-               </font>
-            </Text>
+            <TextFlow layoutX="14.0" layoutY="27.0">
+               <Text fx:id="solutionText" strokeType="OUTSIDE" strokeWidth="0.0" text=" 1" wrappingWidth="560">
+                  <font>
+                     <Font name="Ubuntu Mono" size="13.0" />
+                  </font>
+               </Text>
+            </TextFlow>
          </children>
       </Pane>
       <Pane fx:id="vimPane" onKeyPressed="#handleOnKeyPressed" onKeyReleased="#handleOnKeyReleased" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #000000;" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Text fx:id="vimText" fill="WHITE" layoutX="14.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" 1" wrappingWidth="560">
-               <font>
-                  <Font name="Ubuntu Mono" size="13.0" />
-               </font>
-            </Text>
+            <TextFlow fx:id="vimText" layoutX="14.0" layoutY="27.0">
+            </TextFlow>
          </children>
       </Pane>
       </AnchorPane>
