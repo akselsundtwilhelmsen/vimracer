@@ -135,7 +135,6 @@ public class Controller implements Initializable {
         if (textLoader.compareToSolution()) {
             gameWon();
         }
-
     }
 
     @FXML
@@ -183,6 +182,13 @@ public class Controller implements Initializable {
                     }
                 }
             }
+
+            Color comparisonColor = Color.rgb(255, 255, 255);
+            String solutionLine = solution.getArray().get(lineNumber-1).trim();
+            if (line.trim().equals(solutionLine)) {
+                comparisonColor = Color.rgb(75, 75, 75);
+            }
+
             if (lineNumber.equals(cursor[1]+1)) {
                 int overflowPaddingOffset = 0; // to account for the leading spaces after a linebreak
                 if (cursor[0] >= maxLineLength) {
@@ -191,7 +197,7 @@ public class Controller implements Initializable {
 
                 // before cursor
                 Text beforeCursor = new Text(outString.substring(0, cursor[0]+offset+overflowPaddingOffset));
-                beforeCursor.setFill(Color.WHITE);
+                beforeCursor.setFill(comparisonColor);
                 beforeCursor.setFont(Font.font("Ubuntu mono", FontWeight.NORMAL, 13.0));
                 vimText.getChildren().add(beforeCursor);
 
@@ -210,14 +216,14 @@ public class Controller implements Initializable {
 
                 // after cursor
                 Text afterCursor = new Text(outString.substring(cursor[0]+1+offset+overflowPaddingOffset));
-                afterCursor.setFill(Color.WHITE);
+                afterCursor.setFill(comparisonColor);
                 afterCursor.setFont(Font.font("Ubuntu mono", FontWeight.NORMAL, 13.0));
                 vimText.getChildren().add(afterCursor);
 
             }
             else {
                 Text lineText = new Text(outString);
-                lineText.setFill(Color.WHITE);
+                lineText.setFill(comparisonColor); // INNI ELSE
                 lineText.setFont(Font.font("Ubuntu mono", FontWeight.NORMAL, 13.0));
                 vimText.getChildren().add(lineText);
             }

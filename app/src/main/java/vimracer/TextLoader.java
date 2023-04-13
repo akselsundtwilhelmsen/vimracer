@@ -126,8 +126,8 @@ public class TextLoader {
         return fileNameArray.get(currentIndex);
     }
 
-    private void scrambleByWord(int intensityPercentage) {
-        //intensityPercentage is the percentage of words affected by the scrambler
+    private void scrambleByWord(int impactPercentage) {
+        //impactPercentage is the percentage of words affected by the scrambler
         newLines = new ArrayList<>();
         for (String line : lines) {
             String[] wordArray = line.split(" ");
@@ -137,10 +137,9 @@ public class TextLoader {
                 if (word.equals("")) {
                     continue;
                 }
-                Random random = new Random();
-                int randint = random.nextInt(101 - intensityPercentage)+1;
-                if (randint == 1) {
+                if (impactCalculator(impactPercentage)) {
                     String alteredWord = "";
+                    Random random = new Random();
                     switch (random.nextInt(4)) {
                         case 0:
                             alteredWord = delete(word);
@@ -149,10 +148,10 @@ public class TextLoader {
                             alteredWord = insert(word);
                             break;
                         case 2:
-                            alteredWord = changeLetters(word);
+                            alteredWord = changeLetters(word, 10);
                             break;
                         case 3:
-                            alteredWord = removeLetters(word);
+                            alteredWord = removeLetters(word, 10);
                             break;
                     }
                     newLine += alteredWord + " ";
@@ -165,6 +164,13 @@ public class TextLoader {
             newLine = newLine.trim();
             newLines.add(newLine);
         }
+        System.out.println(newLines);
+    }
+
+    private boolean impactCalculator(int impactPercentage) {
+        Random random = new Random();
+        if (impactPercentage <= 0 || impactPercentage > 100) return false;
+        return random.nextInt(101/impactPercentage) == 0;
     }
 
     public String delete(String word) {
@@ -175,12 +181,12 @@ public class TextLoader {
         return "inserted" + " " + word;
     }
 
-    public String changeLetters(String word) {
+    public String changeLetters(String word, int impactPercentage) {
         String possibleCharacters = "qwertyuiopasdfghjklzxcvbnm";
         String outString = "";
         for (char letter : word.toCharArray()) {
             Random random = new Random();
-            if (random.nextInt(10) == 0) {
+            if (impactCalculator(impactPercentage)) {
                 outString += possibleCharacters.charAt(random.nextInt(possibleCharacters.length()));
             }
             else {
@@ -190,12 +196,11 @@ public class TextLoader {
         return outString;
     }
 
-    public String removeLetters(String word) {
+    public String removeLetters(String word, int impactPercentage) {
         String outString = "";
         Random random = new Random();
         for (int i = 0; i < word.length(); i++) {
-            int randint = random.nextInt(2);
-            if (randint == 0) {
+            if (impactCalculator(impactPercentage)) {
                 outString += word.substring(i, i+1);
             }
         }
@@ -219,5 +224,10 @@ public class TextLoader {
             }
         }
         return true;
+    }
+
+    public static void main(String[] args) {
+        TextLoader t = new TextLoader();
+        t.scrambleCurrentPrompt();
     }
 }
