@@ -128,7 +128,7 @@ public class Leaderboard {
         return outString;
     }
 
-    public String formatTime(String time) {
+    private String formatTime(String time) {
         long elapsedTime = Long.valueOf(time);
         long milliSec = elapsedTime % 1000;
         long sec = (elapsedTime / 1000) % 60;

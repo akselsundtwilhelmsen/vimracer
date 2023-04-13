@@ -3,9 +3,8 @@ package vimracer;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-
 public class TextWindow {
-    ArrayList<String> lines;
+    protected ArrayList<String> lines;
 
     public TextWindow() {
         lines = new ArrayList<>();
@@ -23,6 +22,10 @@ public class TextWindow {
 
     public String toString() { // without line numbers
         return lines.stream().collect(Collectors.joining("\n"));
+    }
+
+    public ArrayList<String> getArray() {
+        return lines;
     }
 
     public String toString(int maxLineLength, int[] highlightPos) { // TODO: deprecated
@@ -81,15 +84,11 @@ public class TextWindow {
         return outString;
     }
 
-    public ArrayList<String> getArray() {
-        return lines;
-    }
-
     public String toString(int maxLineLength) { 
         return toString(maxLineLength, null);
     }
 
-    public boolean equals(TextWindow t) {
-        return this.toString().equals(t.toString());
-    }
+    // public boolean equals(TextWindow t) {
+    //     return this.toString().equals(t.toString());
+    // }
 }

@@ -1,12 +1,10 @@
 package vimracer;
 
 public class Game {
-    Stopwatch stopwatch;
-    KeypressCounter keypressCounter;
-    Controller controller;
+    private Stopwatch stopwatch;
+    private KeypressCounter keypressCounter;
 
-    public Game(Controller controller) {
-        this.controller = controller;
+    public Game() {
         startGame();
     }
     

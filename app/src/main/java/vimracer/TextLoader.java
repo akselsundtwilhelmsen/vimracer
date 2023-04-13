@@ -9,7 +9,6 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.lang.Math;
 
 public class TextLoader {
     private int currentIndex;
@@ -88,7 +87,7 @@ public class TextLoader {
         }
     }
 
-    public void listFiles(String promptPath) {
+    private void listFiles(String promptPath) {
         File directory = new File(promptPath);
         File[] files = directory.listFiles();
         if (files != null) {
@@ -172,15 +171,15 @@ public class TextLoader {
         return random.nextInt(101/impactPercentage) == 0;
     }
 
-    public String delete(String word) {
+    private String delete(String word) {
         return "";
     }
 
-    public String insert(String word) {
+    private String insert(String word) {
         return "inserted" + " " + word;
     }
 
-    public String changeLetters(String word, int impactPercentage) {
+    private String changeLetters(String word, int impactPercentage) {
         String possibleCharacters = "qwertyuiopasdfghjklzxcvbnm";
         String outString = "";
         for (char letter : word.toCharArray()) {
@@ -195,7 +194,7 @@ public class TextLoader {
         return outString;
     }
 
-    public String removeLetters(String word, int impactPercentage) {
+    private String removeLetters(String word, int impactPercentage) {
         String outString = "";
         Random random = new Random();
         for (int i = 0; i < word.length(); i++) {

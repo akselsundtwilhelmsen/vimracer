@@ -65,7 +65,7 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    public void populateUI() {
+    private void populateUI() {
         updateSolution();
         updateLeaderboard();
         setVimText();
@@ -73,7 +73,7 @@ public class Controller implements Initializable {
 
     @FXML
     public void startGame() { // on button start game
-        game = new Game(this);
+        game = new Game();
         setVimText();
         keypressCounterText.setText(game.getKeypressCounter());
         updateStopwatch();
@@ -120,7 +120,7 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    public void setVimText() {
+    private void setVimText() {
         vim = new Vim(); // resets the cursor 
         vim.setText(textLoader.getScrambledText());
         populateTextFlow(vimText, lineLength);
@@ -260,7 +260,7 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    public void updateNameInput() {
+    private void updateNameInput() {
         nameInputText.setText(nameInput.toString());
     }
 
@@ -270,7 +270,7 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    public void updateStopwatch() {
+    private void updateStopwatch() {
         if (game != null) {
             stopwatchText.setText(game.getStopwatch());
         }
@@ -280,7 +280,7 @@ public class Controller implements Initializable {
     }
 
     @FXML
-    public void updateKeypressCounter() {
+    private void updateKeypressCounter() {
         if (game != null) {
             game.keypress(); 
             keypressCounterText.setText(game.getKeypressCounter());
