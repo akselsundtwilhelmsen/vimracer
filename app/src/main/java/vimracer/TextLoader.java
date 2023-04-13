@@ -164,7 +164,6 @@ public class TextLoader {
             newLine = newLine.trim();
             newLines.add(newLine);
         }
-        System.out.println(newLines);
     }
 
     private boolean impactCalculator(int impactPercentage) {
@@ -216,15 +215,15 @@ public class TextLoader {
         return newLines;
     }
 
-    public boolean compareToSolution() { // might require a faster implementation
-        int loopLength = Math.min(lines.size(), newLines.size());
-        for (int i=0; i < loopLength; i++) {
-            if (!lines.get(i).trim().equals(newLines.get(i).trim())) {
-                return false;
-            }
-        }
-        return true;
-    }
+    // public boolean compareToSolution() { // might require a faster implementation
+    //     int loopLength = Math.min(lines.size(), newLines.size());
+    //     for (int i=0; i < loopLength; i++) {
+    //         if (!lines.get(i).trim().equals(newLines.get(i).trim())) {
+    //             return false;
+    //         }
+    //     }
+    //     return true;
+    // }
 
     public static void main(String[] args) {
         TextLoader t = new TextLoader();

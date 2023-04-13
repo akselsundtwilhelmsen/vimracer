@@ -132,9 +132,9 @@ public class Controller implements Initializable {
         populateTextFlow(vimText, lineLength);
 
         updateKeypressCounter();
-        if (textLoader.compareToSolution()) {
-            gameWon();
-        }
+        // if (textLoader.compareToSolution()) {
+        //     gameWon();
+        // }
     }
 
     @FXML
@@ -142,6 +142,7 @@ public class Controller implements Initializable {
         textFlow.getChildren().clear();
         final int padding = 2;
         maxLineLength -= padding + 2; // to account for line number and padding
+        boolean different = false;
 
         String paddingStringOverflow = " "; // amount of padding needed after line overflow
         for (int i=0; i < padding; i++) {
@@ -188,6 +189,9 @@ public class Controller implements Initializable {
             if (line.trim().equals(solutionLine)) {
                 comparisonColor = Color.rgb(75, 75, 75);
             }
+            else {
+                different = true;
+            }
 
             if (lineNumber.equals(cursor[1]+1)) {
                 int overflowPaddingOffset = 0; // to account for the leading spaces after a linebreak
@@ -229,6 +233,11 @@ public class Controller implements Initializable {
             }
         }
         textFlow.requestLayout();
+        
+        if (!different) {
+            gameWon();
+        }
+        System.out.println(different);
     }
 
     @FXML
