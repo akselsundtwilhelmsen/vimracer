@@ -66,15 +66,12 @@ public class Leaderboard {
                     String[] entry = {name, keypress, time};
                     scores.remove(oldLine);
                     scores.add(entry);
-                    System.out.println("FIRST");;
                 }
-                System.out.println("SECOND");
             }
             else {
                 writer.write(name+","+keypress+","+time+"\n");
                 String[] entry = {name, keypress, time};
                 scores.add(entry);
-                System.out.println("THIRD");
             }
 
             writer.close();

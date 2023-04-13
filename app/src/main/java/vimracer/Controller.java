@@ -166,19 +166,19 @@ public class Controller implements Initializable {
             String outString = "";
             if (line.length() < maxLineLength) {
                 // når linjen er mindre enn linelength!!
-                outString += paddingString + lineNumber + " " + line + "\n";
+                outString += paddingString + lineNumber + " " + line + " \n";
             }
             else {
                 // når linjen er lenger enn linelength!!
-                outString += paddingString + lineNumber + " " + line.substring(0, maxLineLength) + "\n";
+                outString += paddingString + lineNumber + " " + line.substring(0, maxLineLength) + " \n";
                 int counter = 1;
                 while (true) {
                     counter += 1;
                     if (line.length() > maxLineLength*counter) {
-                        outString += paddingStringOverflow + line.substring((counter-1)*maxLineLength, counter*maxLineLength) + "\n";
+                        outString += paddingStringOverflow + line.substring((counter-1)*maxLineLength, counter*maxLineLength) + " \n";
                     }
                     else {
-                        outString += paddingStringOverflow + line.substring((counter-1)*maxLineLength) + "\n";
+                        outString += paddingStringOverflow + line.substring((counter-1)*maxLineLength) + " \n";
                         break;
                     }
                 }
@@ -186,7 +186,7 @@ public class Controller implements Initializable {
             if (lineNumber.equals(cursor[1]+1)) {
                 int overflowPaddingOffset = 0; // to account for the leading spaces after a linebreak
                 if (cursor[0] >= maxLineLength) {
-                    overflowPaddingOffset = 4;
+                    overflowPaddingOffset = 5;
                 }
 
                 // before cursor
