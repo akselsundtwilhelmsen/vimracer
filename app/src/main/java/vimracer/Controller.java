@@ -142,7 +142,6 @@ public class Controller implements Initializable {
         textFlow.getChildren().clear();
         final int padding = 2;
         maxLineLength -= padding + 2; // to account for line number and padding
-        boolean different = false;
 
         String paddingStringOverflow = " "; // amount of padding needed after line overflow
         for (int i=0; i < padding; i++) {
@@ -152,6 +151,14 @@ public class Controller implements Initializable {
         int[] cursor = vim.getCursor();
         final int offset = 3; // for the cursor to account for line number and padding
         ArrayList<String> lines = vim.getArray();
+
+        boolean different; // gets set to true if two lines are different
+        if (lines.size() == 0) {
+            different = true;
+        }
+        else {
+            different = false;
+        }
 
         Integer lineNumber = 0;
         for (String line : lines) {
@@ -185,13 +192,16 @@ public class Controller implements Initializable {
             }
 
             Color comparisonColor = Color.rgb(255, 255, 255);
-            String solutionLine = solution.getArray().get(lineNumber-1).trim();
-            if (line.trim().equals(solutionLine)) {
-                comparisonColor = Color.rgb(75, 75, 75);
+            if (lineNumber-1 < solution.getArray().size()) {
+                String solutionLine = solution.getArray().get(lineNumber-1).trim();
+                if (line.trim().equals(solutionLine)) {
+                    comparisonColor = Color.rgb(75, 75, 75);
+                }
+                else {
+                    different = true;
+                }
             }
-            else {
-                different = true;
-            }
+            different = true;
 
             if (lineNumber.equals(cursor[1]+1)) {
                 int overflowPaddingOffset = 0; // to account for the leading spaces after a linebreak
@@ -237,7 +247,6 @@ public class Controller implements Initializable {
         if (!different) {
             gameWon();
         }
-        System.out.println(different);
     }
 
     @FXML
