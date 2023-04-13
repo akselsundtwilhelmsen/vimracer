@@ -176,8 +176,18 @@ public class TextLoader {
     }
 
     public String changeLetters(String word) {
-        String possibleCharacters = "qwertyuiopasdfghjklzxcvbnm"; // TODO: finish this
-        return "changed";
+        String possibleCharacters = "qwertyuiopasdfghjklzxcvbnm";
+        String outString = "";
+        for (char letter : word.toCharArray()) {
+            Random random = new Random();
+            if (random.nextInt(10) == 0) {
+                outString += possibleCharacters.charAt(random.nextInt(possibleCharacters.length()));
+            }
+            else {
+                outString += letter;
+            }
+        }
+        return outString;
     }
 
     public String removeLetters(String word) {
@@ -185,7 +195,7 @@ public class TextLoader {
         Random random = new Random();
         for (int i = 0; i < word.length(); i++) {
             int randint = random.nextInt(2);
-            if (randint == 1) {
+            if (randint == 0) {
                 outString += word.substring(i, i+1);
             }
         }

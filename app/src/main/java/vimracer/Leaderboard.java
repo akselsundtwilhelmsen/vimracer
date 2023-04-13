@@ -125,7 +125,6 @@ public class Leaderboard {
                 break;
             }
         }
-        System.out.println(outString);
         return outString;
     }
 

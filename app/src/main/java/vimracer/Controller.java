@@ -285,14 +285,14 @@ public class Controller implements Initializable {
     @FXML
     private void gameWon() {
         ArrayList<String> gameWonArray = new ArrayList<>();
-        gameWonArray.add(nameInput.toString());
+        gameWonArray.add(nameInput.getName());
         gameWonArray.add(game.getKeypressCounter());
         gameWonArray.add(game.getStopwatch());
         vim = new Vim();
         vim.setText(gameWonArray);
         populateTextFlow(vimText, lineLength);
 
-        leaderboard.writeToFile(nameInput.toString(), game.getKeypressCounter(), String.valueOf(game.getStopwatchLong()));
+        leaderboard.writeToFile(nameInput.getName(), game.getKeypressCounter(), String.valueOf(game.getStopwatchLong()));
         sortLeaderboard(false);
         updateLeaderboard();
         endGame();

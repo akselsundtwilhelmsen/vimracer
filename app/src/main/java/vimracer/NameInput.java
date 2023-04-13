@@ -42,4 +42,8 @@ public class NameInput {
             return name;
         }
     }
+
+    public String getName() {
+        return name;
+    }
 }
