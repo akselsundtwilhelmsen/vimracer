@@ -201,7 +201,6 @@ public class Controller implements Initializable {
                     different = true;
                 }
             }
-            different = true;
 
             if (lineNumber.equals(cursor[1]+1)) {
                 int overflowPaddingOffset = 0; // to account for the leading spaces after a linebreak
