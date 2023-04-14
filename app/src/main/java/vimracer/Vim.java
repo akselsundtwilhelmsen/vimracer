@@ -223,7 +223,7 @@ public class Vim extends TextWindow {
 
         if (linewise) {
             outString = lines.stream()
-                .limit(pos2[1]).skip(pos1[1])
+                .limit(pos2[1]+1).skip(pos1[1])
                 .collect(Collectors.joining("\n"));
         } else {
             if (pos1[1] == pos2[1]) {
@@ -231,9 +231,10 @@ public class Vim extends TextWindow {
             } else {
                 outString = lines.get(pos1[1]).substring(pos1[0]) + "\n";
                 outString = outString + lines.stream()
-                    .limit(pos2[1]+1).skip(pos1[1]-1)
-                    .collect(Collectors.joining("\n"));
-                outString = outString + "\n" + lines.get(pos2[1]).substring(pos2[0]);
+                    .limit(pos2[1]).skip(pos1[1]+1)
+                    .map(s -> s + "\n")
+                    .collect(Collectors.joining(""));
+                outString = outString + lines.get(pos2[1]).substring(0,pos2[0]);
             }
         }
         return outString;

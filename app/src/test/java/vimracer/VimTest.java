@@ -32,7 +32,10 @@ public class VimTest {
         int[] to = {11,0,0,0};
         Assertions.assertEquals(vim.toStringBetween(from, to),"linjer");
         to[0] = 2;
-        to[1] = 1;
-        Assertions.assertEquals(vim.toStringBetween(from, to),"linjer\nen");
+        to[1] = 2;
+        Assertions.assertEquals(vim.toStringBetween(from, to),"linjer\nen ener\nto");
+        to[3] = 1;
+        Assertions.assertEquals(vim.toStringBetween(from, to),"null linjer\nen ener\nto");
+
 	}
 }
