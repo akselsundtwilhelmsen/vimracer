@@ -13,10 +13,15 @@ TODO
 
 # Del 3: Spørsmål
 ## 1: Hvilke deler av pensum er dekket i prosjektet?
-I programmet er det mange eksempel på delegering.
+I programmet er det flere eksempel på delegering.
+Vim delegerer ansvaret for å konvertere tastetrykk til utførbare kommandoer til VimCommandList.
+Game delegerer stoppeklokke og tastetrykksteller til henholdsvis Stopwatch og KeypressCounter.
 Vi også har dekket arv.
 Vim.java arver fra TextWindow.java.
 På denne måten slipper man å programmere metoder for å oppbevare og endre tekst to ganger.
+Et grensesnitt implementeres i VimCommandList for å kunne iterere gjennom klassen.
+Lambdauttrykk og Stream benyttes i VimCommandList.
+Dette for å finne siste element i kommandolisten.
 
 ## 2: Hvilke deler av pensum er ikke dekket i prosjektet?
 Den eneste gangen vi har implementert et grensesnitt er i klassen VimCommandList der vi implementerer Iterable.
