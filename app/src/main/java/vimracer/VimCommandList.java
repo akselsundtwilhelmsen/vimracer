@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 
 import javafx.scene.Cursor;
 
-public class VimCommandList implements Iterator {
+public class VimCommandList implements Iterable {
 
     private ArrayList<Object> commands;
     private String keyPresses;
@@ -97,15 +97,6 @@ public class VimCommandList implements Iterator {
     public void clear() {
         index = -1;
         commands.clear();;
-    }
-
-    public boolean hasNext() {
-        return (commands.size() > index + 1);
-    }
-
-    public Object next() {
-        index++;
-        return (commands.get(index));
     }
 
     public void remove(int index) {
@@ -245,8 +236,8 @@ public class VimCommandList implements Iterator {
             } 
         }
 
-        //is linewise
-        if (VerticalMovementKeys.indexOf(key) != -1) {
+        //is linewisej
+        if (VerticalMovementKeys.indexOf(key) != -1  || key.equals("line")) {
             newPos[3] = 1;
         } else {
             newPos[3] = 0;
@@ -260,7 +251,11 @@ public class VimCommandList implements Iterator {
         generateMovement(key, false);
     }
 
-
+    private String getLastCommand() {
+        if (size() == 0) return null;
+        if (! (commands.get(commands.size()-1) instanceof String)) return null;
+        return (String) commands.get(commands.size()-1);
+    }
 
     private void generateInsertCommand(String key) {
         commands.add("insert");
@@ -288,9 +283,13 @@ public class VimCommandList implements Iterator {
     }
 
     private void generateOperationCommand(String key) {
-        // String lastCommand = getLastCommand();
+        String lastCommand = getLastCommand();
         switch (key) {
             case "d":
+                if ("deleteMotion".equals(lastCommand)) {
+                    generateMovement("line");
+                    break;
+                } 
                 commands.add("deleteMotion");
                 break;
             case "D":
@@ -298,6 +297,10 @@ public class VimCommandList implements Iterator {
                 generateMovement("$");
                 break;
             case "c":
+                if ("change".equals(lastCommand)) {
+                    generateMovement("line");
+                    break;
+                } 
                 commands.add("change");
                 break;
             case "C": //TODO: hvorfor funker ikke+
@@ -341,5 +344,9 @@ public class VimCommandList implements Iterator {
             outString = outString + ", ";
         }
         return outString.substring(0,outString.length()-2) + "]";
+    }
+
+    public Iterator iterator() {
+        return commands.iterator();
     }
 }

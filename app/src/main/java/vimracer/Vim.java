@@ -12,10 +12,14 @@ import javafx.scene.input.KeyEvent;
 
 // TODO utenom prog, tester, dokumentasjon
 
+
 public class Vim extends TextWindow {
     private int[] cursor; //has [col, row, prefcol, linewise(1) or not(0)]
     private char mode; // must be n(ormal), v(isual), or i(nsert) ((visual) l(ine), (visual) b(lock), or r(eplace)?)
     private boolean shiftHeld;
+
+    private String yankedString;
+    private String insertedString;
 
     private VimCommandList commands; 
 
@@ -47,6 +51,7 @@ public class Vim extends TextWindow {
         if (keyString.equals("ESCAPE")) {
             mode = 'n';
             cursor = forceValidPos(cursor);
+            System.out.println(insertedString);
             return;
         }
         
@@ -63,10 +68,17 @@ public class Vim extends TextWindow {
 
         
         if (mode == 'i') {
-            if (keyString.equals("BACK_SPACE")) backspace();
-            else if (keyString.equals("ENTER")) enter();
-            else {
+            if (keyString.equals("BACK_SPACE")) {
+                backspace();
+                if (insertedString.length() > 0) { //TODO: insertedstring bør også kunne være negativ (3 * \b foreks)
+                    insertedString = insertedString.substring(0, insertedString.length()-1);
+                }
+            } else if (keyString.equals("ENTER")) {
+                enter();
+                insertedString = insertedString + "\n";
+            } else {
                 insertString(keyString,cursor);
+                insertedString = insertedString + keyString;
             }
             return;
         }
@@ -74,17 +86,20 @@ public class Vim extends TextWindow {
         commands.buildCommandList(keyString);
 
         System.out.format("\ncommandlist = " + commands.toString());
+        // System.out.format(", %b", commands.isCommandListExecutable());
         if (commands.isCommandListExecutable()) {
             executeCommandList();
         }
+
+        // if (!commands.willCommandListExecutable()) {
+        //     commands.clear();
+        // }
     }
 
     private void executeCommandList() { 
         int index = 0;
         int[] movement;
-        Object command;
-        while (commands.hasNext()) {
-            command = commands.next();
+        for (Object command : commands) {
             if (command instanceof Integer) continue;
             if (command instanceof int[]) {
                 cursor = forceValidPos((int[]) command);
@@ -145,6 +160,7 @@ public class Vim extends TextWindow {
                     // }
                     break;
             }
+            index++;
         }
         commands.clear();
     }
@@ -260,6 +276,11 @@ public class Vim extends TextWindow {
     }
 
     public int[] forceValidPos(int[] pos) {
+        if (lines.size() == 0) {
+            pos[0] = 0;
+            pos[1] = 0;
+            return pos;
+        }
         pos[1] = Math.max(0, Math.min(size()-1, pos[1]));
         int insertModeAppend = (mode == 'i') ? 1 : 0;
         pos[0] = Math.max(0, Math.min(getLineLength(pos[1]) - 1 + insertModeAppend, pos[0]));
