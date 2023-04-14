@@ -18,8 +18,9 @@ public class Vim extends TextWindow {
     private char mode; // must be n(ormal), v(isual), or i(nsert) ((visual) l(ine), (visual) b(lock), or r(eplace)?)
     private boolean shiftHeld;
 
-    private String yankedString;
     private String insertedString;
+    private String yankedString;
+    private boolean yankedLine;
 
     private VimCommandList commands; 
 
@@ -85,21 +86,22 @@ public class Vim extends TextWindow {
 
         commands.buildCommandList(keyString);
 
-        System.out.format("\ncommandlist = " + commands.toString());
         // System.out.format(", %b", commands.isCommandListExecutable());
         if (commands.isCommandListExecutable()) {
             executeCommandList();
         }
 
-        // if (!commands.willCommandListExecutable()) {
-        //     commands.clear();
-        // }
+        if (!commands.willCommandListExecutable()) {
+            commands.clear();
+        }
+        System.out.format("\ncommandlist = " + commands.toString());
     }
 
     private void executeCommandList() { 
-        int index = 0;
+        int index = -1;
         int[] movement;
         for (Object command : commands) {
+            index++;
             if (command instanceof Integer) continue;
             if (command instanceof int[]) {
                 cursor = forceValidPos((int[]) command);
@@ -160,7 +162,6 @@ public class Vim extends TextWindow {
                     // }
                     break;
             }
-            index++;
         }
         commands.clear();
     }

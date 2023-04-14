@@ -94,6 +94,25 @@ public class VimCommandList implements Iterable {
         return (commands.size() > 0);
     }
 
+    public boolean willCommandListExecutable() {
+        int index = -1;
+        for (Object command : commands) {
+            index++;
+            if (command instanceof String) {
+                command = (String) command;
+                if (MovementOperationCommands.indexOf(command) != -1) {
+                    if (commands.size() <= index+1) {
+                        continue;
+                    }
+                    if (!(commands.get(index+1) instanceof int[])) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
     public void clear() {
         index = -1;
         commands.clear();;
@@ -330,6 +349,9 @@ public class VimCommandList implements Iterable {
     }
 
     public String toString() {
+        if (size() == 0) {
+            return "[]";
+        }
         String outString = "[";
         for (Object command : commands) {
             if (command instanceof String) {
