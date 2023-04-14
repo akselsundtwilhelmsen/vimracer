@@ -31,6 +31,10 @@ public class Vim extends TextWindow {
         this.mode = 'n';
         this.shiftHeld = false;
 
+        String insertedString = "";
+        String yankedString = "";
+        boolean yankedLine = false;
+
         this.commands = new VimCommandList(this);
     }
 
@@ -79,6 +83,7 @@ public class Vim extends TextWindow {
                 insertedString = insertedString + "\n";
             } else {
                 insertString(keyString,cursor);
+                cursor[0] += keyString.length();
                 insertedString = insertedString + keyString;
             }
             return;
@@ -133,6 +138,13 @@ public class Vim extends TextWindow {
                     if (smallerPosition(cursor, movement)) commands.remove(index + 1);
                     setMode('i');
                     break;                                                                                                            
+                case "put":
+                    if (yankedLine) {
+                        break;
+                    } else {
+                        insertString(yankedString, cursor);
+                    }
+                    break;
                 case "addIndent":
                     movement = (int[]) commands.get(index+1);
                     int start = cursor[1];
@@ -173,9 +185,20 @@ public class Vim extends TextWindow {
         }
     }
 
-    private void insertString(String s, int[] pos) {
-        lines.set(pos[1], lines.get(pos[1]).substring(0,pos[0]) + s + lines.get(pos[1]).substring(pos[0]));
-        pos[0] += s.length();
+    private void insertString(String string, int[] pos) {
+        String[] lineArray = string.split("\n");
+        String beforeInsert = lines.get(pos[1]).substring(0, pos[0]);
+        String afterInsert = lines.get(pos[1]).substring(pos[0]);
+
+        lines.set(pos[1], beforeInsert + lineArray[0]);
+
+        int lastLine = pos[1] + lineArray.length - 1;
+        
+        for (int line=pos[1]; line < lastLine; line++) {
+            insertLine(line);
+            lines.set(line, lineArray[line-pos[1]]);
+        }
+        lines.set(lastLine, lines.get(lastLine) + afterInsert);
     }
 
     private void removeBetween(int[] pos1, int[] pos2) {
@@ -187,7 +210,7 @@ public class Vim extends TextWindow {
             pos2 = temp;
         }
 
-        yankedString = "";
+        yankedString = toStringBetween(pos1, pos2);
         yankedLine = linewise;
 
         if (linewise) {

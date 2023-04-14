@@ -19,14 +19,14 @@ public class VimCommandList implements Iterable {
     private final ArrayList<String> VerticalMovementKeys = new ArrayList<>(Arrays.asList("gg","{","}","k","j","G"));
     private final ArrayList<String> MovementKeys = new ArrayList<>(Arrays.asList("0","F","ge","b","h","l","e","E","w","W","t","f","$","|"));
     private final ArrayList<String> InsertModeKeys = new ArrayList<>(Arrays.asList("i","I","a","A","o","O"));
-    private final ArrayList<String> OperatorKeys = new ArrayList<>(Arrays.asList("d","D","y","Y","c","C",">","<","x","X","J"));
+    private final ArrayList<String> OperatorKeys = new ArrayList<>(Arrays.asList("d","D","y","Y","c","C","p","P",">","<","x","X","J"));
     private final ArrayList<String> Keys;
 
     private final ArrayList<String> OperatorFollowKeys = new ArrayList<>(Arrays.asList("i","a"));
     private final ArrayList<String> TextObjectFollowKeys = new ArrayList<>(Arrays.asList("w","p"));
 
     private final ArrayList<String> MovementOperationCommands = new ArrayList<>(Arrays.asList("deleteMotion","change","addIndent","removeIndent"));
-    private final ArrayList<String> StationaryOperationCommnads = new ArrayList<>(Arrays.asList("joinLines"));
+    private final ArrayList<String> StationaryOperationCommnads = new ArrayList<>(Arrays.asList("joinLines","put"));
     
     //regexes
     static final Pattern wordBeginning = Pattern.compile("([\\w\\s][^\\w\\s])|(\\W\\w)");
@@ -101,10 +101,15 @@ public class VimCommandList implements Iterable {
             if (command instanceof String) {
                 command = (String) command;
                 if (MovementOperationCommands.indexOf(command) != -1) {
-                    if (commands.size() <= index+1) {
+                    if (size() <= index+1) {
                         continue;
                     }
-                    if (!(commands.get(index+1) instanceof int[])) {
+
+                    if (size() <= index+2 && (get(index+1) instanceof Integer)) {
+                        continue;
+                    }
+
+                    if (!(get(index+1) instanceof int[])) {
                         return false;
                     }
                 }
@@ -262,7 +267,6 @@ public class VimCommandList implements Iterable {
             newPos[3] = 0;
         }
 
-        System.out.format(", movement: %d,%d",newPos[0],newPos[1]);
         commands.add(newPos);
     }
 
@@ -326,6 +330,9 @@ public class VimCommandList implements Iterable {
                 commands.add("change");
                 generateMovement("$");
                 generateMovement("l",true);
+                break;
+            case "p":
+                commands.add("put");
                 break;
             case "x":
                 commands.add("deleteMotion");

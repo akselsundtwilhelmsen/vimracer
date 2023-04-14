@@ -27,7 +27,7 @@ public class VimTest {
 
 	@Test
 	@DisplayName("Test toStringBetween")
-	public void testCapacity() {
+	public void testtoStringBetween() {
         int[] from = {5,0,0,0};
         int[] to = {11,0,0,0};
         Assertions.assertEquals(vim.toStringBetween(from, to),"linjer");
@@ -36,6 +36,7 @@ public class VimTest {
         Assertions.assertEquals(vim.toStringBetween(from, to),"linjer\nen ener\nto");
         to[3] = 1;
         Assertions.assertEquals(vim.toStringBetween(from, to),"null linjer\nen ener\nto");
-
+        to[1] = 0;
+        Assertions.assertEquals(vim.toStringBetween(from, to),"null linjer");
 	}
 }
