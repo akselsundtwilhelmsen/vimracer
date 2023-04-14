@@ -140,7 +140,7 @@ public class VimCommandList implements Iterable {
         return (int) commands.get(commands.size()-1);
     }
 
-    //last movement in command list, returns cursor position if non found
+    //last movement in command list, returns cursor position if none found
     private int[] getLastMovement() {
         Stream<Object> commandStream = commands.stream();
         commandStream = Stream.concat(Stream.of(vim.getCursor()), commandStream);

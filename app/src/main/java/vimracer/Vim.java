@@ -187,6 +187,9 @@ public class Vim extends TextWindow {
             pos2 = temp;
         }
 
+        yankedString = "";
+        yankedLine = linewise;
+
         if (linewise) {
             //Remove all lines between and including pos1 and pos2
             for (int i = pos1[1]; i <= pos2[1]; i++) {
@@ -208,6 +211,33 @@ public class Vim extends TextWindow {
         }
     }
 
+    public String toStringBetween(int[] pos1, int[] pos2) {
+        String outString = "";
+        boolean linewise = pos2[3] == 1;
+
+        if (smallerPosition(pos2, pos1)) {
+            int[] temp = pos1;
+            pos1 = pos2;
+            pos2 = temp;
+        }
+
+        if (linewise) {
+            outString = lines.stream()
+                .limit(pos2[1]).skip(pos1[1])
+                .collect(Collectors.joining("\n"));
+        } else {
+            if (pos1[1] == pos2[1]) {
+                outString = lines.get(pos1[1]).substring(pos1[0], pos2[0]);
+            } else {
+                outString = lines.get(pos1[1]).substring(pos1[0]) + "\n";
+                outString = outString + lines.stream()
+                    .limit(pos2[1]+1).skip(pos1[1]-1)
+                    .collect(Collectors.joining("\n"));
+                outString = outString + "\n" + lines.get(pos2[1]).substring(pos2[0]);
+            }
+        }
+        return outString;
+    }
 
     private void removeUnderCursor() {
         if (lines.get(cursor[1]).length() == 0) return;
@@ -229,6 +259,7 @@ public class Vim extends TextWindow {
         cursor[1]++;
         cursor[0] = 0;
     }
+
 
     private void insertLine(int lineNumber) {
         if (0 > lineNumber || lineNumber > size()) throw new IllegalArgumentException();
@@ -355,20 +386,4 @@ public class Vim extends TextWindow {
     public String toString(int lineLength) {
         return toString(lineLength, cursor);
     }
-
-    // public static void main(String[] args) {
-    //     Vim vim = new Vim();
-    //     ArrayList<String> vimtext = new ArrayList<>();
-    //     vimtext.add("null linjer");
-    //     vimtext.add("en ener");
-    //     vimtext.add("to");
-    //     vimtext.add("tre");
-    //     vimtext.add("");
-    //     vimtext.add("fem");
-    //     vimtext.add("seks");
-    //     vim.setText(vimtext);
-    //     int[] pos1 = {0,4};
-    //     int[] pos2 = {5,0};
-    //     System.out.println(vim.smallerPosition(pos1, pos2));
-    // }
 }
