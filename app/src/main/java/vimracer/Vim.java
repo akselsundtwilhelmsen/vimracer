@@ -168,6 +168,7 @@ public class Vim extends TextWindow {
                     break;                                                                                                            
                 case "yank":
                     movement = (int[]) commands.get(index+1);
+                    commands.remove(index+1);
                     yankedString = toStringBetween(cursor, movement);
                     yankedLine = movement[3] == 1;
                     break;
