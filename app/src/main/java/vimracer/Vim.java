@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.regex.*;
 import java.util.stream.Collectors;
 
+import javafx.scene.control.CustomMenuItem;
 import javafx.scene.input.KeyEvent;
 
 // TODO: må:  bedre kommandovalidering, tall!
@@ -46,6 +47,7 @@ public class Vim extends TextWindow {
 
     public void keyPress(KeyEvent event) {
         String keyString = event.getCode().toString();
+        if (keyString.equals("UNDEFINED")) return;
 
         // behandler input, TODO: bør kanskje finne ut om dette kan gjøres automatisk
         if (keyString.equals("SHIFT")) {
@@ -61,14 +63,40 @@ public class Vim extends TextWindow {
         }
         
         if (keyString.equals("SPACE")) keyString = " ";
+        if (keyString.equals("PERIOD")) keyString = ".";
+        if (keyString.equals("COMMA")) keyString = ",";
+        if (keyString.equals("MINUS")) keyString = "-";
+        if (keyString.equals("PLUS")) keyString = "+";
+        if (keyString.equals("LESS")) keyString = "<";
+        if (keyString.equals("QUOTE")) keyString = "'";
+        if (keyString.equals("BACK_SLASH")) keyString = "\\";
 
         if (keyString.startsWith("DIGIT"))  {
             keyString = keyString.substring(5);
             if (keyString.equals("4")) keyString = "$"; //midlertidig
         }
 
-        if (!shiftHeld && keyString.length() == 1) {
-            keyString = keyString.toLowerCase();
+        if (keyString.length() == 1) {
+            if (shiftHeld) {
+                if (keyString.equals("1")) keyString = "!";
+                if (keyString.equals("2")) keyString = "\"";
+                if (keyString.equals("3")) keyString = "#";
+                if (keyString.equals("4")) keyString = "$"; //dont think too hard about it
+                if (keyString.equals("5")) keyString = "&";
+                if (keyString.equals("7")) keyString = "/";
+                if (keyString.equals("8")) keyString = "(";
+                if (keyString.equals("9")) keyString = ")";
+                if (keyString.equals("0")) keyString = "=";
+                if (keyString.equals("+")) keyString = "?";
+                if (keyString.equals(",")) keyString = ";";
+                if (keyString.equals(".")) keyString = ":";
+                if (keyString.equals("-")) keyString = "_";
+                if (keyString.equals("<")) keyString = ">";
+                if (keyString.equals("'")) keyString = "*";
+                if (keyString.equals("\\")) keyString = "`";
+            } else {
+                keyString = keyString.toLowerCase();
+            }
         }
 
         
@@ -138,12 +166,21 @@ public class Vim extends TextWindow {
                     if (smallerPosition(cursor, movement)) commands.remove(index + 1);
                     setMode('i');
                     break;                                                                                                            
+                case "yank":
+                    movement = (int[]) commands.get(index+1);
+                    yankedString = toStringBetween(cursor, movement);
+                    yankedLine = movement[3] == 1;
+                    break;
                 case "put":
                     if (yankedLine) {
-                        break;
+                        cursor[1]++;
+                        cursor[0] = cursor[2] = 0;
+                        insertLine(cursor[1]);
+                        insertString(yankedString, cursor);
                     } else {
                         insertString(yankedString, cursor);
                     }
+                    System.out.format(", " + yankedString);
                     break;
                 case "addIndent":
                     movement = (int[]) commands.get(index+1);
@@ -190,15 +227,25 @@ public class Vim extends TextWindow {
         String beforeInsert = lines.get(pos[1]).substring(0, pos[0]);
         String afterInsert = lines.get(pos[1]).substring(pos[0]);
 
+        // System.out.println(beforeInsert);
+        // System.out.println(afterInsert);
+
         lines.set(pos[1], beforeInsert + lineArray[0]);
 
+        // System.out.println(lines.get(pos[1]));
+
         int lastLine = pos[1] + lineArray.length - 1;
+
+        // System.out.println(lastLine);
         
-        for (int line=pos[1]; line < lastLine; line++) {
+        for (int line=pos[1]+1; line < lastLine; line++) {
             insertLine(line);
             lines.set(line, lineArray[line-pos[1]]);
+            // System.out.println(line + ": " + lineArray[line-pos[1]]);
         }
         lines.set(lastLine, lines.get(lastLine) + afterInsert);
+
+        // System.out.println(lines.get(lastLine));
     }
 
     private void removeBetween(int[] pos1, int[] pos2) {
@@ -226,9 +273,14 @@ public class Vim extends TextWindow {
                 lines.set(pos1[1], lines.get(pos1[1]).substring(0, pos1[0]));
                 lines.set(pos2[1], lines.get(pos2[1]).substring(pos2[0]));
 
+                //join lines if pos2 not on first column
+                if (!(pos2[0] == 0)) {
+                    joinLines(pos1[1], pos2[1]);
+                }
+
                 //Remove all lines between pos1 and pos2
                 for (int i = pos1[1]+1; i < pos2[1]; i++) {
-                    removeLine(pos1[1]);
+                    removeLine(pos1[1]+1);
                 }
             }
         }
@@ -350,7 +402,10 @@ public class Vim extends TextWindow {
     public int[] nextInstanceOf(Pattern regex, int[] from, boolean endOfRegex) {
         int[] newPos = from.clone();
         //convert String-array to string whith linebreaks starting from from
-        String restOfText = lines.get(from[1]).substring(from[0]+1);
+        String restOfText = "";
+        if (lines.get(from[1]).length() > 0) {
+            restOfText = lines.get(from[1]).substring(from[0]+1);
+        }
         restOfText = restOfText + "\n" + lines.stream().skip(from[1]+1).collect(Collectors.joining("\n")); 
         //find match of regex
         Matcher matcher = regex.matcher(restOfText);

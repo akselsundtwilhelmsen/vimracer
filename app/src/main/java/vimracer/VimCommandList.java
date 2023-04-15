@@ -25,7 +25,7 @@ public class VimCommandList implements Iterable {
     private final ArrayList<String> OperatorFollowKeys = new ArrayList<>(Arrays.asList("i","a"));
     private final ArrayList<String> TextObjectFollowKeys = new ArrayList<>(Arrays.asList("w","p"));
 
-    private final ArrayList<String> MovementOperationCommands = new ArrayList<>(Arrays.asList("deleteMotion","change","addIndent","removeIndent"));
+    private final ArrayList<String> MovementOperationCommands = new ArrayList<>(Arrays.asList("deleteMotion","change","yank","addIndent","removeIndent"));
     private final ArrayList<String> StationaryOperationCommnads = new ArrayList<>(Arrays.asList("joinLines","put"));
     
     //regexes
@@ -330,6 +330,17 @@ public class VimCommandList implements Iterable {
                 commands.add("change");
                 generateMovement("$");
                 generateMovement("l",true);
+                break;
+            case "y":
+                if ("yank".equals(lastCommand)) {
+                    generateMovement("line");
+                    break;
+                } 
+                commands.add("yank");
+                break;
+            case "Y":
+                commands.add("yank");
+                generateMovement("line");
                 break;
             case "p":
                 commands.add("put");
