@@ -51,7 +51,6 @@ public class Controller implements Initializable {
         nameInput = new NameInput(this);
 
         populateUI();
-        // nameInputPane.requestFocus(); // TODO: dette funker ikke her
 
         final Controller c = this; // Oskar & Mathias hack
         Timeline updateStopwatch = new Timeline(new KeyFrame(Duration.seconds(1/60f), new EventHandler<ActionEvent>() {
@@ -62,6 +61,8 @@ public class Controller implements Initializable {
         }));
         updateStopwatch.setCycleCount(Timeline.INDEFINITE);
         updateStopwatch.play();
+
+        nameInputPane.requestFocus(); // TODO: dette funker ikke her
     }
 
     @FXML
@@ -204,11 +205,14 @@ public class Controller implements Initializable {
 
             if (lineNumber.equals(cursor[1]+1)) {
                 int overflowPaddingOffset = 0; // to account for the leading spaces after a linebreak
-                if (cursor[0] >= maxLineLength) {
-                    overflowPaddingOffset = 5;
-                }
+                overflowPaddingOffset = 5*(cursor[0]/maxLineLength);
+                // System.out.println("-------------------------------");
+                // System.out.println(cursor[0]);
+                // System.out.println(cursor[0]/maxLineLength);
+                // System.out.println(overflowPaddingOffset);
 
                 // before cursor
+                System.out.println("beforeTo: " + (cursor[0]+offset+overflowPaddingOffset));
                 Text beforeCursor = new Text(outString.substring(0, cursor[0]+offset+overflowPaddingOffset));
                 beforeCursor.setFill(comparisonColor);
                 beforeCursor.setFont(Font.font("Ubuntu mono", FontWeight.NORMAL, 13.0));
@@ -232,7 +236,6 @@ public class Controller implements Initializable {
                 afterCursor.setFill(comparisonColor);
                 afterCursor.setFont(Font.font("Ubuntu mono", FontWeight.NORMAL, 13.0));
                 vimText.getChildren().add(afterCursor);
-
             }
             else {
                 Text lineText = new Text(outString);

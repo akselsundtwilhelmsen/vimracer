@@ -69,7 +69,8 @@ public class TextLoader {
     }
 
     public void scrambleCurrentPrompt() {
-        scrambleByWord(100); // TODO: skal denne scramble fra fil eller fra lines??
+        scrambleByWord(30);
+        scrambleByLine(30);
         writeScramble();
     }
 
@@ -165,10 +166,30 @@ public class TextLoader {
         }
     }
 
-    private boolean impactCalculator(int impactPercentage) {
-        Random random = new Random();
-        if (impactPercentage <= 0 || impactPercentage > 100) return false;
-        return random.nextInt(101/impactPercentage) == 0;
+    private void scrambleByLine(int impactPercentage) {
+        for (int i=0; i < lines.size(); i++) {
+            if (impactCalculator(impactPercentage)) {
+                Random random = new Random();
+                switch (random.nextInt(2)) {
+                    case 0:
+                        swapLines(i);
+                        break;
+                    case 1:
+                        addLine(i+1);
+                        break;
+                }
+            }
+        }
+    }
+
+    private void swapLines(int index) {
+        if (index > 0) {
+            newLines.add(index, newLines.remove(index-1)); // swap place in scores
+        }
+    }
+
+    private void addLine(int index) {
+        newLines.add(index, "");
     }
 
     private String delete(String word) {
@@ -176,7 +197,8 @@ public class TextLoader {
     }
 
     private String insert(String word) {
-        return "inserted" + " " + word;
+        // return "inserted" + " " + word;
+        return word;
     }
 
     private String changeLetters(String word, int impactPercentage) {
@@ -205,6 +227,12 @@ public class TextLoader {
         return outString;
     }
 
+    private boolean impactCalculator(int impactPercentage) {
+        Random random = new Random();
+        if (impactPercentage <= 0 || impactPercentage > 100) return false;
+        return random.nextInt(100/impactPercentage) == 0;
+    }
+
     public ArrayList<String> getText() {
         return lines;
     }
@@ -227,5 +255,6 @@ public class TextLoader {
     public static void main(String[] args) {
         TextLoader t = new TextLoader();
         t.scrambleCurrentPrompt();
+        System.out.println(t.getScrambledText());
     }
 }
