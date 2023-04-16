@@ -25,10 +25,10 @@ public class VimCommandList implements Iterable {
     private final ArrayList<String> StationaryOperationCommnads = new ArrayList<>(Arrays.asList("joinLines","put"));
     
     //regexes
-    static final Pattern wordBeginning = Pattern.compile("([\\w\\s][^\\w\\s])|(\\W\\w)");
-    static final Pattern WORDBeginning = Pattern.compile("(\\s.)");
-    static final Pattern wordEnd = Pattern.compile("([^\\w\\s][\\w\\s])|(\\w\\W)|[^\\s]$");
-    static final Pattern WORDEnd = Pattern.compile("(.\\s)|[^\\s]$");
+    public static final Pattern wordBeginning = Pattern.compile("([\\w\\s][^\\w\\s])|(\\W\\w)");
+    public static final Pattern WORDBeginning = Pattern.compile("(\\s.)");
+    public static final Pattern wordEnd = Pattern.compile("([^\\w\\s][\\w\\s])|(\\w\\W)|[^\\s]$");
+    public static final Pattern WORDEnd = Pattern.compile("(.\\s)|[^\\s]$");
 
     //other constants
     static final int MAX_NUMBER = 1000000;
@@ -275,6 +275,7 @@ public class VimCommandList implements Iterable {
     }
 
     private void generateInsertCommand(String key) {
+        int lineNumber = getLastMovement()[1];
         switch (key) {
             case "i":
                 break;
@@ -282,11 +283,15 @@ public class VimCommandList implements Iterable {
                 generateMovement("0");
                 break;
             case "a":
-                generateMovement("l", true);
+                if (!(vim.getLineLength(lineNumber) == 0)) {
+                    generateMovement("l", true);
+                }
                 break;
             case "A":
                 generateMovement("$");
-                generateMovement("l", true);
+                if (!(vim.getLineLength(lineNumber) == 0)) {
+                    generateMovement("l", true);
+                }
                 break;
             case "o":
                 generateMovement("j", true);

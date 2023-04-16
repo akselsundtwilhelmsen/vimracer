@@ -39,4 +39,13 @@ public class VimTest {
         to[1] = 0;
         Assertions.assertEquals(vim.toStringBetween(from, to),"null linjer");
 	}
+
+	// @Test
+	// @DisplayName("Test next regex")
+	// public void testNextInstanceOf() {
+    //     int[] from = {0,0,0,0};
+    //     int[] correctPos = {3,0,0,0};
+    //     Assertions.assertEquals(.wordEnd, correctPos);;
+	// }
+
 }

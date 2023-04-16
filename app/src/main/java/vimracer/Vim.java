@@ -47,7 +47,6 @@ public class Vim extends TextWindow {
         if (keyString.equals("ESCAPE")) {
             mode = 'n';
             cursor = forceValidPos(cursor);
-            System.out.println(insertedString);
             return;
         }
         
@@ -319,7 +318,10 @@ public class Vim extends TextWindow {
 
     private void insertLine(int lineNumber) {
         if (0 > lineNumber || lineNumber > size()) throw new IllegalArgumentException();
-        if (lineNumber == size()) lines.add("");
+        if (lineNumber == size()) {
+            lines.add("");
+            return;
+        }
         lines.add(lineNumber, "");
     }
 
