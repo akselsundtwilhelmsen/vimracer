@@ -1,5 +1,5 @@
 # Del 1: Beskrivelse av appen
-Vi har laget en applikasjon der målet er å redigere en tekst etter en fasit.
+Vimracer er en applikasjon der målet er å redigere en tekst etter en fasit.
 Dette gjøres ved hjelp av vim-kommandoer.
 Brukeren ser to tekstbokser der den ene er en fasittekst og den andre er en litt endret versjon av denne teksten.
 Til høyre er et panel med knapper som starter og avslutter en runde, knapper som bytter fasittekst, en tekstboks til å skrive inn navn, en poengtavle, en tastetrykksteller, og en stoppeklokke.
