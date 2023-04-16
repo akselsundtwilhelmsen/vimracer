@@ -69,7 +69,7 @@ public class TextLoader {
     }
 
     public void scrambleCurrentPrompt() {
-        scrambleByWord(30);
+        scrambleByWord(15);
         scrambleByLine(30);
         writeScramble();
     }

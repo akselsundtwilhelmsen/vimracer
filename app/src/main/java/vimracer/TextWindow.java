@@ -20,15 +20,15 @@ public class TextWindow {
         this.lines.add(text);
     }
 
-    public String toString() { // without line numbers
-        return lines.stream().collect(Collectors.joining("\n"));
-    }
-
     public ArrayList<String> getArray() {
         return lines;
     }
 
-    public String toString(int maxLineLength, int[] highlightPos) { // TODO: deprecated
+    public String toString() {
+        return lines.stream().collect(Collectors.joining("\n"));
+    }
+
+    public String toString(int maxLineLength, int[] highlightPos) { // deprecated, only used to the solution window
         final int padding = 2;
         maxLineLength -= padding + 2; // to account for line number and padding
 
@@ -47,20 +47,6 @@ public class TextWindow {
             String paddingStringOverflow = " "; // amount of padding needed after line overflow
             for (int i=0; i < padding; i++) {
                 paddingStringOverflow += " ";
-            }
-
-            if (highlightPos != null) { // TODO: gjør skikkelig
-                if (highlightPos[1] == lineNumber-1) {
-                    if (line == "") {
-                        line = "█";
-                    } else {
-                        String newLine = line.substring(0, highlightPos[0]) + "█";
-                        if (line.length() > highlightPos[0]+1) {
-                            newLine = newLine + line.substring(highlightPos[0]+1);
-                        }
-                        line = newLine;
-                    }
-                }
             }
 
             if (line.length() < maxLineLength) {
@@ -87,8 +73,4 @@ public class TextWindow {
     public String toString(int maxLineLength) { 
         return toString(maxLineLength, null);
     }
-
-    // public boolean equals(TextWindow t) {
-    //     return this.toString().equals(t.toString());
-    // }
 }
