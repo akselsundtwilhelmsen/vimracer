@@ -126,7 +126,7 @@ public class Vim extends TextWindow {
             index++;
             if (command instanceof Integer) continue;
             if (command instanceof int[]) {
-                cursor = forceValidPos((int[]) command);
+                cursor = (int[]) command;
                 continue;
             }
             switch ((String) command) {
