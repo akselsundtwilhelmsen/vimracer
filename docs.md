@@ -9,23 +9,46 @@ Når brukeren har redigert teksten slik at den tilsvarer fasitteksten vil navn, 
 Poenget med spillet er å redigere teksten enten så fort som mulig, eller ved hjelp av så få tastetrykk som mulig.
 
 # Del 2: Diagram
-TODO
+
+Sentralt i appen er hvordan tekstvinduene og tekstredigering fungerer.
+Begge tekstvinduene er instanser av textwindow klassen TextWindow.
+Denne klassen lagrer en teksten som en array med strenger.
+Vim-klassen arver fra denne og tilbyr metoder for tastaturinndata, og tekstredigering med vim-kommandoer.
+Disse kommandoene kan kombineres på mange måter, så vi fant ut at det var hensiktsmessig å konvertere tataturinndataen til en liste med kommandoer som er lettere å håndtere.
+Vim deligerer ansvaret for å holde styr på denne listen til VimCommandList.
+Denne klassen har en liste med kommandoer, og metoder for å "bygge" denne listen fra tastaturinndata, og hvorvidt listen er en gyldig kombinasjon av kommandoer.
+Klassen implenterer også grensesnittet Iterable for at vim lettere skal kunne iterere gjennom kommandoene når de utføres.
+Samhandlingen mellom disse klassene er vist i dagrammet under.
+
+![klassediagram for text window, vim, og vim command list](klassediagram.png "Klassediagram")
+
 
 # Del 3: Spørsmål
 ## 1: Hvilke deler av pensum er dekket i prosjektet?
-I programmet er det flere eksempel på delegering.
+Det er det flere eksempel på delegering.
 Vim delegerer ansvaret for å konvertere tastetrykk til utførbare kommandoer til VimCommandList.
 Game delegerer stoppeklokke og tastetrykksteller til henholdsvis Stopwatch og KeypressCounter.
-Vi også har dekket arv.
+
+Vi har også dekket arv og grensesnitt.
 Vim.java arver fra TextWindow.java.
 På denne måten slipper man å programmere metoder for å oppbevare og endre tekst to ganger.
-Et grensesnitt implementeres i VimCommandList for å kunne iterere gjennom klassen.
+Grensesnittet Iterable implementeres av VimCommandList for å lettere kunne iterere gjennom klassen.
+
 Lambdauttrykk og Stream benyttes i VimCommandList.
 Dette for å finne siste element i kommandolisten.
 
+Vi dekker også deler av pensum utenfor selve programmet.
+Egendefinerte JUnit tester validerer viktige funksjoner i programmet.
+Det er også laget et klassedigramm som viser sammenhengen mellom klassene i kjernen av programmet.
+
+
 ## 2: Hvilke deler av pensum er ikke dekket i prosjektet?
-Den eneste gangen vi har implementert et grensesnitt er i klassen VimCommandList der vi implementerer Iterable.
-Vi har aldri implementert et egendefinert grensesnitt, som er en del av pensum.
+Appen dekker altså de fleste temaene fra pensum, men den nytter likevel ikke alt som er mulig innen disse temaene.
+Vi implementerer kun ett av grensesnittene fra pensum, og har heller ingen egendefinerte grensesnitt.
+Appen har heller ingen eksempler på abstrakte klasser eller metoder. 
+Flere typer assosiasjoner, som 1-n og n-n er ikke i appen.
+
+
 
 ## 3: Hvordan forholder koden seg til MVC-prinsippet?
 Visningsdelen vår er stort sett i add.fxml-filen.
@@ -36,10 +59,12 @@ Dette gjøres for å kunne fargelegge forskjellige individuelle deler av teksten
 Det hadde selvfølgelig vært mulig å flytte til modelldelen av programmet men ettersom den jobber med fxml-objekter er det praktisk å ha den i kontrolleren.
 
 ## 4: Hvordan har dere gått frem for å teste programmet?
-Vi har testet programmet både ved hjelp av main-metoder i individuelle klasser, og ved å kjøre programmet.
-Hvis en en metode skulle testes, ble det ofte gjort ved å interragere med metoden slik som en bruker ville gjort.
+Vi har testet programmet både ved å kjøre programmet, main metoder i klassene, og JUnit tester.
+Under utvikling ble metoder i stor grad testet ved å kjøre programmet. 
+Dette er hensiktsmessig med 
 Det vil si at vi testet ved å bruke den som den ville blitt brukt i programmet.
 Vi har brukt både debugger og System.out.println(); for å holde styr på verdier gjennom programmets kjøring.
+Viktige metoder med mange hjørnetilfeller utviklet vi JUnit tester for, for å være mer sikre på at de kjører som de skal.
 
 ### Referanser
 [1]: [Model-View-Controller. *Wikipedia*.](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93controller)
