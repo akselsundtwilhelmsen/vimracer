@@ -118,11 +118,13 @@ public class Leaderboard {
     public String toString() {
         String outString = "";
         int counter = 0; // to stop the loop before overflowing the textbox
-        for (String[] line: scores) {
-            outString += line[0]+"\n"+line[1]+"\n"+formatTime(line[2])+"\n\n";
-            counter += 1;
-            if (counter >= 8) {
-                break;
+        if (scores != null) {
+            for (String[] line: scores) {
+                outString += line[0]+"\n"+line[1]+"\n"+formatTime(line[2])+"\n\n";
+                counter += 1;
+                if (counter >= 8) {
+                    break;
+                }
             }
         }
         return outString;
