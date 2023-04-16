@@ -140,18 +140,15 @@ public class TextLoader {
                 if (impactCalculator(impactPercentage)) {
                     String alteredWord = "";
                     Random random = new Random();
-                    switch (random.nextInt(4)) {
+                    switch (random.nextInt(3)) {
                         case 0:
-                            alteredWord = delete(word);
+                            alteredWord = removeLetters(word, 10);
                             break;
                         case 1:
                             alteredWord = insert(word);
                             break;
                         case 2:
                             alteredWord = changeLetters(word, 10);
-                            break;
-                        case 3:
-                            alteredWord = removeLetters(word, 10);
                             break;
                     }
                     newLine += alteredWord + " ";
@@ -192,10 +189,6 @@ public class TextLoader {
         newLines.add(index, "");
     }
 
-    private String delete(String word) {
-        return "";
-    }
-
     private String insert(String word) {
         // return "inserted" + " " + word;
         return word;
@@ -218,7 +211,6 @@ public class TextLoader {
 
     private String removeLetters(String word, int impactPercentage) {
         String outString = "";
-        Random random = new Random();
         for (int i = 0; i < word.length(); i++) {
             if (impactCalculator(impactPercentage)) {
                 outString += word.substring(i, i+1);

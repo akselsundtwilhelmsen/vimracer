@@ -204,15 +204,9 @@ public class Controller implements Initializable {
             }
 
             if (lineNumber.equals(cursor[1]+1)) {
-                int overflowPaddingOffset = 0; // to account for the leading spaces after a linebreak
-                overflowPaddingOffset = 5*(cursor[0]/maxLineLength);
-                // System.out.println("-------------------------------");
-                // System.out.println(cursor[0]);
-                // System.out.println(cursor[0]/maxLineLength);
-                // System.out.println(overflowPaddingOffset);
+                int overflowPaddingOffset = 5*((cursor[0]-1)/maxLineLength); // to account for the leading spaces after a linebreak
 
                 // before cursor
-                System.out.println("beforeTo: " + (cursor[0]+offset+overflowPaddingOffset));
                 Text beforeCursor = new Text(outString.substring(0, cursor[0]+offset+overflowPaddingOffset));
                 beforeCursor.setFill(comparisonColor);
                 beforeCursor.setFont(Font.font("Ubuntu mono", FontWeight.NORMAL, 13.0));
