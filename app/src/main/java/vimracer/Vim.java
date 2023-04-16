@@ -1,18 +1,13 @@
 package vimracer;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.*;
 import java.util.stream.Collectors;
 
-import javafx.scene.control.CustomMenuItem;
 import javafx.scene.input.KeyEvent;
 
-// TODO: må:  bedre kommandovalidering, tall!
+// TODO: må: tall for kommandor (2p, 2dw), funker bare med motions nå
 // TODO: bør: Text-objects (dip, ciw, di[ osv), yank og put, flere bevegelser (lett nå med bra regex))
-
-// TODO utenom prog, tester, dokumentasjon
-
 
 public class Vim extends TextWindow {
     private int[] cursor; //has [col, row, prefcol, linewise(1) or not(0)]
@@ -32,18 +27,12 @@ public class Vim extends TextWindow {
         this.mode = 'n';
         this.shiftHeld = false;
 
-        String insertedString = "";
-        String yankedString = "";
-        boolean yankedLine = false;
+        insertedString = "";
+        yankedString = "";
+        yankedLine = false;
 
         this.commands = new VimCommandList(this);
     }
-
-
-    // Plan for normal (og viusal) mode
-    // få KeyEvent input
-    // fortløpende til en array med lett-håndterbare kommandoer
-    // når denne listen er utførbar vil den bli utført
 
     public void keyPress(KeyEvent event) {
         String keyString = event.getCode().toString();
@@ -228,25 +217,15 @@ public class Vim extends TextWindow {
         String beforeInsert = lines.get(pos[1]).substring(0, pos[0]);
         String afterInsert = lines.get(pos[1]).substring(pos[0]);
 
-        // System.out.println(beforeInsert);
-        // System.out.println(afterInsert);
-
         lines.set(pos[1], beforeInsert + lineArray[0]);
-
-        // System.out.println(lines.get(pos[1]));
 
         int lastLine = pos[1] + lineArray.length - 1;
 
-        // System.out.println(lastLine);
-        
         for (int line=pos[1]+1; line < lastLine; line++) {
             insertLine(line);
             lines.set(line, lineArray[line-pos[1]]);
-            // System.out.println(line + ": " + lineArray[line-pos[1]]);
         }
         lines.set(lastLine, lines.get(lastLine) + afterInsert);
-
-        // System.out.println(lines.get(lastLine));
     }
 
     private void removeBetween(int[] pos1, int[] pos2) {
@@ -359,13 +338,13 @@ public class Vim extends TextWindow {
         // insertString("    ", (int[]) Arrays.asList(0,lineNumber));
     }
 
-    private void removeIndent(int lineNumber) {
-        if (lines.get(lineNumber).startsWith("    ")) {
-            // removeBetween(cursor, cursor);
-        } else if (lines.get(lineNumber).startsWith("\t")) {
-            //remove
-        }
-    }
+    // private void removeIndent(int lineNumber) {
+    //     if (lines.get(lineNumber).startsWith("    ")) {
+    //         // removeBetween(cursor, cursor);
+    //     } else if (lines.get(lineNumber).startsWith("\t")) {
+    //         //remove
+    //     }
+    // }
 
     public void setMode(char mode) {
         if ("ni".indexOf(mode) == -1) throw new IllegalArgumentException();

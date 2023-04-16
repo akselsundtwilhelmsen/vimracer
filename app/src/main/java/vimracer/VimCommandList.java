@@ -2,18 +2,14 @@ package vimracer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
-
-import javafx.scene.Cursor;
 
 public class VimCommandList implements Iterable {
 
     private ArrayList<Object> commands;
     private String keyPresses;
-    private int index;
     private Vim vim;
 
     private final ArrayList<String> VerticalMovementKeys = new ArrayList<>(Arrays.asList("gg","{","}","k","j","G"));
@@ -40,7 +36,6 @@ public class VimCommandList implements Iterable {
     public VimCommandList(Vim vim) {
         this.commands = new ArrayList<>();
         this.keyPresses = "";
-        this.index = -1;
         this.vim = vim;
 
         this.MovementKeys.addAll(VerticalMovementKeys);
@@ -119,7 +114,6 @@ public class VimCommandList implements Iterable {
     }
 
     public void clear() {
-        index = -1;
         commands.clear();;
     }
 
