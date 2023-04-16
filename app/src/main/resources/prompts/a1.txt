@@ -1,3 +1,0 @@
-Som en del av øvingsopplegget i TDT4100 - Objektorientert Programmering inngår et større prosjekt der dere skal lage en fungerende app. 
-Dette dokumentet beskriver prosjektet, lister opp krav, frister, og generell informasjon som det er viktig å få med seg. 
-Vi anbefaler på det sterkeste å lese hele dette dokumentet før dere starter å jobbe med prosjektet.

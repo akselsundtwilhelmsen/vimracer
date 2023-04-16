@@ -22,15 +22,6 @@ import javafx.util.Duration;
 
 public class Controller implements Initializable {
 
-    TextWindow solution;
-    Vim vim;
-    public Stopwatch stopwatch;
-    KeypressCounter keypressCounter;
-    TextLoader textLoader;
-    Leaderboard leaderboard;
-    Game game;
-    NameInput nameInput;
-
     @FXML private Text solutionText;
     @FXML private TextFlow vimText;
     @FXML private Pane vimPane;
@@ -40,7 +31,17 @@ public class Controller implements Initializable {
     @FXML public Text leaderboardText;
     @FXML public Text nameInputText;
 
-    final int lineLength = 86;
+    TextWindow solution;
+    Vim vim;
+    Stopwatch stopwatch;
+    KeypressCounter keypressCounter;
+    TextLoader textLoader;
+    Leaderboard leaderboard;
+    Game game;
+    NameInput nameInput;
+
+    double fontSize;
+    final int lineLength = 71;
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
@@ -49,6 +50,7 @@ public class Controller implements Initializable {
         solution = new TextWindow();
         leaderboard = new Leaderboard(textLoader);
         nameInput = new NameInput(this);
+        fontSize = solutionText.getFont().getSize();
 
         populateUI();
 
@@ -62,7 +64,7 @@ public class Controller implements Initializable {
         updateStopwatch.setCycleCount(Timeline.INDEFINITE);
         updateStopwatch.play();
 
-        nameInputPane.requestFocus(); // TODO: dette funker ikke her
+        nameInputPane.requestFocus(); // dette funker ikke her
     }
 
     @FXML
@@ -131,11 +133,7 @@ public class Controller implements Initializable {
     public void handleOnKeyPressed(KeyEvent event) { // on keypress
         vim.keyPress(event);
         populateTextFlow(vimText, lineLength);
-
         updateKeypressCounter();
-        // if (textLoader.compareToSolution()) {
-        //     gameWon();
-        // }
     }
 
     @FXML
@@ -173,11 +171,9 @@ public class Controller implements Initializable {
 
             String outString = "";
             if (line.length() < maxLineLength) {
-                // når linjen er mindre enn linelength!!
                 outString += paddingString + lineNumber + " " + line + " \n";
             }
             else {
-                // når linjen er lenger enn linelength!!
                 outString += paddingString + lineNumber + " " + line.substring(0, maxLineLength) + " \n";
                 int counter = 1;
                 while (true) {
@@ -187,6 +183,9 @@ public class Controller implements Initializable {
                     }
                     else {
                         outString += paddingStringOverflow + line.substring((counter-1)*maxLineLength) + " \n";
+                        if (counter*maxLineLength == line.length()) { // hack to avoid overflow in beforeCursor on linebreak
+                            outString += "    \n";
+                        }
                         break;
                     }
                 }
@@ -204,37 +203,38 @@ public class Controller implements Initializable {
             }
 
             if (lineNumber.equals(cursor[1]+1)) {
-                int overflowPaddingOffset = 5*((cursor[0]-1)/maxLineLength); // to account for the leading spaces after a linebreak
+                int overflowPaddingOffset = 3+(5*((cursor[0])/maxLineLength)); // to account for the leading spaces after a linebreak
 
                 // before cursor
-                Text beforeCursor = new Text(outString.substring(0, cursor[0]+offset+overflowPaddingOffset));
+                Text beforeCursor = new Text(outString.substring(0, cursor[0]+overflowPaddingOffset));
                 beforeCursor.setFill(comparisonColor);
-                beforeCursor.setFont(Font.font("Ubuntu mono", FontWeight.NORMAL, 13.0));
+                beforeCursor.setFont(Font.font("Ubuntu mono", FontWeight.NORMAL, fontSize));
                 vimText.getChildren().add(beforeCursor);
 
                 // on cursor
-                String cursorCharacter = outString.substring(cursor[0]+offset+overflowPaddingOffset, cursor[0]+1+offset+overflowPaddingOffset); // to check if it's a space (or newline)
+                String cursorCharacter = outString.substring(cursor[0]+overflowPaddingOffset,
+                                                                cursor[0]+1+overflowPaddingOffset); // to check if it's a space (or newline)
                 Text onCursor;
                 if (cursorCharacter.equals(" ") || cursorCharacter.equals(null)) { // to make the cursor visible when on a space
                     onCursor = new Text("_");
                 }
                 else {
-                    onCursor = new Text(outString.substring(cursor[0]+offset+overflowPaddingOffset, cursor[0]+1+offset+overflowPaddingOffset));
+                    onCursor = new Text(cursorCharacter);
                 }
                 onCursor.setFill(Color.RED);
-                onCursor.setFont(Font.font("Ubuntu mono", FontWeight.NORMAL, 13.0));
+                onCursor.setFont(Font.font("Ubuntu mono", FontWeight.NORMAL, fontSize));
                 vimText.getChildren().add(onCursor);
 
                 // after cursor
-                Text afterCursor = new Text(outString.substring(cursor[0]+1+offset+overflowPaddingOffset));
+                Text afterCursor = new Text(outString.substring(cursor[0]+1+overflowPaddingOffset));
                 afterCursor.setFill(comparisonColor);
-                afterCursor.setFont(Font.font("Ubuntu mono", FontWeight.NORMAL, 13.0));
+                afterCursor.setFont(Font.font("Ubuntu mono", FontWeight.NORMAL, fontSize));
                 vimText.getChildren().add(afterCursor);
             }
             else {
                 Text lineText = new Text(outString);
-                lineText.setFill(comparisonColor); // INNI ELSE
-                lineText.setFont(Font.font("Ubuntu mono", FontWeight.NORMAL, 13.0));
+                lineText.setFill(comparisonColor);
+                lineText.setFont(Font.font("Ubuntu mono", FontWeight.NORMAL, fontSize));
                 vimText.getChildren().add(lineText);
             }
         }

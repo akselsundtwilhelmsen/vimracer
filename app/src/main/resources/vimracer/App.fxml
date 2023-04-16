@@ -17,7 +17,7 @@
             <TextFlow layoutX="14.0" layoutY="27.0">
                <Text fx:id="solutionText" strokeType="OUTSIDE" strokeWidth="0.0" text=" 1" wrappingWidth="560">
                   <font>
-                     <Font name="Ubuntu Mono" size="13.0" />
+                     <Font name="Ubuntu Mono" size="16.0" />
                   </font>
                </Text>
             </TextFlow>
