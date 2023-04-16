@@ -34,8 +34,8 @@ Vim.java arver fra TextWindow.java.
 På denne måten slipper man å programmere metoder for å oppbevare og endre tekst to ganger.
 Grensesnittet Iterable implementeres av VimCommandList for å lettere kunne iterere gjennom klassen.
 
-Lambdauttrykk og Stream benyttes i VimCommandList.
-Dette for å finne siste element i kommandolisten.
+Lambdauttrykk og Regexer benyttes også i Vim.
+Labdauttrykk brukes for å finne kommandoer i kommandolisten, mens regexene brukes til å søke i teksten.
 
 Vi dekker også deler av pensum utenfor selve programmet.
 Egendefinerte JUnit tester validerer viktige funksjoner i programmet.
@@ -45,6 +45,8 @@ Det er også laget et klassedigramm som viser sammenhengen mellom klassene i kje
 ## 2: Hvilke deler av pensum er ikke dekket i prosjektet?
 Appen dekker altså de fleste temaene fra pensum, men den nytter likevel ikke alt som er mulig innen disse temaene.
 Vi implementerer kun ett av grensesnittene fra pensum, og har heller ingen egendefinerte grensesnitt.
+Et grensesnitt og egne klasser for kommandoer i VimCommandList hadde ikke vært malplassert.
+Løsningen vi landet på var representere de med Object-klasser, som kanskje er mindre lestbart og brukbart enn klasser med et felles grensesnitt. 
 Appen har heller ingen eksempler på abstrakte klasser eller metoder. 
 Flere typer assosiasjoner, som 1-n og n-n er ikke i appen.
 
