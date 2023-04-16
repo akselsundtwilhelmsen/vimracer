@@ -204,7 +204,6 @@ public class Controller implements Initializable {
 
             if (lineNumber.equals(cursor[1]+1)) {
                 int overflowPaddingOffset = 3+(5*((cursor[0])/maxLineLength)); // to account for the leading spaces after a linebreak
-                System.out.println(overflowPaddingOffset);
 
                 // before cursor
                 Text beforeCursor = new Text(outString.substring(0, cursor[0]+overflowPaddingOffset));
