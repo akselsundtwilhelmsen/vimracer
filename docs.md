@@ -17,7 +17,7 @@ Vim-klassen arver fra denne og tilbyr metoder for tastaturinndata, og tekstredig
 Disse kommandoene kan kombineres på mange måter, så vi fant ut at det var hensiktsmessig å konvertere tataturinndataen til en liste med kommandoer som er lettere å håndtere.
 Vim deligerer ansvaret for å holde styr på denne listen til VimCommandList.
 Denne klassen har en liste med kommandoer, og metoder for å "bygge" denne listen fra tastaturinndata, og hvorvidt listen er en gyldig kombinasjon av kommandoer.
-Klassen implenterer også grensesnittet Iterable for at vim lettere skal kunne iterere gjennom kommandoene når de utføres.
+Klassen implenterer også grensesnittet Iterable.
 Samhandlingen mellom disse klassene er vist i dagrammet under.
 
 ![klassediagram for text window, vim, og vim command list](klassediagram.png "Klassediagram")
@@ -29,12 +29,12 @@ Det er det flere eksempel på delegering.
 Vim delegerer ansvaret for å konvertere tastetrykk til utførbare kommandoer til VimCommandList.
 Game delegerer stoppeklokke og tastetrykksteller til henholdsvis Stopwatch og KeypressCounter.
 
-Vi har også dekket arv og grensesnitt.
+Som nevnt i del 2 har vi brukt både arv og grensesnitt.
 Vim.java arver fra TextWindow.java.
 På denne måten slipper man å programmere metoder for å oppbevare og endre tekst to ganger.
-Grensesnittet Iterable implementeres av VimCommandList for å lettere kunne iterere gjennom klassen.
+Iterable implementeres av VimCommandList for å lettere kunne iterere gjennom klassen.
 
-Lambdauttrykk og Regexer benyttes også i Vim.
+Lambdauttrykk og Regexer benyttes også i Vim og VimCommandList.
 Labdauttrykk brukes for å finne kommandoer i kommandolisten, mens regexene brukes til å søke i teksten.
 
 Vi dekker også deler av pensum utenfor selve programmet.
@@ -45,7 +45,7 @@ Det er også laget et klassedigramm som viser sammenhengen mellom klassene i kje
 ## 2: Hvilke deler av pensum er ikke dekket i prosjektet?
 Appen dekker altså de fleste temaene fra pensum, men den nytter likevel ikke alt som er mulig innen disse temaene.
 Vi implementerer kun ett av grensesnittene fra pensum, og har heller ingen egendefinerte grensesnitt.
-Et grensesnitt og egne klasser for kommandoer i VimCommandList hadde ikke vært malplassert.
+Et grensesnitt og klasser for kommandoer i VimCommandList hadde ikke vært malplassert.
 Løsningen vi landet på var representere de med Object-klasser, som kanskje er mindre lestbart og brukbart enn klasser med et felles grensesnitt. 
 Appen har heller ingen eksempler på abstrakte klasser eller metoder. 
 Flere typer assosiasjoner, som 1-n og n-n er ikke i appen.
